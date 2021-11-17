@@ -131,11 +131,14 @@ android {
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     defaultConfig {
-        applicationId "com.zik_mu"
+        applicationId "info.enguehard.localhost.quentin"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+        manifestPlaceholders = [
+            appAuthRedirectScheme: 'info.enguehard.localhost.quentin:8081'
+        ]
     }
     splits {
         abi {
@@ -192,6 +195,8 @@ dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
     //noinspection GradleDynamicVersion
     implementation "com.facebook.react:react-native:+"  // From node_modules
+
+    implementation project(':react-native-app-auth')
 
     implementation "androidx.swiperefreshlayout:swiperefreshlayout:1.0.0"
 
