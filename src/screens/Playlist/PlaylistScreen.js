@@ -31,7 +31,7 @@ function PlaylistScreen(props) {
     }
 
     return (
-        <View>
+        <View style={{flex: 1, justifyContent: 'center', backgroundColor: 'black'}}>
             <Suspense fallback={null}>
                 {
                     playlist
@@ -39,7 +39,7 @@ function PlaylistScreen(props) {
                         <FlatList
                             data={playlist.tracks.items}
                             scrollEnabled={true}
-                            horizontal={true}
+                            horizontal={false}
                             renderItem={({item, key}) => (
                                 <TouchableOpacity onPress={() => navigation.navigate('Playlist', {
                                     playlist_id: item.track.id

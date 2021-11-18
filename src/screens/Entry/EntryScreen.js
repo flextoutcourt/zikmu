@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
-import {Text} from 'react-native';
+import {Text, View, TouchableOpacity, Alert, Image} from 'react-native';
+
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 //Authentication handler
 import authHandler from '../../utils/authenticationHandler';
@@ -16,6 +18,9 @@ import {
 //Navigations
 import LoggedinNavigation from '../../navigation/loggedInNavigation';
 import GuestNavigation from '../../navigation/guestNavigation';
+
+//components
+import PlayerMini from './../../components/Global/PlayerMini';
 
 class EntryScreen extends Component {
   state = {refreshToken: ''};
@@ -53,7 +58,12 @@ class EntryScreen extends Component {
     // }
 
     if (accessToken) {
-      return <LoggedinNavigation />;
+      return (
+        <>
+          <LoggedinNavigation />
+          <PlayerMini />
+        </>
+      );
     }
 
     return <GuestNavigation />;

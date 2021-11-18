@@ -10,7 +10,10 @@ class AuthenticationHandler {
         'user-library-read',
         'user-library-modify',
         'user-top-read',
-        'playlist-read-private'
+        'playlist-read-private',
+        'user-read-recently-played',
+        'user-read-email',
+        'user-read-playback-state'
       ],
       serviceConfiguration: {
         authorizationEndpoint: 'https://accounts.spotify.com/authorize',

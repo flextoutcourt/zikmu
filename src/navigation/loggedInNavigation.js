@@ -115,7 +115,7 @@ function LoggedInNavigation(props) {
 
                 if (route.name === 'Welcome') {
                   iconName = focused
-                    ? 'ios-home'
+                    ? 'home'
                     : '';
                 } else if (route.name === 'Test') {
                   iconName = focused ? 'glass' : 'glass';
