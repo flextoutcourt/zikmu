@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react'
 import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 
 import {ReactReduxContext, connect} from 'react-redux';
@@ -19,10 +20,10 @@ function HomeScreen() {
     const navigation = useNavigation();
 
     return (
-        <View style={{flex: 1, backgroundColor: 'black'}}>
-        <RecentComponent />
-        <GenreComponent />
-        </View>
+        <SafeAreaView style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}>
+            <RecentComponent />
+            <GenreComponent />
+        </SafeAreaView>
     )
 }
 

@@ -5,6 +5,7 @@ import {ReactReduxContext, connect} from 'react-redux';
 
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function CategoryScreen(props) {
 
@@ -36,7 +37,7 @@ function CategoryScreen(props) {
     }
 
     return (
-        <View style={{flex: 1, justifyContent: 'center', backgroundColor: 'black'}}>
+        <SafeAreaView style={{flex: 1, justifyContent: 'center', backgroundColor: 'black'}}>
             <Suspense fallback={null}>
                 {
                     playlist
@@ -44,7 +45,7 @@ function CategoryScreen(props) {
                         <FlatList
                             data={playlistItems}
                             scrollEnabled={true}
-                            horizontal={true}
+                            horizontal={false}
                             onEndReachedThreshold={0.5}
                             onEndReached={() => _get_playlist(playlist.next).then(json => {
                                 setPlaylistItems(playlistItems => playlistItems.concat(json.playlists.items))
@@ -67,7 +68,7 @@ function CategoryScreen(props) {
                         null
                 }
             </Suspense>
-        </View>
+        </SafeAreaView>
     )
 }
 

@@ -11,6 +11,7 @@ import AlbumItem from '../../components/Album/AlbumItem';
 import TopTracks from '../../components/Artist/TopTracks';
 import Albums from '../../components/Artist/Albums';
 import RelatedArtists from '../../components/Artist/RelatedArtists';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function ArtistScreen(props) {
 
@@ -29,15 +30,17 @@ function ArtistScreen(props) {
     })
 
     return (
-        <ScrollView style={{flex: 1, backgroundColor: 'black'}}>
-            <View style={{alignItems: 'center', marginTop: 10}} >
-                <Image source={{uri: artist?.images[0].url}} style={{width: Dimensions.get('screen').width - 150, height: Dimensions.get('screen').width - 150, borderRadius: artist?.images[0].height}} />
-            </View>
-            <Text style={{fontSize: 36, color: 'white', textAlign: 'center', marginTop: 10}}>{artist?.name}</Text>
-            <TopTracks artist={artist} />
-            <Albums artist={artist} />
-            <RelatedArtists artist={artist} />
-        </ScrollView>
+        <SafeAreaView>
+            <ScrollView style={{flex: 1, backgroundColor: 'black'}}>
+                <View style={{alignItems: 'center', marginTop: 10}} >
+                    <Image source={{uri: artist?.images[0].url}} style={{width: Dimensions.get('screen').width - 150, height: Dimensions.get('screen').width - 150, borderRadius: artist?.images[0].height}} />
+                </View>
+                <Text style={{fontSize: 36, color: 'white', textAlign: 'center', marginTop: 10}}>{artist?.name}</Text>
+                <TopTracks artist={artist} />
+                <Albums artist={artist} />
+                <RelatedArtists artist={artist} />
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 

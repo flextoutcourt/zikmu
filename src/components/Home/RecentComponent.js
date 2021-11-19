@@ -33,9 +33,8 @@ function RecentComponent() {
     }
 
     return (
-        <Suspense fallback={null}>
+        <View>
             <FlatList
-                style={{display: "flex", flexDirection:'row'}}
                 data={recent} 
                 scrollEnabled={true}
                 horizontal={true}
@@ -56,7 +55,7 @@ function RecentComponent() {
                     </TouchableOpacity>
                 )}
             />
-        </Suspense>
+        </View>
     )
 }
 

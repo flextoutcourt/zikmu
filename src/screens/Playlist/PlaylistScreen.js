@@ -5,6 +5,7 @@ import {ReactReduxContext, connect} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 
 import axios from 'axios';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 function PlaylistScreen(props) {
 
@@ -31,7 +32,7 @@ function PlaylistScreen(props) {
     }
 
     return (
-        <View style={{flex: 1, justifyContent: 'center', backgroundColor: 'black'}}>
+        <SafeAreaView style={{flex: 1, justifyContent: 'center', backgroundColor: 'black'}}>
             <Suspense fallback={null}>
                 {
                     playlist
@@ -56,7 +57,7 @@ function PlaylistScreen(props) {
                         null
                 }
             </Suspense>
-        </View>
+        </SafeAreaView>
     )
 }
 
