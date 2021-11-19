@@ -44,7 +44,7 @@ function PlaylistScreen(props) {
                                 <TouchableOpacity onPress={() => navigation.navigate('Playlist', {
                                     playlist_id: item.track.id
                                 })}>
-                                    <Image source={{uri: item?.track?.album?.images[0]?.url}}
+                                    <Image source={{uri: item?.track?.album?.images[0]?.url ?? 'null'}}
                                         style={{width: 116, height: 116, margin: "auto"}} />
                                     <Text>
                                         {item?.track?.name}

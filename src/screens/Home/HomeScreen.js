@@ -7,8 +7,8 @@ import {ReactReduxContext, connect} from 'react-redux';
 import axios from 'axios';
 import Store from './../../redux/store/index';
 
-import RecentComponent from './../../components/RecentComponent';
-import GenreComponent from './../../components/GenreComponent';
+import RecentComponent from './../../components/Home/RecentComponent';
+import GenreComponent from '../../components/Home/GenreComponent';
 
 function HomeScreen() {
 
@@ -19,7 +19,7 @@ function HomeScreen() {
     const navigation = useNavigation();
 
     return (
-        <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', backgroundColor: 'black'}}>
+        <View style={{flex: 1, backgroundColor: 'black'}}>
         <RecentComponent />
         <GenreComponent />
         </View>

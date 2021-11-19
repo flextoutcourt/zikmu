@@ -6,7 +6,7 @@ import {ReactReduxContext, connect} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
 
-function CategoryScreen(props, {accessToken}) {
+function CategoryScreen(props) {
 
     const {store} = useContext(ReactReduxContext);
 
@@ -47,7 +47,7 @@ function CategoryScreen(props, {accessToken}) {
                             horizontal={true}
                             onEndReachedThreshold={0.5}
                             onEndReached={() => _get_playlist(playlist.next).then(json => {
-                                setPlaylistItems(playlistItems => [...playlistItems, json.playlists.items])
+                                setPlaylistItems(playlistItems => playlistItems.concat(json.playlists.items))
                             })}
                             renderItem={({item, key}) => (
                                 <TouchableOpacity onPress={() => navigation.navigate('Playlist', {
