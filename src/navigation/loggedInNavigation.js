@@ -17,6 +17,7 @@ import Album from './../screens/Album/AlbumScreen';
 import Artist from './../screens/Artist/ArtistScreen';
 import Track from './../screens/Track/TrackScreen';
 import Playlist from './../screens/Playlist/PlaylistScreen';
+import SearchScreen from '../screens/Search/SearchScreen';
 
 export const config = {
   screens: {
@@ -55,12 +56,6 @@ function LoggedInNavigation(props) {
 
     console.log(store.getState().authentication.accessToken)
 
-    function HomeComponent(accessToken){
-      return (
-          <HomeScreen accessToken={accessToken} />
-      )
-    }
-
     function SettingsScreen({ navigation }) {
         return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -84,18 +79,19 @@ function LoggedInNavigation(props) {
     const Stack = createNativeStackNavigator();
 
 
-    function NavigationStack()
+    function HomeNavigationStack()
     {
         return(
         <Stack.Navigator screenOptions={{
-            gestureEnabled: true
+            gestureEnabled: true,
+			headerShown: false
         }}>
             <Stack.Screen options={{
             transitionSpec: {
                 open: config,
                 close: config
             }
-            }} name="Home" component={HomeComponent} />
+            }} name="Home" component={HomeScreen} />
             <Stack.Screen name="Settings" component={SettingsScreen} />
             <Stack.Screen name="Category" component={Category} />
             <Stack.Screen name="Album" component={Album} />
@@ -106,31 +102,80 @@ function LoggedInNavigation(props) {
         )
     }
 
+    function SearchNavigationStack()
+    {
+		return(
+			<Stack.Navigator screenOptions={{
+				gestureEnabled: true,
+				headerShown: false
+			}}>
+				<Stack.Screen options={{
+				transitionSpec: {
+					open: config,
+					close: config
+				}
+				}} name="Search" component={SearchScreen} />
+				<Stack.Screen name="Settings" component={SettingsScreen} />
+				<Stack.Screen name="Category" component={Category} />
+				<Stack.Screen name="Album" component={Album} />
+				<Stack.Screen name="Artist" component={Artist} />
+				<Stack.Screen name="Track" component={Track} />
+				<Stack.Screen name="Playlist" component={Playlist} />
+			</Stack.Navigator>
+			)
+    }
+
+    function libraryNavigationStack()
+    {
+		return(
+			<Stack.Navigator screenOptions={{
+				gestureEnabled: true,
+				headerShown: false
+			}}>
+				<Stack.Screen options={{
+				transitionSpec: {
+					open: config,
+					close: config
+				}
+				}} name="Test" component={TestScreen} />
+				<Stack.Screen name="Settings" component={SettingsScreen} />
+				<Stack.Screen name="Category" component={Category} />
+				<Stack.Screen name="Album" component={Album} />
+				<Stack.Screen name="Artist" component={Artist} />
+				<Stack.Screen name="Track" component={Track} />
+				<Stack.Screen name="Playlist" component={Playlist} />
+			</Stack.Navigator>
+			)
+    }
+
   return (
     <NavigationContainer>
         <Tab.Navigator
             screenOptions={({ route }) => ({
               tabBarIcon: ({ focused, color, size }) => {
-                let iconName;
-
-                if (route.name === 'Welcome') {
-                  iconName = focused
-                    ? 'home'
-                    : '';
-                } else if (route.name === 'Test') {
-                  iconName = focused ? 'glass' : 'glass';
+                let iconName = 'home';
+                if (route.name === 'Accueil') {
+                  iconName = focused ? 'home' : 'home';
+                } else if (route.name === 'Rechercher') {
+                  iconName = focused ? 'search' : 'search';
+                } else if (route.name === 'Librarie'){
+                  iconName = focused ? 'book' : 'book';
                 }
-                return <Icon name={'comments'} size={size} color={color} />;
+                return <Icon name={iconName} size={24} color={'white'} />;
               },
               tabBarActiveTintColor: 'tomato',
               tabBarInactiveTintColor: 'gray',
+              tabBarStyle: {
+                backgroundColor: 'transparent'
+              },
+              tabBarActiveBackgroundColor: 'transparent',
               gestureEnabled: true,
+              headerShown: false,
             })}
           >
-            <Tab.Screen name="Welcome" component={NavigationStack} options={{
-              headerShown: false
-            }}/>
-            <Tab.Screen name="Test" component={TestScreen} />
+            <Tab.Screen name="Accueil" component={HomeNavigationStack}/>
+            <Tab.Screen name="Rechercher" component={SearchNavigationStack} />
+            <Tab.Screen name="Librarie" component={libraryNavigationStack} />
           </Tab.Navigator>
       </NavigationContainer>
   );

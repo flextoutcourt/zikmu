@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext, Suspense} from 'react'
-import { View, Text, FlatList, TouchableOpacity} from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, Image} from 'react-native'
 
 import axios from 'axios';
 
@@ -15,7 +15,7 @@ function RecentComponent() {
     const navigation = useNavigation();
 
     useEffect(() => {
-        _get_recent().then((json) => setRecent(json.categories.items))
+        _get_recent().then((json) => setRecent(json.items))
     });
 
     const _get_recent = (after = null) => {
@@ -41,7 +41,7 @@ function RecentComponent() {
                 horizontal={true}
                 onEndReachedThreshold={0.5}
                 onEndReached={() => {
-                    _get_recent(recent[recent.length]?.item?.track?.id ?? null).then((data) => setRecent(recent, [...props, data]));
+                    _get_recent(recent[recent.length - 1]?.item?.track?.id ?? null).then((json) => setRecent(recent => recent.concat(json.items)));
                 }}
                 renderItem={({item, key}) => (
                     <TouchableOpacity onPress={() => {}}>
