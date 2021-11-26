@@ -30,7 +30,7 @@ function ArtistScreen(props) {
     })
 
     return (
-        <SafeAreaView>
+        <SafeAreaView style={{flex: 1, justifyContent: 'space-between', alignItems: 'flex-start', width: Dimensions.get('screen').width}}>
             <ScrollView style={{flex: 1, backgroundColor: 'black'}}>
                 <View style={{alignItems: 'center', marginTop: 10}} >
                     <Image source={{uri: artist?.images[0].url}} style={{width: Dimensions.get('screen').width - 150, height: Dimensions.get('screen').width - 150, borderRadius: artist?.images[0].height}} />

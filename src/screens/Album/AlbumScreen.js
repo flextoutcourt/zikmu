@@ -40,7 +40,7 @@ function AlbumScreen(props) {
 
     return (
 
-        <SafeAreaView style={{flex: 1}}>
+        <SafeAreaView style={{flex: 1, justifyContent: 'space-between', alignItems: 'flex-start', width: Dimensions.get('screen').width}}>
             <ScrollView style={{backgroundColor: 'black', flex: 1}}>
                 <View style={{alignItems: 'center'}}>
                     <Image source={{uri: album?.images[0]?.url}} style={{width: Dimensions.get('screen').width - 20, height: Dimensions.get('screen').width - 20, margin: "auto", borderRadius: 10}}/>

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react'
-import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, Image, Dimensions } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 
@@ -20,7 +20,7 @@ function HomeScreen() {
     const navigation = useNavigation();
 
     return (
-        <SafeAreaView style={{ flex: 1, justifyContent: 'space-around', alignItems: 'center' }}>
+        <SafeAreaView style={{flex: 1, justifyContent: 'space-between', alignItems: 'flex-start', width: Dimensions.get('screen').width, backgroundColor: 'black'}}>
             <RecentComponent />
             <GenreComponent />
         </SafeAreaView>

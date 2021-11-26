@@ -156,19 +156,21 @@ function LoggedInNavigation(props) {
                 let iconName = 'home';
                 if (route.name === 'Accueil') {
                   iconName = focused ? 'home' : 'home';
+				  color = focused ? 'purple' : 'white';
                 } else if (route.name === 'Rechercher') {
                   iconName = focused ? 'search' : 'search';
+				  color = focused ? 'purple' : 'white';
                 } else if (route.name === 'Librarie'){
                   iconName = focused ? 'book' : 'book';
+				  color = focused ? 'purple' : 'white';
                 }
-                return <Icon name={iconName} size={24} color={'white'} />;
+                return <Icon name={iconName} size={24} color={color} />;
               },
               tabBarActiveTintColor: 'tomato',
               tabBarInactiveTintColor: 'gray',
-              tabBarStyle: {
-                backgroundColor: 'transparent'
-              },
-              tabBarActiveBackgroundColor: 'transparent',
+			  tabBarInactiveBackgroundColor: 'black',
+			  tabBarActiveBackgroundColor: 'black',
+			  tabBarActiveTintColor: 'purple',
               gestureEnabled: true,
               headerShown: false,
             })}

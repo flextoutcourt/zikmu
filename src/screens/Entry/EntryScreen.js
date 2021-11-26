@@ -61,7 +61,7 @@ class EntryScreen extends Component {
     if (accessToken) {
       return (
         <SafeAreaProvider>
-            <StatusBar translucent={true} />
+            <StatusBar translucent={true} showHideTransition={true} backgroundColor={"rgba(0,0,0,0.5)"} />
             <LoggedinNavigation />
             <Player />
         </SafeAreaProvider>

@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Button} from 'react-native';
+import {View, Button, Dimensions} from 'react-native';
 
 import {connect} from 'react-redux';
 
@@ -26,7 +26,7 @@ class LoginScreen extends Component {
 
   render() {
     return (
-      <SafeAreaView>
+      <SafeAreaView style={{flex: 1, justifyContent: 'space-between', alignItems: 'flex-start', width: Dimensions.get('screen').width}}>
         <Button onPress={this.onPressLogin} title="Press to login" />
       </SafeAreaView>
     );

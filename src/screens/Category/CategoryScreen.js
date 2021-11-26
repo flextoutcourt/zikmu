@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext, Suspense} from 'react'
-import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native'
+import { View, Text, FlatList, TouchableOpacity, Image, Dimensions } from 'react-native'
 
 import {ReactReduxContext, connect} from 'react-redux';
 
@@ -16,13 +16,7 @@ function CategoryScreen(props) {
 
     const navigation = useNavigation();
 
-    useEffect(() => {
-        _get_playlist().then((json) => {
-            setPlaylist(json);
-            setPlaylistItems(json.playlists.items);
-        })
-    });
-
+    
     const _get_playlist = (next = null) => {
         let url = `https://api.spotify.com/v1/browse/categories/${props.route.params.category_id}/playlists?limit=15`;
         const promise = axios.get(next ?? url, {
@@ -35,9 +29,13 @@ function CategoryScreen(props) {
         const response = promise.then((data) => data.data);
         return response;
     }
+    _get_playlist().then((json) => {
+        setPlaylist(json);
+        setPlaylistItems(json.playlists.items);
+    })
 
     return (
-        <SafeAreaView style={{flex: 1, justifyContent: 'center', backgroundColor: 'black'}}>
+        <SafeAreaView style={{flex: 1, justifyContent: 'space-between', alignItems: 'flex-start', width: Dimensions.get('screen').width}}>
             <Suspense fallback={null}>
                 {
                     playlist

@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext, Suspense} from 'react'
-import { View, Text, FlatList, Image, TouchableOpacity } from 'react-native'
+import { View, Text, FlatList, Image, TouchableOpacity, Dimensions } from 'react-native'
 
 import {ReactReduxContext, connect} from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
@@ -15,14 +15,11 @@ function PlaylistScreen(props) {
 
     const [playlist, setPlaylist] = useState(null);
 
-    useEffect(() => {
-        _get_playlist().then(json => setPlaylist(json))
-    });
-
+    
     const _get_playlist = () => {
         const promise = axios.get('https://api.spotify.com/v1/playlists/' + props.route.params.playlist_id , {
             headers: {
-				Accept: "application/json",
+                Accept: "application/json",
 				Authorization: "Bearer " + store.getState().authentication.accessToken,
 				"Content-Type": "application/json"
 			}
@@ -30,9 +27,11 @@ function PlaylistScreen(props) {
         const response = promise.then(data => data.data);
         return response
     }
+    
+    _get_playlist().then(json => setPlaylist(json))
 
     return (
-        <SafeAreaView style={{flex: 1, justifyContent: 'center', backgroundColor: 'black'}}>
+        <SafeAreaView style={{flex: 1, justifyContent: 'space-between', alignItems: 'flex-start', width: Dimensions.get('screen').width}}>
             <Suspense fallback={null}>
                 {
                     playlist
