@@ -169,16 +169,13 @@ function LoggedInNavigation(props) {
               },
               tabBarActiveTintColor: 'tomato',
               tabBarInactiveTintColor: 'gray',
-<<<<<<< HEAD
               tabBarStyle: {
                 backgroundColor: 'black'
               },
               tabBarActiveBackgroundColor: 'transparent',
-=======
-			  tabBarInactiveBackgroundColor: 'black',
-			  tabBarActiveBackgroundColor: 'black',
-			  tabBarActiveTintColor: 'purple',
->>>>>>> 68e33f4cb4a8db0bf2fb2291564b05c72ba6e63d
+	      tabBarInactiveBackgroundColor: 'black',
+	      tabBarActiveBackgroundColor: 'black',
+	      tabBarActiveTintColor: 'purple',
               gestureEnabled: true,
               headerShown: false,
             })}
