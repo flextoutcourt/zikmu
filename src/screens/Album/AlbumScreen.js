@@ -1,5 +1,6 @@
 import React, {useState, useEffect, useContext} from 'react';
 import { View, Text, Image, TouchableOpacity, FlatList, Dimensions, ScrollView } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { connect, ReactReduxContext } from 'react-redux';
 import {useNavigation} from '@react-navigation/native';
 
@@ -38,21 +39,24 @@ function AlbumScreen(props) {
     }
 
     return (
-        <ScrollView style={{backgroundColor: 'black', flex: 1}}>
-            <View style={{alignItems: 'center'}}>
-                <Image source={{uri: album?.images[0]?.url}} style={{width: Dimensions.get('screen').width - 20, height: Dimensions.get('screen').width - 20, margin: "auto", borderRadius: 10}}/>
-            </View>
-            <Text style={{fontSize: 24, color: 'white', textAlign: 'center'}}>{album?.name}</Text>
-            <FlatList
-                data={album?.tracks?.items}
-                scrollEnabled={true}
-                horizontal={false}
-                style={{marginBottom: 110}}
-                renderItem={({item, key}) => (
-                    <TrackItem track={item} album={album} />
-                )}
-            />
-        </ScrollView>
+
+        <SafeAreaView style={{flex: 1, justifyContent: 'space-between', alignItems: 'flex-start', width: Dimensions.get('screen').width}}>
+            <ScrollView style={{backgroundColor: 'black', flex: 1}}>
+                <View style={{alignItems: 'center'}}>
+                    <Image source={{uri: album?.images[0]?.url}} style={{width: Dimensions.get('screen').width - 20, height: Dimensions.get('screen').width - 20, margin: "auto", borderRadius: 10}}/>
+                </View>
+                <Text style={{fontSize: 24, color: 'white', textAlign: 'center'}}>{album?.name}</Text>
+                <FlatList
+                    data={album?.tracks?.items}
+                    scrollEnabled={true}
+                    horizontal={false}
+                    style={{marginBottom: 110}}
+                    renderItem={({item, key}) => (
+                        <TrackItem track={item} album={album} />
+                    )}
+                />
+            </ScrollView>
+        </SafeAreaView>
     )
 }
 

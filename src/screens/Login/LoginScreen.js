@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {View, Button} from 'react-native';
+import {View, Button, Dimensions} from 'react-native';
 
 import {connect} from 'react-redux';
 
@@ -10,6 +10,7 @@ import {
   setRefreshToken,
   setSigingIn,
 } from '../../redux/features/authentication/authenticationSlice';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 class LoginScreen extends Component {
   state = {};
@@ -25,9 +26,9 @@ class LoginScreen extends Component {
 
   render() {
     return (
-      <View>
+      <SafeAreaView style={{flex: 1, justifyContent: 'space-between', alignItems: 'flex-start', width: Dimensions.get('screen').width}}>
         <Button onPress={this.onPressLogin} title="Press to login" />
-      </View>
+      </SafeAreaView>
     );
   }
 }
