@@ -51,7 +51,6 @@ function ArtistScreen(props) {
     _get_artist();
 
     return (
-<<<<<<< HEAD
         <ScrollView style={{flex: 1, backgroundColor: 'black'}}>
             {
                 artist
@@ -69,19 +68,6 @@ function ArtistScreen(props) {
                     <Text>test</Text>
             }
         </ScrollView>
-=======
-        <SafeAreaView style={{flex: 1, justifyContent: 'space-between', alignItems: 'flex-start', width: Dimensions.get('screen').width}}>
-            <ScrollView style={{flex: 1, backgroundColor: 'black'}}>
-                <View style={{alignItems: 'center', marginTop: 10}} >
-                    <Image source={{uri: artist?.images[0].url}} style={{width: Dimensions.get('screen').width - 150, height: Dimensions.get('screen').width - 150, borderRadius: artist?.images[0].height}} />
-                </View>
-                <Text style={{fontSize: 36, color: 'white', textAlign: 'center', marginTop: 10}}>{artist?.name}</Text>
-                <TopTracks artist={artist} />
-                <Albums artist={artist} />
-                <RelatedArtists artist={artist} />
-            </ScrollView>
-        </SafeAreaView>
->>>>>>> 68e33f4cb4a8db0bf2fb2291564b05c72ba6e63d
     )
     
 }
