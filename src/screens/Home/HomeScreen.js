@@ -1,9 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react'
-<<<<<<< HEAD
-import { View, Text, FlatList, TouchableOpacity, Image } from 'react-native'
-=======
 import { View, Text, FlatList, TouchableOpacity, Image, Dimensions } from 'react-native'
->>>>>>> 68e33f4cb4a8db0bf2fb2291564b05c72ba6e63d
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {useNavigation} from '@react-navigation/native';
 
