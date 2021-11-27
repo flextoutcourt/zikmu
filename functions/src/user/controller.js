@@ -1,8 +1,12 @@
+var SpotifyWebApi = require('spotify-web-api-node');
+
 const spotifyConfig = {
-    clientId: 'f57a06423bf043b6bd5ecebe2b0e9c5a',
-    clientSecret: '659b8653e6b744e2a99f9363dac84688',
+    clientId: "f57a06423bf043b6bd5ecebe2b0e9c5a",
+    clientSecret: "659b8653e6b744e2a99f9363dac84688",
     redirectUrl: "info.enguehard.localhost.quentin://oauthredirect"
 };
+
+var spotifyApi = new SpotifyWebApi(spotifyConfig);
 
 async function proxySpotifyToken(_req, res){
     //Retrieve code from request
@@ -15,12 +19,24 @@ async function proxySpotifyToken(_req, res){
 
     if(refreshToken){ 
         //Refresh token is available, retrieve a new access token
-        return res.json({ todo: "Refresh accesstoken"});
+        spotifyApi.setRefreshToken(resfreshToken);
+        spotifyApi.refreshAccessToken().then((data) => {
+            data.body.refreshToken = refreshToken;
+            return res.json(data.body);
+        }, (error) => {
+            console.log('Could not refresh access token', error);
+        }).catch(oError => {
+            return res.json(oError)
+        })
     }
 
     if(code){
         //Retrieve new refresh token and access token
-        return res.json({ todo: "Get refresh token & access token"});
+        spotifyApi.authorizationCodeGrant(code).then((data) => {
+            return res.json(data.body);
+        }).catch(e => {
+            console.log('Something went wrong', e);
+        })
     }
 
 

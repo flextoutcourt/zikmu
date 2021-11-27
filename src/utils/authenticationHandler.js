@@ -4,7 +4,6 @@ class AuthenticationHandler {
   constructor() {
     this.spotifyAuthConfig = {
       clientId: 'f57a06423bf043b6bd5ecebe2b0e9c5a',
-      clientSecret: '659b8653e6b744e2a99f9363dac84688',
       redirectUrl: 'info.enguehard.localhost.quentin://oauthredirect',
       scopes: [
         'user-library-read',
@@ -18,7 +17,7 @@ class AuthenticationHandler {
       ],
       serviceConfiguration: {
         authorizationEndpoint: 'https://accounts.spotify.com/authorize',
-        tokenEndpoint: 'https://accounts.spotify.com/api/token',
+        tokenEndpoint: 'https://europe-west1-zikmu-e3f16.cloudfunctions.net/api/user/authentication',
       },
     };
   }
@@ -26,11 +25,9 @@ class AuthenticationHandler {
   async onLogin() {
     try {
       const result = await authorize(this.spotifyAuthConfig);
-      alert(JSON.stringify(result));
       return result;
     } catch (error) {
-        alert(error)
-      console.log(JSON.stringify(error));
+      alert(error)
     } 
   }
 
@@ -38,7 +35,6 @@ class AuthenticationHandler {
     const result = await refresh(this.spotifyAuthConfig, {
       refreshToken: refreshToken,
     });
-    console.log(JSON.stringify(result));
     return result;
   }
 

@@ -14,8 +14,7 @@ import RelatedArtists from '../../components/Artist/RelatedArtists';
 
 function ArtistScreen(props) {
 
-    const artist = props.route.params.artist;
-
+    const [artist, setArtist] = useState(null);
     const [albums, setAlbums] = useState(null);
     const [topTracks, setTopTracks] = useState([]);
     const [related, setRelated] = useState([]);
@@ -24,25 +23,57 @@ function ArtistScreen(props) {
 
     const navigation = useNavigation();
 
-    navigation.setOptions({
-        title: artist.name
-    })
+    const _get_artist = () => {
+        if(props.route.params.artist_id){
+            axios.get(`https://api.spotify.com/v1/artists/${props.route.params.artist_id}`, {
+                headers: {
+                    Accept: "application/json",
+                    Authorization: "Bearer " + store.getState().authentication.accessToken,
+                    "Content-Type": "application/json"
+                }
+            })
+            .then((data) => {
+                console.log("data.data", data.data)
+                setArtist(data.data);
+                navigation.setOptions({
+                    title: data.data.name
+                });
+            })
+            .catch(e => {
+                console.error('errorrrrr', e.status);
+            })
+        }else{
+            setArtist(props.route.params.artist);
+        }
+    }
+
+    _get_artist();
 
     return (
         <ScrollView style={{flex: 1, backgroundColor: 'black'}}>
-            <View style={{alignItems: 'center', marginTop: 10}} >
-                <Image source={{uri: artist?.images[0].url}} style={{width: Dimensions.get('screen').width - 150, height: Dimensions.get('screen').width - 150, borderRadius: artist?.images[0].height}} />
-            </View>
-            <Text style={{fontSize: 36, color: 'white', textAlign: 'center', marginTop: 10}}>{artist?.name}</Text>
-            <TopTracks artist={artist} />
-            <Albums artist={artist} />
-            <RelatedArtists artist={artist} />
+            {
+                artist
+                ?
+                    <>
+                        <View style={{alignItems: 'center', marginTop: 10}} >
+                            <Image source={{uri: artist?.images[0]?.url}} style={{width: Dimensions.get('screen').width - 150, height: Dimensions.get('screen').width - 150, borderRadius: artist?.images[0].height}} />
+                        </View>
+                        <Text style={{fontSize: 36, color: 'white', textAlign: 'center', marginTop: 10}}>{artist?.name}</Text>
+                        <TopTracks artist={artist} />
+                        <Albums artist={artist} />
+                        <RelatedArtists artist={artist} />
+                    </>
+                :
+                    <Text>test</Text>
+            }
         </ScrollView>
     )
+    
 }
 
 const mapStateToProps = store => {
-    props: store.props
+    props: store
 }
+
 
 export default connect(mapStateToProps)(ArtistScreen);

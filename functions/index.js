@@ -1,4 +1,3 @@
-
 const functions = require('firebase-functions');
 const server = require("./src/server");
 
@@ -6,10 +5,11 @@ const server = require("./src/server");
 //Endpoint url: https://yourfirebaseurl.com/api/*
 //* will be filled with the endpoints defined in server.js
 const api = functions
-            .runWith({memory: "2GB", timeoutSeconds: 120})
-            .https  
+            .region('europe-west1')
+            .runWith({memory: "2GB", timeoutSeconds: 540})
+            .https
             .onRequest(server);
 
 module.exports = {
     api
-};     
+}; 

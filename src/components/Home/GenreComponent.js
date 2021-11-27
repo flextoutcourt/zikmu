@@ -19,6 +19,7 @@ function GenreComponent() {
     });
 
     const _get_genres = (offset = 0) => {
+        console.log("genres");
         const promise = axios.get(`https://api.spotify.com/v1/browse/categories?offset=${offset}`, {
             headers: {
                 Accept: "application/json",
@@ -26,7 +27,7 @@ function GenreComponent() {
                 "Content-Type": "application/json"
             }
         })
-        const response = promise.then((data) => data.data);
+        const response = promise.then((data) => data);
         return response;
     }
 

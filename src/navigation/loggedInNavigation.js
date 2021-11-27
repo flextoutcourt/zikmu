@@ -5,6 +5,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {navigationRef} from './../utils/RootNavigation';
 
 import {ReactReduxContext, connect} from 'react-redux';
 
@@ -149,7 +150,7 @@ function LoggedInNavigation(props) {
     }
 
   return (
-    <NavigationContainer>
+    <NavigationContainer ref={navigationRef}>
         <Tab.Navigator
             screenOptions={({ route }) => ({
               tabBarIcon: ({ focused, color, size }) => {
@@ -166,7 +167,7 @@ function LoggedInNavigation(props) {
               tabBarActiveTintColor: 'tomato',
               tabBarInactiveTintColor: 'gray',
               tabBarStyle: {
-                backgroundColor: 'transparent'
+                backgroundColor: 'black'
               },
               tabBarActiveBackgroundColor: 'transparent',
               gestureEnabled: true,

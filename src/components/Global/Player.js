@@ -1,8 +1,11 @@
 import React, {useEffect, useState, useContext} from 'react'
-import { View, Text, TouchableOpacity, Image, Alert, Button, TouchableHighlight, Dimensions, FlatList, ScrollView} from 'react-native'
+import { View, Text, TouchableOpacity, Image, Alert, Button, TouchableHighlight, Dimensions, FlatList, ScrollView, StatusBar} from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import {useNavigation} from '@react-navigation/native';
 
 import dominantColors from 'dominant-colors'
+
+import * as rootNavigation from './../../utils/RootNavigation';
 
 import {ReactReduxContext, connect} from 'react-redux';
 
@@ -50,7 +53,7 @@ function Player() {
 
     const _play = () => {
         axios.put('https://api.spotify.com.v1/me/player/play', {
-            body: `{"context_uri\\":\\"${listening.item.uri}\\",\\"position_ms\\":${listening.progress_ms}}`,
+            body: `{"context_uri\\":\\"${listening?.item?.uri}\\",\\"position_ms\\":${listening?.progress_ms}}`,
             headers: {
                 Accept: "application/json",
                 Authorization: "Bearer " + store.getState().authentication.accessToken,
@@ -111,16 +114,16 @@ function Player() {
         listening
         ?
         <TouchableOpacity
-            style={{position: 'absolute', bottom: big ? 0 : 60, top : big ? 0 : null , left: big ? 0 : 2, right: big ? 0 : 2, backgroundColor: big ? mainColor : mainColor, zIndex: 99, padding: big ? 10 : 0, borderRadius: big ? 0 : 10}}
+            style={{position: 'absolute', bottom: big ? 0 : 60, top : big ? 0 : null , left: big ? 0 : 2, right: big ? 0 : 2, backgroundColor: big ? mainColor : mainColor, zIndex: 99, padding: 0, borderRadius: big ? 0 : 10}}
             onPress={() => {!big ? setBig(true) : null}}
             activeOpacity={big ? 1 : 0.2}
         >
             {
                 big
                 ?
-                    <ScrollView>
+                    <ScrollView style={{padding: 10}}>
                         <View style={{flex: 2.5}}>
-                            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20}}>
+                            <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, marginTop: StatusBar.currentHeight}}>
                                 <TouchableOpacity onPress={() => setBig(false)}>
                                     <Icon name="arrow-left" size={24} color={"white"}/> 
                                 </TouchableOpacity>
@@ -142,14 +145,14 @@ function Player() {
                         </View>
                         <View style={{flex: 1, justifyContent: 'flex-start'}}>
                             <View style={{flexDirection: 'row', marginTop: 15, width: '100%'}}>
-                                <Text>{Math. floor((listening.progress_ms / 1000 / 60) << 0)}:{Math.floor((listening.progress_ms / 1000) % 60).toString().padStart(2, '0')}</Text>
+                                <Text>{Math. floor((listening?.progress_ms / 1000 / 60) << 0)}:{Math.floor((listening?.progress_ms / 1000) % 60).toString().padStart(2, '0')}</Text>
                                 <View style={{height: 2, backgroundColor: 'tomato', flex: 1, alignSelf: 'center', marginLeft: 5, marginRight: 5}}>
-                                    <View style={{position: 'relative',height: 2, backgroundColor: 'grey', width: (listening.progress_ms) / (listening.item.duration_ms) * 100 + "%"}}>
+                                    <View style={{position: 'relative',height: 2, backgroundColor: 'grey', width: (listening?.progress_ms) / (listening?.item?.duration_ms) * 100 + "%"}}>
                                         <View style={{borderRadius: 100, height: 8, width: 8, backgroundColor: 'red', position: 'absolute', top: '50%', right: 0, transform : [{translateY: -4}]}}></View>
                                     </View>
                                     
                                 </View>
-                                <Text>{Math. floor((listening.item.duration_ms / 1000 / 60) << 0)}:{Math.floor((listening.item.duration_ms / 1000) % 60).toString().padStart(2, '0')}</Text>
+                                <Text>{Math. floor((listening?.item?.duration_ms / 1000 / 60) << 0)}:{Math.floor((listening?.item?.duration_ms / 1000) % 60).toString().padStart(2, '0')}</Text>
                             </View>
                             <View>
                                 <Text numberOfLines={1} style={{fontSize: 24, color: 'white', textAlign: 'center', marginVertical: 15}}>
@@ -164,7 +167,9 @@ function Player() {
                                             <Text>, </Text>
                                         )}
                                         renderItem={({item, key}) => (
-                                            <TouchableOpacity>
+                                            <TouchableOpacity onPress={() => rootNavigation.navigate('Artist', {
+                                                artist_id: item.id
+                                            })}>
                                                 <Text style={{color: 'white'}}>{item.name}</Text>
                                             </TouchableOpacity>
                                         )}
@@ -214,15 +219,9 @@ function Player() {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        <Lyrics track={listening?.item} />
-                        {/* <View style={{backgroundColor: 'blue', borderRadius: 10, height: paroles ? null : 450, width: '100%', marginVertical: 25, elevation: 5, position: paroles ? 'absolute' : 'relative', top: paroles ? 5 : null, left: paroles ? 5 : null, right: paroles ? 5 : null, bottom: paroles ? 5 : null}}>
-                            <TouchableOpacity
-                                onPress={() => setPar
-: 100, backgroundColor: 'black', height: 36, width: 36, top: 5, right: 5, position: 'absolute', alignItems: 'center', justifyContent: 'center'}}
-                            >
-                                <Icon name={paroles ? 'close' : 'plus'} size={24} color={"white"}/>
-                            </TouchableOpacity>
-                        </View> */}
+                        <View style={{backgroundColor: 'blue', borderRadius: 10, marginBottom: 50, height: paroles ? null : 450, width: '100%', marginVertical: 25, elevation: 5, position: paroles ? 'absolute' : 'relative', top: paroles ? 5 : null, left: paroles ? 5 : null, right: paroles ? 5 : null, bottom: paroles ? 5 : null, overflow: 'hidden'}}>
+                            <Lyrics track={listening?.item} style={{color: 'white'}} />
+                        </View>
                     </ScrollView>
                 :
                     <View style={{margin: 10}}>
@@ -260,11 +259,11 @@ function Player() {
                             </View>
                         </View>
                         <View style={{flexDirection: 'row', marginTop: 5, width: '100%'}}>
-                            <Text>{Math. floor((listening.progress_ms/1000/60) << 0)}:{Math.floor((listening.progress_ms/1000) % 60).toString().padStart(2, '0')}</Text>
+                            <Text>{Math. floor((listening?.progress_ms/1000/60) << 0)}:{Math.floor((listening?.progress_ms/1000) % 60).toString().padStart(2, '0')}</Text>
                             <View style={{height: 2, backgroundColor: 'tomato', flex: 1, alignSelf: 'center', marginLeft: 5, marginRight: 5}}>
-                                <View style={{height: 2, backgroundColor: 'grey', width: (listening.progress_ms) / (listening.item.duration_ms) * 100 + "%"}}></View>
+                                <View style={{height: 2, backgroundColor: 'grey', width: (listening?.progress_ms) / (listening?.item?.duration_ms) * 100 + "%"}}></View>
                             </View>
-                            <Text>{Math. floor((listening.item.duration_ms/1000/60) << 0)}:{Math.floor((listening.item.duration_ms/1000) % 60).toString().padStart(2, '0')}</Text>
+                            <Text>{Math. floor((listening?.item?.duration_ms/1000/60) << 0)}:{Math.floor((listening?.item?.duration_ms/1000) % 60).toString().padStart(2, '0')}</Text>
                         </View>
                     </View>
                 }   
