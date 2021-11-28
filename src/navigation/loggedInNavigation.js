@@ -20,6 +20,8 @@ import Track from './../screens/Track/TrackScreen';
 import Playlist from './../screens/Playlist/PlaylistScreen';
 import SearchScreen from '../screens/Search/SearchScreen';
 
+import Library from '../screens/MyProfile/Library';
+
 export const config = {
   screens: {
     Home: {
@@ -138,7 +140,7 @@ function LoggedInNavigation(props) {
 					open: config,
 					close: config
 				}
-				}} name="Test" component={TestScreen} />
+				}} name="Test" component={Library} />
 				<Stack.Screen name="Settings" component={SettingsScreen} />
 				<Stack.Screen name="Category" component={Category} />
 				<Stack.Screen name="Album" component={Album} />
