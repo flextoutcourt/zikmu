@@ -20,11 +20,7 @@ function HomeScreen() {
     const navigation = useNavigation();
 
     return (
-<<<<<<< HEAD
-        <SafeAreaView style={{flex: 1, backgroundColor: 'black'}}>
-=======
         <SafeAreaView style={{flex: 1, justifyContent: 'space-between', alignItems: 'flex-start', width: Dimensions.get('screen').width, backgroundColor: 'black'}}>
->>>>>>> 68e33f4cb4a8db0bf2fb2291564b05c72ba6e63d
             <RecentComponent />
             <GenreComponent />
         </SafeAreaView>

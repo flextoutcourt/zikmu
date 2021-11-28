@@ -65,6 +65,7 @@ class EntryScreen extends Component {
             <StatusBar backgroundColor={"rgba(0,0,0, 0.5)"} translucent={true} />
             <LoggedinNavigation />
             <Player />
+          </SafeAreaView>
         </SafeAreaProvider>
       );
     }
