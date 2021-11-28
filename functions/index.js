@@ -6,7 +6,7 @@ const server = require("./src/server");
 //* will be filled with the endpoints defined in server.js
 const api = functions
             .region('europe-west1')
-            .runWith({memory: "2GB", timeoutSeconds: 540})
+            .runWith({memory: "2GB", timeoutSeconds: 120})
             .https
             .onRequest(server);
 

@@ -19,7 +19,7 @@ async function proxySpotifyToken(_req, res){
 
     if(refreshToken){ 
         //Refresh token is available, retrieve a new access token
-        spotifyApi.setRefreshToken(resfreshToken);
+        spotifyApi.setRefreshToken(refreshToken);
         spotifyApi.refreshAccessToken().then((data) => {
             data.body.refreshToken = refreshToken;
             return res.json(data.body);
