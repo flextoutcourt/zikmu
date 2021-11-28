@@ -15,9 +15,9 @@ function GenreComponent() {
 
     const navigation = useNavigation();
 
-    useEffect(() => {
-        _get_genres().then((json) => setGenres(json.categories.items))
-    });
+    // useEffect(() => {
+    //     _get_genres().then((json) => setGenres(json.categories.items))
+    // });
 
     const _get_genres = (offset = 0) => {
         console.log("genres");
@@ -31,6 +31,8 @@ function GenreComponent() {
         const response = promise.then((data) => data);
         return response;
     }
+
+    _get_genres();
 
     return (
         <View>
