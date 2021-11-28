@@ -11,6 +11,7 @@ import {ReactReduxContext, connect} from 'react-redux';
 
 import axios from 'axios';
 import Lyrics from './Player/Lyrics';
+import SeekBar from './Player/Seek';
 
 function Player() {
 
@@ -42,53 +43,76 @@ function Player() {
     }
 
     const _pause = () => {
-        axios.put('https://api.spotify.com.v1/me/player/pause', {
+        fetch("https://api.spotify.com/v1/me/player/pause", {
             headers: {
                 Accept: "application/json",
                 Authorization: "Bearer " + store.getState().authentication.accessToken,
                 "Content-Type": "application/json"
-            }
-        });
+            },
+            method: "PUT"
+        })
+        .catch(e => console.log(e.config))
     }
 
     const _play = () => {
-        axios.put('https://api.spotify.com.v1/me/player/play', {
-            body: `{"context_uri\\":\\"${listening?.item?.uri}\\",\\"position_ms\\":${listening?.progress_ms}}`,
+        fetch("https://api.spotify.com/v1/me/player/play", {
             headers: {
                 Accept: "application/json",
                 Authorization: "Bearer " + store.getState().authentication.accessToken,
                 "Content-Type": "application/json"
-            }
-        });
+            },
+            method: "PUT"
+        })
     }
 
     const _next = () => {
-        axios.put('https://api.spotify.com/v1/me/player/next', {
+        fetch('https://api.spotify.com/v1/me/player/next', {
             headers: {
                 Accept: "application/json",
                 Authorization: "Bearer " + store.getState().authentication.accessToken,
                 "Content-Type": "application/json"
-            }
-        })   
+            },
+            method: 'POST'
+        });
     }
 
     const _prev = () => {
-        axios.put('https://api.spotify.com/v1/me/player/previous', {
+        if(listening?.progress_ms > 10000){
+            _seek(0);
+        }else{
+            fetch('https://api.spotify.com/v1/me/player/previous', {
+                headers: {
+                    Accept: "application/json",
+                    Authorization: "Bearer " + store.getState().authentication.accessToken,
+                    "Content-Type": "application/json"
+                },
+                method: 'POST'
+            })
+        }
+    }
+
+    const _seek = (position) => {
+        fetch(`https://api.spotify.com/v1/me/player/seek?position_ms=${Math.round(position * 1000)}`, {
             headers: {
                 Accept: "application/json",
                 Authorization: "Bearer " + store.getState().authentication.accessToken,
                 "Content-Type": "application/json"
-            }
+            },
+            method: "PUT"
+        })
+        .catch(e => {
+            console.log(e);
         })
     }
 
     const _shuffle = () => {
-        axios.put(`https://api.spotify.com/v1/me/player/shuffle?state=${!listening?.shuffle_state}`, {
+        fetch(`https://api.spotify.com/v1/me/player/shuffle?state=${!listening?.shuffle_state}`, {
             headers: {
                 Accept: "application/json",
                 Authorization: "Bearer " + store.getState().authentication.accessToken,
                 "Content-Type": "application/json"
-            }
+            },
+            method: 'PUT'
         })
     }
 
@@ -97,16 +121,17 @@ function Player() {
         if(listening?.repeat_state == 'context'){
             state = 'track';
         }else if(listening?.repeat_state == 'track'){
-            state = false;
+            state = 'off';
         }else{
             state = 'context';
         }
-        axios.put(`https://api.spotify.com/v1/me/player/repeat?state=${state}`, {
+        fetch(`https://api.spotify.com/v1/me/player/repeat?state=${state}`, {
             headers: {
                 Accept: "application/json",
                 Authorization: "Bearer " + store.getState().authentication.accessToken,
                 "Content-Type": "application/json"
-            }
+            },
+            method: 'PUT'
         })
     }
 
@@ -145,14 +170,7 @@ function Player() {
                         </View>
                         <View style={{flex: 1, justifyContent: 'flex-start'}}>
                             <View style={{flexDirection: 'row', marginTop: 15, width: '100%'}}>
-                                <Text>{Math. floor((listening?.progress_ms / 1000 / 60) << 0)}:{Math.floor((listening?.progress_ms / 1000) % 60).toString().padStart(2, '0')}</Text>
-                                <View style={{height: 2, backgroundColor: 'tomato', flex: 1, alignSelf: 'center', marginLeft: 5, marginRight: 5}}>
-                                    <View style={{position: 'relative',height: 2, backgroundColor: 'grey', width: (listening?.progress_ms) / (listening?.item?.duration_ms) * 100 + "%"}}>
-                                        <View style={{borderRadius: 100, height: 8, width: 8, backgroundColor: 'red', position: 'absolute', top: '50%', right: 0, transform : [{translateY: -4}]}}></View>
-                                    </View>
-                                    
-                                </View>
-                                <Text>{Math. floor((listening?.item?.duration_ms / 1000 / 60) << 0)}:{Math.floor((listening?.item?.duration_ms / 1000) % 60).toString().padStart(2, '0')}</Text>
+                                <SeekBar trackLength={listening?.item?.duration_ms / 1000 ?? 0} currentPosition={listening?.progress_ms / 1000} onSeek={_seek} />
                             </View>
                             <View>
                                 <Text numberOfLines={1} style={{fontSize: 24, color: 'white', textAlign: 'center', marginVertical: 15}}>
