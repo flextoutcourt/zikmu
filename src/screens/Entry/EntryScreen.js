@@ -1,8 +1,5 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity, Alert, Image, StatusBar} from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
-
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import {Text} from 'react-native';
 
 //Authentication handler
 import authHandler from '../../utils/authenticationHandler';
@@ -19,9 +16,6 @@ import {
 //Navigations
 import LoggedinNavigation from '../../navigation/loggedInNavigation';
 import GuestNavigation from '../../navigation/guestNavigation';
-
-//components
-import Player from './../../components/Global/Player';
 
 class EntryScreen extends Component {
   state = {refreshToken: ''};
@@ -54,20 +48,12 @@ class EntryScreen extends Component {
   render() {
     const {accessToken, loading} = this.props.authentication;
 
-    // if (loading) {
-    //   return <Text>gjdfskgj</Text>;
-    // }
+    if (loading) {
+      return <Text>Loading</Text>;
+    }
 
     if (accessToken) {
-      return (
-        <SafeAreaProvider>
-          <SafeAreaView style={{flex: 1}}>
-            <StatusBar backgroundColor={"rgba(0,0,0, 0.5)"} translucent={true} />
-            <LoggedinNavigation />
-            <Player />
-          </SafeAreaView>
-        </SafeAreaProvider>
-      );
+      return <LoggedinNavigation />;
     }
 
     return <GuestNavigation />;

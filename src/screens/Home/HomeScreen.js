@@ -6,7 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 import {ReactReduxContext, connect} from 'react-redux';
 
 import axios from 'axios';
-import Store from './../../redux/store/index';
+import Store from './../../redux/store/store';
 
 import RecentComponent from './../../components/Home/RecentComponent';
 import GenreComponent from '../../components/Home/GenreComponent';

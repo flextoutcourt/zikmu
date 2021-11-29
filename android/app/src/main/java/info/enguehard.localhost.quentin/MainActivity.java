@@ -1,4 +1,4 @@
-package com.zik_mu;
+package info.enguehard.localhost.quentin;
 
 import com.facebook.react.ReactActivity;
 

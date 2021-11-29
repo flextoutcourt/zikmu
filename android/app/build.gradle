@@ -138,7 +138,7 @@ android {
         versionName "1.0"
         multiDexEnabled true
         manifestPlaceholders = [
-            appAuthRedirectScheme: 'info.enguehard.localhost.quentin:8081'
+            appAuthRedirectScheme: 'info.enguehard.localhost.quentin'
         ]
     }
     splits {

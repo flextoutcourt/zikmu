@@ -1,9 +1,8 @@
-import { AsyncStorage } from 'react-native';
-
 import {combineReducers} from 'redux';
 
 import authenticationSlice from '../features/authentication/authenticationSlice';
 import {persistReducer} from 'redux-persist';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const authenticationConfig = {
   key: 'authentication',

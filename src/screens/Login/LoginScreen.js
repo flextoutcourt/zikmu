@@ -6,7 +6,11 @@ import {connect} from 'react-redux';
 
 import authHandler from '../../utils/authenticationHandler';
 
-import { setAccessToken, setRefreshToken, setSigingIn } from '../../redux/features/authentication/authenticationSlice';
+import {
+  setAccessToken,
+  setRefreshToken,
+  setSigingIn,
+} from '../../redux/features/authentication/authenticationSlice';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import axios from 'axios';

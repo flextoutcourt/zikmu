@@ -14,7 +14,7 @@ export default function GuestScreen() {
             </View>
             <View style={{flex: 1, alignItems: 'center'}}>
                 <Text style={{color: 'white', fontSize: 48, textTransform: 'uppercase'}}>ZikMu</Text>
-                <Text style={{color: 'rgba(255,255,255,0.7', fontSize: 32, textAlign: 'center'}}>L'application musique du SEII-GNEUUUUR</Text>
+                <Text style={{color: 'rgba(255,255,255,0.7)', fontSize: 32, textAlign: 'center'}}>L'application musique du SEII-GNEUUUUR</Text>
             </View>
             <View style={{flex: 1}}>
                 <TouchableHighlight 
