@@ -1,13 +1,31 @@
+import axios from 'axios';
 import React, {useState, useEffect, useContext} from 'react'
 import { View, Text, Image, TouchableOpacity, Dimensions } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import { ReactReduxContext } from 'react-redux';
 
-function TrackItem({track, album = null}) {
+function TrackItem({track, album = null, favorites = false}) {
+
+    const {store} = useContext(ReactReduxContext);
+
+    const _play = (uri, offset = 0, position = 0) => {
+        console.log(uri, offset, position)
+        fetch("https://api.spotify.com/v1/me/player/play", {
+            body: JSON.stringify({uris: [uri]}),
+            headers: {
+                Accept: "application/json",
+                Authorization: "Bearer " + store.getState().authentication.accessToken,
+                "Content-Type": "application/json"
+            },
+            method: "PUT"
+        })
+        .catch(e => {
+            alert(JSON.stringify(e))
+        })
+    }
 
     return (
-        <TouchableOpacity onPress={() => {
-            alert('will play' + track.name)
-        }}>
+        <TouchableOpacity onPress={() => _play(track?.uri, track?.track_number)}>
             <View style={{width: 116, padding: 0, backgroundColor: 'green', margin: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: Dimensions.get('screen').width - 20}}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Image source={{uri: album?.images[0]?.url}}
@@ -17,7 +35,7 @@ function TrackItem({track, album = null}) {
                     </View>
                 </View>
                 <TouchableOpacity>
-                    <Icon name="heart" size={24} color={"white"} />
+                    <Icon name="heart" size={24} solid={favorites ? true: false} color={"white"} style={{color: 'white'}} />
                 </TouchableOpacity>
             </View>
         </TouchableOpacity>
