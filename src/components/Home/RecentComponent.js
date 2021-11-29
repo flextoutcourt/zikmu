@@ -19,6 +19,7 @@ function RecentComponent() {
     });
 
     const _get_recent = (after = null) => {
+        console.log(store.getState().authentication.accessToken)
         let url = `https://api.spotify.com/v1/me/player/recently-played`;
         after ? url += `?after=${after}` : url;
         const promise = axios.get(url, {

@@ -1,8 +1,13 @@
 import React, {Component} from 'react';
-import {Text} from 'react-native';
+import {Text, View, TouchableOpacity, Alert, Image, StatusBar} from 'react-native';
+import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 //Authentication handler
 import authHandler from '../../utils/authenticationHandler';
+
+import Player from '../../components/Global/Player'
 
 //Redux imports
 import {connect} from 'react-redux';
@@ -48,12 +53,25 @@ class EntryScreen extends Component {
   render() {
     const {accessToken, loading} = this.props.authentication;
 
-    if (loading) {
-      return <Text>Loading</Text>;
-    }
+    // if (loading) {
+    //   return (
+    //     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    //       <Text>Chargement de l'application en cours</Text>
+    //     </View>
+    //   )
+    // }
 
     if (accessToken) {
-      return <LoggedinNavigation />;
+
+      return (
+        <SafeAreaProvider>
+          <SafeAreaView style={{flex: 1}}>
+            <StatusBar backgroundColor={"rgba(0,0,0, 0.5)"} translucent={true} />
+            <LoggedinNavigation />
+            <Player />
+          </SafeAreaView>
+        </SafeAreaProvider>
+      );
     }
 
     return <GuestNavigation />;

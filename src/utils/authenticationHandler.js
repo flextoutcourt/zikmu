@@ -12,22 +12,30 @@ class AuthenticationHandler {
         'playlist-modify-private',
         'user-library-read',
         'user-library-modify',
+        'user-read-email',
+        'user-read-private',
+        'user-read-recently-played',
+        'user-read-currently-playing',
+        'user-read-playback-position',
+        'user-follow-read',
+        'user-top-read',
+        'user-follow-modify',
+        'user-read-playback-state',
+        'user-modify-playback-state'
       ],
       serviceConfiguration: {
         authorizationEndpoint: 'https://accounts.spotify.com/authorize',
-        tokenEndpoint: 'https://europe-west1-zikmu-e3f16.cloudfunctions.net/api/user/authentication',
+        tokenEndpoint: 'https://accounts.spotify.com/api/token',
       },
     };
   }
 
   async onLogin() {
     try {
-      console.log('teststststs');
       const result = await authorize(this.spotifyAuthConfig);
       alert(JSON.stringify(result));
       return result;
     } catch (error) {
-      console.log('teststststsgkfhlgskjfdhlgskjdfhlgk');
       alert(error);
       console.log(JSON.stringify(error));
     } 

@@ -9,7 +9,7 @@ function ArtistItem({artist}) {
     return (
         <TouchableOpacity onPress={() => navigation.navigate('Artist', {
             artist: artist
-        })}>
+        })} style={{flex: 1, width: Dimensions.get('screen').width}}>
             <View style={{width: 116, padding: 0, backgroundColor: 'transparent', margin: 5}}>
                 <Image source={{uri: artist?.images[0]?.url}}
                 style={{width: 116, height: 116, margin: "auto", borderRadius: artist?.images[0]?.height}} />

@@ -16,16 +16,6 @@ function AlbumScreen(props) {
     const navigation = useNavigation();
 
     
-
-    useEffect(() => {
-        _get_album().then(json => {
-            setAlbum(json)
-            navigation.setOptions({
-                title: json?.name
-            })
-        });
-    });
-
     const _get_album = () => {
         const promise = axios.get(`https://api.spotify.com/v1/albums/${props.route.params.album_id}`, {
             headers: {
@@ -37,6 +27,13 @@ function AlbumScreen(props) {
         const response = promise.then((data) => data.data);
         return response;
     }
+    
+    _get_album().then(json => {
+        setAlbum(json)
+        navigation.setOptions({
+            title: json?.name
+        })
+    });
 
     return (
 

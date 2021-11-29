@@ -173,7 +173,7 @@ function Player() {
                                 <SeekBar trackLength={listening?.item?.duration_ms / 1000 ?? 0} currentPosition={listening?.progress_ms / 1000} onSeek={_seek} />
                             </View>
                             <View>
-                                <Text numberOfLines={1} style={{fontSize: 24, color: 'white', textAlign: 'center', marginVertical: 15}}>
+                                <Text numberOfLines={1} style={{fontSize: 24, color: 'white', textAlign: 'center'}}>
                                     {listening?.item?.name}
                                 </Text>
                                 <View style={{marginBottom: 10}}>

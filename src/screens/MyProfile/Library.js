@@ -10,6 +10,7 @@ import Artists from './Library/Artists';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 
 import {useNavigation} from '@react-navigation/native';
+import Tracks from './Library/Tracks';
 
 const Library = () => {
 
@@ -20,13 +21,11 @@ const Library = () => {
     const Tab = createMaterialTopTabNavigator();
 
     return (
-        <View style={{flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: 'black'}}>
-            <Tab.Navigator>
-                <Tab.Screen name="Playlists" component={Playlists}></Tab.Screen>
-                <Tab.Screen name="Albums" component={Albums}></Tab.Screen>
-                <Tab.Screen name="Artists" component={Artists}></Tab.Screen>
-            </Tab.Navigator>
-        </View>
+        <Tab.Navigator>
+            <Tab.Screen name="Playlists" component={Playlists} />
+            <Tab.Screen name="Albums" component={Albums} />
+            <Tab.Screen name="Artists" component={Artists} />
+        </Tab.Navigator>
     );
 };
 
