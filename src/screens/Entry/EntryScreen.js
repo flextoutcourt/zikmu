@@ -62,11 +62,10 @@ class EntryScreen extends Component {
     // }
 
     if (accessToken) {
-
       return (
         <SafeAreaProvider>
-          <SafeAreaView style={{flex: 1}}>
-            <StatusBar backgroundColor={"rgba(0,0,0, 0.5)"} translucent={true} />
+          <SafeAreaView style={{flex: 1, paddingTop: -StatusBar.currentHeight}}>
+            <StatusBar backgroundColor={"rgba(0,0,0, 0.5)"} translucent={true}  />
             <LoggedinNavigation />
             <Player />
           </SafeAreaView>
@@ -74,7 +73,14 @@ class EntryScreen extends Component {
       );
     }
 
-    return <GuestNavigation />;
+    return (
+      <SafeAreaProvider>
+        <SafeAreaView style={{flex: 1, marginTop: -StatusBar.currentHeight}}>
+          <StatusBar backgroundColor={"rgba(0,0,0, 0.5)"} translucent={true}  />
+          <GuestNavigation />
+        </SafeAreaView>
+      </SafeAreaProvider>
+    )
   }
 }
 
