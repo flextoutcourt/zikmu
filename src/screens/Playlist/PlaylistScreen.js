@@ -6,6 +6,7 @@ import {useNavigation} from '@react-navigation/native';
 
 import axios from 'axios';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import TrackItem from '../../components/Track/TrackItem';
 
 function PlaylistScreen(props) {
 
@@ -32,30 +33,24 @@ function PlaylistScreen(props) {
 
     return (
         <SafeAreaView style={{flex: 1, justifyContent: 'space-between', alignItems: 'flex-start', width: Dimensions.get('screen').width}}>
-            <Suspense fallback={null}>
-                {
-                    playlist
-                    ?
-                        <FlatList
-                            data={playlist.tracks.items}
-                            scrollEnabled={true}
-                            horizontal={false}
-                            renderItem={({item, key}) => (
-                                <TouchableOpacity onPress={() => navigation.navigate('Playlist', {
-                                    playlist_id: item.track.id
-                                })}>
-                                    <Image source={{uri: item?.track?.album?.images[0]?.url ?? 'null'}}
-                                        style={{width: 116, height: 116, margin: "auto"}} />
-                                    <Text>
-                                        {item?.track?.name}
-                                    </Text>
-                                </TouchableOpacity>
-                            )}
-                        />
-                    :
-                        null
-                }
-            </Suspense>
+            {
+                playlist
+                ?
+                    <FlatList
+                        data={playlist.tracks.items}
+                        scrollEnabled={true}
+                        horizontal={false}
+                        renderItem={({item, key}) => (
+                            <TouchableOpacity onPress={() => navigation.navigate('Playlist', {
+                                playlist_id: item.track.id
+                            })}>
+                                <TrackItem track={item?.track} album={item?.track?.album} />
+                            </TouchableOpacity>
+                        )}
+                    />
+                :
+                    null
+            }
         </SafeAreaView>
     )
 }

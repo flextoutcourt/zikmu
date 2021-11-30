@@ -21,6 +21,7 @@ import Playlist from './../screens/Playlist/PlaylistScreen';
 import SearchScreen from '../screens/Search/SearchScreen';
 
 import Library from '../screens/MyProfile/Library';
+import Tracks from '../screens/MyProfile/Library/Tracks';
 
 export const config = {
   screens: {
@@ -57,8 +58,6 @@ function LoggedInNavigation(props) {
 
     const {store} = useContext(ReactReduxContext);
 
-    console.log(store.getState().authentication.accessToken)
-
     function SettingsScreen({ navigation }) {
         return (
         <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
@@ -87,7 +86,7 @@ function LoggedInNavigation(props) {
         return(
         <Stack.Navigator screenOptions={{
             gestureEnabled: true,
-			headerShown: false
+			      headerShown: false
         }}>
             <Stack.Screen options={{
             transitionSpec: {
@@ -131,23 +130,35 @@ function LoggedInNavigation(props) {
     function libraryNavigationStack()
     {
 		return(
-			<Stack.Navigator screenOptions={{
-				gestureEnabled: true,
-				headerShown: false
-			}}>
-				<Stack.Screen options={{
-				transitionSpec: {
-					open: config,
-					close: config
-				}
-				}} name="Test" component={Library} />
-				<Stack.Screen name="Settings" component={SettingsScreen} />
-				<Stack.Screen name="Category" component={Category} />
-				<Stack.Screen name="Album" component={Album} />
-				<Stack.Screen name="Artist" component={Artist} />
-				<Stack.Screen name="Track" component={Track} />
-				<Stack.Screen name="Playlist" component={Playlist} />
-			</Stack.Navigator>
+			<View style={{flex: 1}}>
+        <Stack.Navigator screenOptions={{
+            gestureEnabled: true,
+          }}
+          defaultScreenOptions={{
+            headerShown: false
+          }}
+        >
+          <Stack.Screen options={{
+            transitionSpec: {
+              open: config,
+              close: config
+            },
+            headerShown: false
+          }} name="Test" component={Library} />
+          <Stack.Screen name="Settings" component={SettingsScreen} />
+          <Stack.Screen name="Category" component={Category} />
+          <Stack.Screen name="Album" component={Album} options={{
+            haederShown: true
+          }} />
+          <Stack.Screen name="Artist" component={Artist} options={{
+            haederShown: true
+          }} />
+          <Stack.Screen name="MyTracks" component={Tracks} />
+          <Stack.Screen name="Playlist" component={Playlist} options={{
+            haederShown: true
+          }} />
+        </Stack.Navigator>
+      </View>
 			)
     }
 
@@ -175,9 +186,9 @@ function LoggedInNavigation(props) {
                 backgroundColor: 'black'
               },
               tabBarActiveBackgroundColor: 'transparent',
-	      tabBarInactiveBackgroundColor: 'black',
-	      tabBarActiveBackgroundColor: 'black',
-	      tabBarActiveTintColor: 'purple',
+              tabBarInactiveBackgroundColor: 'black',
+              tabBarActiveBackgroundColor: 'black',
+              tabBarActiveTintColor: 'purple',
               gestureEnabled: true,
               headerShown: false,
             })}

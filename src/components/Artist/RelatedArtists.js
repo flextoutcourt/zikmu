@@ -13,10 +13,6 @@ function RelatedArtists({artist}) {
 
     const navigation = useNavigation();
 
-    useEffect(() => {
-        _get_artist_related().then(json => setRelated(json))
-    });
-
     const _get_artist_related = () => {
         const promise = axios.get(`https://api.spotify.com/v1/artists/${artist.id}/related-artists`, {
             headers: {
@@ -28,6 +24,8 @@ function RelatedArtists({artist}) {
         const response = promise.then((data) => data.data);
         return response;
     }
+    
+    _get_artist_related().then(json => setRelated(json))
 
     return (
         <FlatList

@@ -12,9 +12,7 @@ function Albums({artist}) {
     const { store } = useContext(ReactReduxContext);
     
     const navigation = useNavigation();
-    useEffect(() => {
-        _get_artist_album().then(json => setAlbums(json));
-    });
+
     const _get_artist_album = () => {
         const promise = axios.get(`https://api.spotify.com/v1/artists/${artist.id}/albums`, {
             headers: {
@@ -26,6 +24,8 @@ function Albums({artist}) {
         const response = promise.then((data) => data.data);
         return response;
     }
+
+    _get_artist_album().then(json => setAlbums(json));
 
     return (
         <FlatList

@@ -14,12 +14,8 @@ function RecentComponent() {
 
     const navigation = useNavigation();
 
-    useEffect(() => {
-        _get_recent().then((json) => setRecent(json.items))
-    });
 
     const _get_recent = (after = null) => {
-        console.log(store.getState().authentication.accessToken)
         let url = `https://api.spotify.com/v1/me/player/recently-played`;
         after ? url += `?after=${after}` : url;
         const promise = axios.get(url, {
@@ -32,6 +28,8 @@ function RecentComponent() {
         const response = promise.then((data) => data.data);
         return response;
     }
+
+    _get_recent().then(data => setRecent(data))
 
     return (
         <View>

@@ -51,7 +51,7 @@ function ArtistScreen(props) {
     _get_artist();
 
     return (
-        <ScrollView style={{flex: 1, backgroundColor: 'black'}}>
+        <ScrollView style={{flex: 1, backgroundColor: 'black', width: Dimensions.get('screen').width}}>
             {
                 artist
                 ?

@@ -8,10 +8,6 @@ export default function Playlist(props) {
 
     const [playlist, setPlaylist] = useState(null)
 
-    useEffect(() => {
-        _get_playlist().then(json => setPlaylist(json))
-    });
-
     const _get_playlist = () => {
         const promise = axios.get('https://api.spotify.com/v1/playlists/' + props.route.params.playlist_id , {
             headers: {
@@ -23,6 +19,8 @@ export default function Playlist(props) {
         const response = promise.then(data => data.data);
         return response
     }
+
+    _get_playlist().then(json => setPlaylist(json))
 
     return (
         <Suspense fallback={null}>

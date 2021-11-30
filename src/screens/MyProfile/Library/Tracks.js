@@ -5,12 +5,15 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import { connect, ReactReduxContext } from 'react-redux';
 import TrackItem from '../../../components/Track/TrackItem';
 import axios from 'axios';
+import { useNavigation } from '@react-navigation/native';
 
 const Tracks = () => {
 
     const {store} = useContext(ReactReduxContext)
 
     const [tracks, setTracks] = useState([]);
+
+    const navigation = useNavigation();
 
     const _get_tracks = (offset = 0) => {
         const promise = axios.get('https://api.spotify.com/v1/me/tracks', {
@@ -25,6 +28,10 @@ const Tracks = () => {
     }
 
     _get_tracks().then(data => setTracks(data.data));
+
+    navigation.setOptions({
+        title: 'Mes favoris'
+    })
 
     return (
         <View style={styles.container}>

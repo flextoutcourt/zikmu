@@ -30,13 +30,13 @@ function TrackItem({track, album = null, favorites = false}) {
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Image source={{uri: album?.images[0]?.url}}
                     style={{width: 50, height: 50, margin: "auto"}} />
-                    <View style={{marginLeft: 10}}>
-                        <Text style={{fontWeight: 'bold', color: 'white'}}>{track?.name}</Text>
-                    </View>
                 </View>
-                <TouchableOpacity>
-                    <Icon name="heart" size={24} solid={favorites ? true: false} color={"white"} style={{color: 'white'}} />
-                </TouchableOpacity>
+                <View style={{marginLeft: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingRight: 10}}>
+                    <Text style={{fontWeight: 'bold', color: 'white'}} numberOfLines={1}>{track?.name}</Text>
+                    <TouchableOpacity>
+                        <Icon name="heart" size={24} solid={favorites ? true: false} color={"white"} style={{color: 'white'}} />
+                    </TouchableOpacity>
+                </View>
             </View>
         </TouchableOpacity>
     )

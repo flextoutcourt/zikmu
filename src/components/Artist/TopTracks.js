@@ -12,11 +12,7 @@ function TopTracks({artist}) {
     const { store } = useContext(ReactReduxContext);
 
     const navigation = useNavigation();
-
-    useEffect(() => {
-        _get_artist_top_tracks().then(json => setTopTracks(json));
-    });
-
+    
     const _get_artist_top_tracks = () => {
         const promise = axios.get(`https://api.spotify.com/v1/artists/${artist.id}/top-tracks?country=FR`, {
             headers: {
@@ -28,6 +24,8 @@ function TopTracks({artist}) {
         const response = promise.then((data) => data.data);
         return response;
     }
+
+    _get_artist_top_tracks().then(json => setTopTracks(json));
 
     return (
         <FlatList

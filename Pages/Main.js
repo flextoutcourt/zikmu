@@ -52,18 +52,16 @@ const Main = () => {
 			return responseData;
 	}
 
-	useEffect(() => {
-		// _get_tracks().then(json => {
-		// 	setTracks(json.items);
-		// });
-		// _get_genres().then((json) => {
-		// 	// console.log(json.items)
-		// 	setGenres(json.categories.items);
-		// })
-		// _get_recent().then(json => {
-		// 	setRecent(json.items);
-		// })
-	}, []);
+	_get_tracks().then(json => {
+		setTracks(json.items);
+	});
+	_get_genres().then((json) => {
+		// console.log(json.items)
+		setGenres(json.categories.items);
+	})
+	_get_recent().then(json => {
+		setRecent(json.items);
+	})
 
 	return (
 		<View style={{flex: 1}}>

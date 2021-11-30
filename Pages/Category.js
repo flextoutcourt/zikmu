@@ -10,10 +10,7 @@ const Category = (props) => {
     const [category, setCategory] = useState(null);
     const [categoryPlaylists, setCategoryPlaylists] = useState([])
 
-    useEffect(() => {
-        _get_category().then(json => setCategory(json));
-        _get_category_playslits().then(json => setCategoryPlaylists(json.playlists.items));
-    });
+    
 
     const _get_category = () => {
         const promise = axios.get('https://api.spotify.com/v1/browse/categories/' + props.route.params.category_id, {
@@ -27,7 +24,7 @@ const Category = (props) => {
         return response;
     }
 
-    const _get_category_playslits = (offset = 0) => {
+    const _get_category_playlist = (offset = 0) => {
         const promise = axios.get('https://api.spotify.com/v1/browse/categories/' + props.route.params.category_id + '/playlists', {
             headers: {
 				Accept: "application/json",
@@ -38,6 +35,9 @@ const Category = (props) => {
         const response = promise.then((data) => data.data);
         return response;
     }
+
+    _get_category().then(json => setCategory(json));
+    _get_category_playlist().then(json => setCategoryPlaylists(json.playlists.items));
 
     return (
         <Suspense fallback={null}>

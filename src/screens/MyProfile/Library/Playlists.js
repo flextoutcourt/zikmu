@@ -1,10 +1,12 @@
 //import liraries
 import axios from 'axios';
 import React, { Component, useContext, useState } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity, Dimensions, StatusBar } from 'react-native';
 import { ReactReduxContext } from 'react-redux';
 import AlbumItem from '../../../components/Album/AlbumItem';
 import PlaylistItem from '../../../components/Playlist/PlaylistItem';
+import {useNavigation} from '@react-navigation/native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 // create a component
 export default function Playlists(){
@@ -12,6 +14,8 @@ export default function Playlists(){
     const [playlists, setPlaylists] = useState([]);
 
     const {store} = useContext(ReactReduxContext);
+
+    const navigation = useNavigation();
 
     const _get_playlists = (offset = 0) => {
         const promise = axios.get('https://api.spotify.com/v1/me/playlists', {
@@ -28,8 +32,15 @@ export default function Playlists(){
     _get_playlists().then(data => setPlaylists(data));
 
     return (
-        <View style={styles.container}>
+        <View style={{marginTop: -StatusBar.currentHeight}, styles.container}>
             <FlatList
+                ListHeaderComponent={() => (
+                    <TouchableOpacity onPress={() => {
+                        navigation.navigate('MyTracks');
+                    }}>
+                        <Text>Mes titres likés</Text> 
+                    </TouchableOpacity>
+                )}
                 data={playlists?.items}
                 scrollEnabled={true}
                 horizontal={false}
@@ -51,6 +62,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#2c3e50',
+        backgroundColor: '#2c3e50'
     },
 });
