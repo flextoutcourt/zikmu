@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React from 'react';
-import { Dimensions, FlatList, Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import { Dimensions, FlatList, Image, ScrollView, StatusBar, StyleSheet, Text, View, SectionList } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import { connect } from 'react-redux';
@@ -12,7 +12,9 @@ class AlbumScreen extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            album: null
+            album: null,
+            disks: null,
+            test: null
         }
     }
     
@@ -27,10 +29,29 @@ class AlbumScreen extends React.Component {
         const response = promise.then((data) => data.data);
         return response;
     }
+
+    _group_by_key = (array) => {
+        let groups = [];
+        array.map((item, key) => {
+            if(groups[item.disc_number]){
+                groups[item.disc_number].data.push(item);
+            }else{
+                groups[item.disc_number] = {
+                    title: 'Disque ' + item.disc_number,
+                    data: [],
+                };
+                groups[item.disc_number].data.push(item);
+            }
+        })
+        return groups;
+
+    }
     
     componentDidMount(){
         this._get_album().then(json => {
             this.setState({album: json});
+            this.setState({disks :this._group_by_key(json.tracks.items, 'disc_number')});
+            this.setState({test :this._group_by_key(json.tracks.items, 'disc_number')});
             this.props.navigation.setOptions({
                 headerTitle: () => (
                     <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: -15, overflow: 'hidden'}}>
@@ -60,15 +81,25 @@ class AlbumScreen extends React.Component {
                         <Image source={{uri: this.state.album?.images[0]?.url}} style={{width: Dimensions.get('screen').width - 20, height: Dimensions.get('screen').width - 20, marginBottom: 15, borderRadius: 10}}/>
                     </View>
                     <Text style={{fontSize: 24, color: 'white', textAlign: 'center'}}>{this.state.album?.name}</Text>
-                    <FlatList
-                        data={this.state.album?.tracks?.items}
-                        scrollEnabled={true}
-                        horizontal={false}
-                        style={{marginBottom: 110}}
-                        renderItem={({item, key}) => (
-                            <TrackItem track={item} album={this.state.album} />
-                        )}
-                    />
+                    {
+                        this.state.disks && this.state.test
+                        ?
+                            <SectionList
+                                sections={this.state.disks.splice(1)}
+                                keyExtractor={({item, index}) => item * index}  
+                                renderItem={({item, section}) => (
+                                    <TrackItem track={item} album={this.state.album} disks={this.state.test} type={"album"} />
+                                )}
+                                renderSectionHeader={({ section: { title } }) => (
+                                    <View style={{flexDirection: 'row', alignItems: 'center', justifyContent:'flex-start', marginLeft: 5}}> 
+                                        <FontAwesome5Icon name='compact-disc' size={24}/>
+                                        <Text style={{fontSize: 18, marginLeft: 10, color: 'white', marginVertical: 15}}>{title}</Text>
+                                    </View>
+                                )}
+                            />
+                        :
+                            null
+                    }
                 </ScrollView>
             </LinearGradient>
         )

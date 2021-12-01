@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { connect } from 'react-redux';
-import { play } from '../../../redux/features/play';
 
 class Recentitem extends Component {
 

@@ -28,6 +28,24 @@ class Albums extends React.Component{
         return response;
     }
 
+    _group_by_key = (array, f) => {
+        let groups = [];
+        array.map((item, key) => {
+            if(groups[item.disc_number]){
+                groups[item.disc_number].data.push(item);
+            }else{
+                groups[item.disc_number] = {
+                    title: 'Disque ' + item.disc_number,
+                    data: [],
+                };
+                groups[item.disc_number].data.push(item);
+            }
+        })
+
+        this.setState({disks: groups});
+
+    }
+
     componentDidMount(){
         this._get_albums().then(data => this.setState({albums: data.items}));
     }

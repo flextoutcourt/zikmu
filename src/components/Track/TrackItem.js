@@ -9,10 +9,39 @@ class TrackItem extends React.Component {
         super(props);
     }
 
-    _play = (uri, offset = 0, position = 0) => {
-        console.log(uri, offset, position)
+    _set_offset = (disc_number, track_number) => {
+        let offset = 0;
+        while(disc_number > 0){
+            offset += (this.props.disks[disc_number - 1]?.data?.length ?? 0);
+            disc_number--;
+        }
+        return offset+track_number;
+    }
+
+    _play = (uri, track_number, disc_number = 1) => {
+        let offset = this._set_offset(disc_number, track_number);
+        let body = {};
+        if(this.props.type == "album"){
+            body = {
+                "context_uri": uri,
+                "offset": {
+                    "position": offset - 1,
+                },
+                "position_ms": 0,
+            };
+        }else{
+            body = {
+                "uris": [uri],
+                "offset": {
+                    "position": offset - 1,
+                },
+                "position_ms": 0,
+            };
+
+        }
+
         fetch("https://api.spotify.com/v1/me/player/play", {
-            body: JSON.stringify({uris: [uri]}),
+            body: JSON.stringify(body),
             headers: {
                 Accept: "application/json",
                 Authorization: "Bearer " + this.props.store.authentication.accessToken,
@@ -27,7 +56,9 @@ class TrackItem extends React.Component {
 
     render(){
         return (
-            <TouchableOpacity onPress={() => this._play(this.props.track?.uri, this.props.track?.track_number)}>
+            <TouchableOpacity onPress={() => 
+                this._play(this.props.type == "album" ? this.props.album?.uri : this.props.track?.uri, this.props.track?.track_number, this.props.track?.disc_number)
+            }>
                 <View style={{width: 116, padding: 0, margin: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: Dimensions.get('screen').width - 20}}>
                     <View style={{flexDirection: 'row', alignItems: 'center', elevation: 5}}>
                         <Image source={{uri: this.props.album?.images[2]?.url}}
