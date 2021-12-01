@@ -1,27 +1,26 @@
 //import liraries
 import axios from 'axios';
-import React, { Component, useContext, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, TouchableOpacity, Dimensions, StatusBar } from 'react-native';
-import { ReactReduxContext } from 'react-redux';
-import AlbumItem from '../../../components/Album/AlbumItem';
+import React from 'react';
+import { FlatList, StatusBar, StyleSheet, Text, TouchableOpacity } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { connect } from 'react-redux';
 import PlaylistItem from '../../../components/Playlist/PlaylistItem';
-import {useNavigation} from '@react-navigation/native';
-import { SafeAreaView } from 'react-native-safe-area-context';
 
 // create a component
-export default function Playlists(){
+class Playlists extends React.Component{
 
-    const [playlists, setPlaylists] = useState([]);
-
-    const {store} = useContext(ReactReduxContext);
-
-    const navigation = useNavigation();
-
-    const _get_playlists = (offset = 0) => {
-        const promise = axios.get('https://api.spotify.com/v1/me/playlists', {
+    constructor(props){
+        super(props);
+        this.state = {
+            playlists: null
+        }
+    }
+    
+    _get_playlists = (offset = 0) => {
+        const promise = axios.get(`https://api.spotify.com/v1/me/playlists?offset=${offset}`, {
             headers: {
                 Accept: "application/json",
-                Authorization: "Bearer " + store.getState().authentication.accessToken,
+                Authorization: "Bearer " + this.props.store.authentication.accessToken,
                 "Content-Type": "application/json"
             },
         });
@@ -29,31 +28,37 @@ export default function Playlists(){
         return response;
     }
 
-    _get_playlists().then(data => setPlaylists(data));
+    componentDidMount(){
+        this._get_playlists().then(data => this.setState({playlists: data.items}));
+    }
 
-    return (
-        <View style={{marginTop: -StatusBar.currentHeight}, styles.container}>
-            <FlatList
-                ListHeaderComponent={() => (
-                    <TouchableOpacity onPress={() => {
-                        navigation.navigate('MyTracks');
-                    }}>
-                        <Text>Mes titres likés</Text> 
-                    </TouchableOpacity>
-                )}
-                data={playlists?.items}
-                scrollEnabled={true}
-                horizontal={false}
-                // onEndReachedThreshold={0.4}
-                // onEndReached={() => {
-                //     _get_playlists(playlists?.items?.length).then(json => setPlaylists(playlists => playlists?.items?.concat(json.items)))
-                // }}
-                renderItem={({item, key}) => (
-                    <PlaylistItem playlist={item} />
-                )}
-            />
-        </View>
-    );
+    render(){
+        return (
+            <LinearGradient colors={['#B00D72', '#5523BF']} style={{marginTop: -StatusBar.currentHeight}, styles.container}>
+                <FlatList
+                    ListHeaderComponent={() => (
+                        <TouchableOpacity onPress={() => {
+                            navigation.navigate('MyTracks');
+                        }}>
+                            <Text>Mes titres likés</Text> 
+                        </TouchableOpacity>
+                    )}
+                    data={this.state.playlists}
+                    scrollEnabled={true}
+                    horizontal={false}
+                    onEndReachedThreshold={0.1}
+                    onEndReached={() => {
+                        this._get_playlists(this.state.playlists.length - 1).then(data => {
+                            this.setState({playlists: [...this.state.playlists, ...data.items]});
+                        });
+                    }}
+                    renderItem={({item, key}) => (
+                        <PlaylistItem playlist={item} />
+                    )}
+                />
+            </LinearGradient>
+        );
+    }
 };
 
 // define your styles
@@ -65,3 +70,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#2c3e50'
     },
 });
+
+const mapStateToProps = store => {
+    return {
+        store: store
+    }
+}
+
+export default connect(mapStateToProps)(Playlists)

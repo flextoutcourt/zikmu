@@ -23,6 +23,7 @@ import LoggedinNavigation from '../../navigation/loggedInNavigation';
 import GuestNavigation from '../../navigation/guestNavigation';
 
 class EntryScreen extends Component {
+
   state = {refreshToken: ''};
 
   componentDidUpdate(prevProps) {

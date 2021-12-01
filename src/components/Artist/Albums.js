@@ -1,23 +1,23 @@
-import { useNavigation } from '@react-navigation/core';
-import React, {useState, useEffect, useContext} from 'react'
-import { View, Text, Image, Dimensions, FlatList, ScrollView } from 'react-native'
-import {connect, ReactReduxContext} from 'react-redux';
 import axios from 'axios';
+import React, { Suspense } from 'react';
+import { FlatList } from 'react-native';
+import { connect } from 'react-redux';
 import AlbumItem from '../Album/AlbumItem';
 
-function Albums({artist}) {
+class Albums extends React.Component {
     
-    const [albums, setAlbums] = useState([]);
-
-    const { store } = useContext(ReactReduxContext);
+    constructor(props){
+        super(props);
+        this.state = {
+            albums: null
+        }
+    }
     
-    const navigation = useNavigation();
-
-    const _get_artist_album = () => {
-        const promise = axios.get(`https://api.spotify.com/v1/artists/${artist.id}/albums`, {
+    _get_artist_album = () => {
+        const promise = axios.get(`https://api.spotify.com/v1/artists/${this.props.artist.id}/albums`, {
             headers: {
                 Accept: "application/json",
-                Authorization: "Bearer " + store.getState().authentication.accessToken,
+                Authorization: "Bearer " + this.props.store.authentication.accessToken,
                 "Content-Type": "application/json"
             }
         });
@@ -25,23 +25,32 @@ function Albums({artist}) {
         return response;
     }
 
-    _get_artist_album().then(json => setAlbums(json));
+    componentDidMount(){
+        this._get_artist_album().then(json => this.setState({albums: json}));
+    }
 
-    return (
-        <FlatList
-            data={albums?.items}
-            scrollEnabled={false}
-            style={{marginBottom: 110}}
-            renderItem={({item, key}) => (
-                <AlbumItem album={item} />
-            )}
-        />
-    )
+
+    render(){
+        return (
+            <Suspense fallback={null}>
+                <FlatList
+                    data={this.state.albums?.items}
+                    horizontal={true}
+                    style={{marginBottom: 110}}
+                    renderItem={({item, key}) => (
+                        <AlbumItem album={item} />
+                    )}
+                />
+            </Suspense>
+        )
+    }
 }
 
 
 const mapStateToProps = store => {
-    props: store.props
+    return {
+        store: store
+    }
 }
 
 export default connect(mapStateToProps)(Albums)

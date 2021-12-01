@@ -3,19 +3,21 @@ import { View, Text, Dimensions } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { ReactReduxContext, connect } from 'react-redux'
 
-function WaitingList() {
+class WaitingList extends React.Component {
 
-    const { store } = useContext(ReactReduxContext);
-
-    return (
-        <SafeAreaView style={{flex: 1, justifyContent: 'space-between', alignItems: 'flex-start', width: Dimensions.get('screen').width}}>
-            <Text></Text>
-        </SafeAreaView>
-    )
+    render(){
+        return (
+            <SafeAreaView style={{flex: 1, justifyContent: 'space-between', alignItems: 'flex-start', width: Dimensions.get('screen').width}}>
+                <Text></Text>
+            </SafeAreaView>
+        )
+    }
 }
 
 const mapStateToProps = store => {
-    props: store.props
+    return {
+        store: store
+    }
 }
 
 export default connect(mapStateToProps)(WaitingList)

@@ -1,22 +1,28 @@
 //import liraries
 import axios from 'axios';
-import React, { Component, useContext, useState } from 'react';
-import { View, Text, StyleSheet, FlatList, Dimensions } from 'react-native';
-import { ReactReduxContext } from 'react-redux';
+import { json } from 'express';
+import React from 'react';
+import { Dimensions, FlatList, StatusBar, StyleSheet } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { connect } from 'react-redux';
 import ArtistItem from '../../../components/Artist/ArtistItem';
 
 // create a component
-export default function Artist(){
+class Artist extends React.Component{
 
-    const [artist, setArtist] = useState([]);
-
-    const {store} = useContext(ReactReduxContext);
-
-    const _get_artist = (offset = 0) => {
-        const promise = axios.get('https://api.spotify.com/v1/me/following?type=artist', {
+    constructor(props){
+        super(props);
+        this.state = {
+            artists: [],
+        }
+    }
+    
+    _get_artist = (offset = 0) => {
+        console.log(offset);
+        const promise = axios.get(`https://api.spotify.com/v1/me/following?type=artist&after=${offset}&limit=20`, {
             headers: {
                 Accept: "application/json",
-                Authorization: "Bearer " + store.getState().authentication.accessToken,
+                Authorization: "Bearer " + this.props.store.authentication.accessToken,
                 "Content-Type": "application/json"
             },
         });
@@ -24,22 +30,37 @@ export default function Artist(){
         return response;
     }
 
-    _get_artist().then(data => setArtist(data.artists));
+    componentDidMount(){
+        this._get_artist().then(data => this.setState({artists: data.artists.items}));
+    }
 
-    return (
-        <View style={styles.container}>
-            <FlatList
-                data={artist?.items}
-                scrollEnabled={true}
-                horizontal={false}
-                numColumns={3}
-                renderItem={({item}) => (
-                    <ArtistItem artist={item} />
-                )}
-                // keyExtractor={(item, index) => index}
-            />
-        </View>
-    );
+    render(){
+        return (
+            <LinearGradient colors={['#B00D72', '#5523BF']} style={{marginTop: -StatusBar.currentHeight}, styles.container}>
+                <FlatList
+                    data={this.state.artists}
+                    scrollEnabled={true}
+                    horizontal={false}
+                    numColumns={3}
+                    keyExtractor={item => item.id}
+                    renderItem={({item, key}) => (
+                        <ArtistItem artist={item} />
+                    )}
+                    onEndReachedThreshold={0.1}
+                    onEndReached={() => {
+                        this._get_artist(this.state.artists[this.state.artists.length - 1].id).then(data => {
+                            // this.state.artists.push(data.artists.items);
+                            // console.log(this.state.artists);
+                            this.setState({artists: [...this.state.artists, ...data.artists.items]});
+                        });
+                        // this._get_artist(this.state.artists[this.state.artists.length - 1].id).then(data => console.log(data.artists.items))
+                    }}
+                    contentContainerStyle={{alignItems: 'center'}}
+                    style={{width: Dimensions.get('screen').width, flex: 1}}
+                />
+            </LinearGradient>
+        );
+    }
 };
 
 // define your styles
@@ -51,3 +72,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#2c3e50',
     },
 });
+
+const mapStateToProps = store => {
+    return {
+        store: store
+    }
+}
+
+export default connect(mapStateToProps)(Artist)

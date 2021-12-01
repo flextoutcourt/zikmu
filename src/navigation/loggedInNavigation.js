@@ -203,7 +203,7 @@ function LoggedInNavigation(props) {
 
 const mapStateToProps = store => {
       return {
-        props: store.props
+        store: store
       }
     }
 

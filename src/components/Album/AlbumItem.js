@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import React, {useState, useEffect, useContext} from 'react'
-import { View, Text, Image, TouchableOpacity, Dimensions } from 'react-native'
+import { View, Text, Image, TouchableOpacity, Dimensions, TouchableWithoutFeedback } from 'react-native'
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 function AlbumItem({album}) {
@@ -8,24 +8,17 @@ function AlbumItem({album}) {
     const navigation = useNavigation();
 
     return (
-        <TouchableOpacity onPress={() => {
+        <TouchableWithoutFeedback onPress={() => {
             navigation.navigate('Album', {
                 album_id: album.id,
             })
         }}>
-            <View style={{width: 116, padding: 0, backgroundColor: 'green', margin: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: Dimensions.get('screen').width - 20}}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={{uri: album?.images[0]?.url}}
-                    style={{width: 50, height: 50, margin: "auto"}} />
-                    <View style={{marginLeft: 10}}>
-                        <Text style={{fontWeight: 'bold', color: 'white'}}>{album?.name}</Text>
-                    </View>
-                </View>
-                <TouchableOpacity>
-                    <Icon name="heart" size={24} color={"white"} />
-                </TouchableOpacity>
+            <View style={{alignItems: 'center', justifyContent: 'flex-start', maxWidth: Dimensions.get('screen').width / 2, margin: 10}}>
+                <Image source={{uri: album?.images[1]?.url}}
+                style={{width: Dimensions.get('screen').width / 2 - 20, height: Dimensions.get('screen').width / 2 - 20, borderRadius: 10}} />
+                <Text style={{fontWeight: 'bold', color: 'white'}} numberOfLines={1} textBreakStrategy={"balanced"}>{album?.name}</Text>
             </View>
-        </TouchableOpacity>
+        </TouchableWithoutFeedback>
     )
 }
 

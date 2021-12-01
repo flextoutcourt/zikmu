@@ -1,79 +1,95 @@
-import { useNavigation } from '@react-navigation/core';
-import React, {useState, useEffect, useContext} from 'react'
-import { View, Text, Image, Dimensions, FlatList, ScrollView } from 'react-native'
-
-import {connect, ReactReduxContext} from 'react-redux';
-
 import axios from 'axios';
-
-import TrackItem from '../../components/Track/TrackItem';
-import AlbumItem from '../../components/Album/AlbumItem';
-import TopTracks from '../../components/Artist/TopTracks';
+import React from 'react';
+import { Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import { connect } from 'react-redux';
 import Albums from '../../components/Artist/Albums';
 import RelatedArtists from '../../components/Artist/RelatedArtists';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import TopTracks from '../../components/Artist/TopTracks';
 
-function ArtistScreen(props) {
+class ArtistScreen extends React.Component {
 
-    const [artist, setArtist] = useState(null);
-    const [albums, setAlbums] = useState(null);
-    const [topTracks, setTopTracks] = useState([]);
-    const [related, setRelated] = useState([]);
-
-    const { store } = useContext(ReactReduxContext);
-
-    const navigation = useNavigation();
-
-    const _get_artist = () => {
-        if(props.route.params.artist_id){
-            axios.get(`https://api.spotify.com/v1/artists/${props.route.params.artist_id}`, {
-                headers: {
-                    Accept: "application/json",
-                    Authorization: "Bearer " + store.getState().authentication.accessToken,
-                    "Content-Type": "application/json"
-                }
-            })
-            .then((data) => {
-                console.log("data.data", data.data)
-                setArtist(data.data);
-                navigation.setOptions({
-                    title: data.data.name
-                });
-            })
-            .catch(e => {
-                console.error('errorrrrr', e.status);
-            })
-        }else{
-            setArtist(props.route.params.artist);
+    constructor(props){
+        super(props);
+        this.state = {
+            artist: null
         }
     }
-
-    _get_artist();
-
-    return (
-        <ScrollView style={{flex: 1, backgroundColor: 'black', width: Dimensions.get('screen').width}}>
-            {
-                artist
-                ?
-                    <>
-                        <View style={{alignItems: 'center', marginTop: 10}} >
-                            <Image source={{uri: artist?.images[0]?.url}} style={{width: Dimensions.get('screen').width - 150, height: Dimensions.get('screen').width - 150, borderRadius: artist?.images[0].height}} />
-                        </View>
-                        <Text style={{fontSize: 36, color: 'white', textAlign: 'center', marginTop: 10}}>{artist?.name}</Text>
-                        <TopTracks artist={artist} />
-                        <Albums artist={artist} />
-                        <RelatedArtists artist={artist} />
-                    </>
-                :
-                    <Text>test</Text>
+    _get_artist = () => {
+        const promise = axios.get(`https://api.spotify.com/v1/artists/${this.props.route.params.artist_id}`, {
+            headers: {
+                Accept: "application/json",
+                Authorization: "Bearer " + this.props.store.authentication.accessToken,
+                "Content-Type": "application/json"
             }
-        </ScrollView>
-    )
+        });
+        const response = promise.then(data => data.data);
+        return response;
+    }
+
+    componentDidMount(){
+        this._get_artist().then(data => {
+            this.setState({artist: data});
+            this.props.navigation.setOptions({
+                headerTitle: () => (
+                    <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: -15}}>
+                        {data?.images[0]
+                            ?
+                                <Image source={{uri: data?.images[0]?.url}} style={{height: 48, width: 48, borderRadius: 10}} />
+                            :
+                                null
+                        }
+                        <Text style={{color: 'black', marginLeft: 10, fontWeight: 'bold'}}>{data?.name}</Text>
+                    </View>
+                ),
+                headerRight: () => (
+                    <FontAwesome5Icon name='heart' size={24} color={"red"} />
+                )
+            })
+        });
+    }
+
+    render(){
+        return (
+            <LinearGradient colors={['#B00D72', '#5523BF']} style={{marginTop: -StatusBar.currentHeight}, styles.container}>
+                <ScrollView style={{flex: 1, width: Dimensions.get('screen').width}}>
+                    {
+                        this.state.artist != null
+                        ?
+                            <>
+                                <View style={{alignItems: 'center', marginTop: 10}} >
+                                    <Image source={{uri: this.state.artist?.images[0]?.url}} style={{width: Dimensions.get('screen').width - 150, height: Dimensions.get('screen').width - 150, borderRadius: this.state.artist?.images[0].height}} />
+                                </View>
+                                <Text style={{fontSize: 36, color: 'white', textAlign: 'center', marginTop: 10}}>{this.state.artist?.name}</Text>
+                                <TopTracks artist={this.state.artist} />
+                                <Albums artist={this.state.artist} />
+                                <RelatedArtists artist={this.state.artist} />
+                            </>
+                        :
+                            <Text>test</Text>
+                    }
+                </ScrollView>
+            </LinearGradient>
+        )
+    }
     
 }
 
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#2c3e50',
+    },
+});
+
+
 const mapStateToProps = store => {
-    props: store
+    return {
+        store: store
+    }
 }
 
 

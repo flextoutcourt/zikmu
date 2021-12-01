@@ -1,20 +1,21 @@
-import axios from 'axios';
-import React, {useState, useEffect, useContext} from 'react'
-import { View, Text, Image, TouchableOpacity, Dimensions } from 'react-native'
+import React, { useContext } from 'react';
+import { Dimensions, Image, Text, TouchableOpacity, View } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import { ReactReduxContext } from 'react-redux';
+import { connect, ReactReduxContext } from 'react-redux';
 
-function TrackItem({track, album = null, favorites = false}) {
+class TrackItem extends React.Component {
 
-    const {store} = useContext(ReactReduxContext);
+    constructor(props){
+        super(props);
+    }
 
-    const _play = (uri, offset = 0, position = 0) => {
+    _play = (uri, offset = 0, position = 0) => {
         console.log(uri, offset, position)
         fetch("https://api.spotify.com/v1/me/player/play", {
             body: JSON.stringify({uris: [uri]}),
             headers: {
                 Accept: "application/json",
-                Authorization: "Bearer " + store.getState().authentication.accessToken,
+                Authorization: "Bearer " + this.props.store.authentication.accessToken,
                 "Content-Type": "application/json"
             },
             method: "PUT"
@@ -24,22 +25,30 @@ function TrackItem({track, album = null, favorites = false}) {
         })
     }
 
-    return (
-        <TouchableOpacity onPress={() => _play(track?.uri, track?.track_number)}>
-            <View style={{width: 116, padding: 0, backgroundColor: 'green', margin: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: Dimensions.get('screen').width - 20}}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                    <Image source={{uri: album?.images[0]?.url}}
-                    style={{width: 50, height: 50, margin: "auto"}} />
+    render(){
+        return (
+            <TouchableOpacity onPress={() => this._play(this.props.track?.uri, this.props.track?.track_number)}>
+                <View style={{width: 116, padding: 0, margin: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: Dimensions.get('screen').width - 20}}>
+                    <View style={{flexDirection: 'row', alignItems: 'center', elevation: 5}}>
+                        <Image source={{uri: this.props.album?.images[2]?.url}}
+                        style={{width: 50, height: 50, borderRadius: 10}} />
+                    </View>
+                    <View style={{marginLeft: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingRight: 10}}>
+                        <Text style={{fontWeight: 'bold', color: 'white'}} numberOfLines={1}>{this.props.track?.name}</Text>
+                        <TouchableOpacity>
+                            <Icon name="heart" size={24} solid={this.props.favorites ? true: false} color={"white"} style={{color: 'white'}} />
+                        </TouchableOpacity>
+                    </View>
                 </View>
-                <View style={{marginLeft: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingRight: 10}}>
-                    <Text style={{fontWeight: 'bold', color: 'white'}} numberOfLines={1}>{track?.name}</Text>
-                    <TouchableOpacity>
-                        <Icon name="heart" size={24} solid={favorites ? true: false} color={"white"} style={{color: 'white'}} />
-                    </TouchableOpacity>
-                </View>
-            </View>
-        </TouchableOpacity>
-    )
+            </TouchableOpacity>
+        )
+    }
 }
 
-export default TrackItem;
+const mapStateToProps = store => {
+    return {
+        store: store
+    }
+}
+
+export default connect(mapStateToProps)(TrackItem);

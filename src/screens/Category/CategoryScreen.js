@@ -1,73 +1,79 @@
-import React, {useState, useEffect, useContext, Suspense} from 'react'
-import { View, Text, FlatList, TouchableOpacity, Image, Dimensions } from 'react-native'
-
-import {ReactReduxContext, connect} from 'react-redux';
-
-import {useNavigation} from '@react-navigation/native';
 import axios from 'axios';
+import React, { Suspense } from 'react';
+import { Dimensions, FlatList, Image, Text, TouchableOpacity, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { connect } from 'react-redux';
 
-function CategoryScreen(props) {
 
-    const {store} = useContext(ReactReduxContext);
 
-    const [playlist, setPlaylist] = useState(null);
-    const [playlistItems, setPlaylistItems] = useState();
+class CategoryScreen extends React.Component {
 
-    const navigation = useNavigation();
+    constructor(props){
+        super(props);
+        this.state = {
+            playlist: null,
+            playlistItems: null
+        }
+    }
 
-    
-    const _get_playlist = (next = null) => {
-        let url = `https://api.spotify.com/v1/browse/categories/${props.route.params.category_id}/playlists?limit=15`;
+    _get_playlist = (next = null) => {
+        let url = `https://api.spotify.com/v1/browse/categories/${this.props.route.params.category_id}/playlists?limit=15`;
         const promise = axios.get(next ?? url, {
             headers: {
                 Accept: "application/json",
-                Authorization: "Bearer " + store.getState().authentication.accessToken,
+                Authorization: "Bearer " + this.props.store.authentication.accessToken,
                 "Content-Type": "application/json"
             }
         })
         const response = promise.then((data) => data.data);
         return response;
     }
-    _get_playlist().then((json) => {
-        setPlaylist(json);
-        setPlaylistItems(json.playlists.items);
-    })
+    
+    componentDidMount(){
+        this._get_playlist().then((json) => {
+            this.setState({
+                playlist: json,
+                playlistItems: json.playlists.items
+            })
+        });
+    }
 
-    return (
-        <SafeAreaView style={{flex: 1, justifyContent: 'space-between', alignItems: 'flex-start', width: Dimensions.get('screen').width}}>
-            <Suspense fallback={null}>
-                {
-                    playlist
-                    ?
-                        <FlatList
-                            data={playlistItems}
-                            scrollEnabled={true}
-                            horizontal={false}
-                            onEndReachedThreshold={0.5}
-                            onEndReached={() => _get_playlist(playlist.next).then(json => {
-                                setPlaylistItems(playlistItems => playlistItems.concat(json.playlists.items))
-                            })}
-                            renderItem={({item, key}) => (
-                                <TouchableOpacity onPress={() => navigation.navigate('Playlist', {
-                                    playlist_id: item.id
-                                })}>
-                                    <View style={{width: 116, padding: 0, backgroundColor: 'transparent', margin: 5}}>
-                                        <Image source={{uri: item?.images[0]?.url}}
-                                        style={{width: 116, height: 116, margin: "auto"}} />
-                                        <View>
-                                            <Text style={{fontWeight: 'bold', color: 'white'}}>{item?.name}</Text>
+    render(){
+        return (
+            <SafeAreaView style={{flex: 1, justifyContent: 'space-between', alignItems: 'flex-start', width: Dimensions.get('screen').width}}>
+                <Suspense fallback={null}>
+                    {
+                        this.playlist
+                        ?
+                            <FlatList
+                                data={this.playlistItems}
+                                scrollEnabled={true}
+                                horizontal={false}
+                                onEndReachedThreshold={0.5}
+                                onEndReached={() => _get_playlist(this.playlist.next).then(json => {
+                                    setPlaylistItems(playlistItems => playlistItems.concat(json.playlists.items))
+                                })}
+                                renderItem={({item, key}) => (
+                                    <TouchableOpacity onPress={() => navigation.navigate('Playlist', {
+                                        playlist_id: item.id
+                                    })}>
+                                        <View style={{width: 116, padding: 0, backgroundColor: 'transparent', margin: 5}}>
+                                            <Image source={{uri: item?.images[0]?.url}}
+                                            style={{width: 116, height: 116, margin: "auto"}} />
+                                            <View>
+                                                <Text style={{fontWeight: 'bold', color: 'white'}}>{item?.name}</Text>
+                                            </View>
                                         </View>
-                                    </View>
-                                </TouchableOpacity>
-                            )}
-                        />
-                    :
-                        null
-                }
-            </Suspense>
-        </SafeAreaView>
-    )
+                                    </TouchableOpacity>
+                                )}
+                            />
+                        :
+                            null
+                    }
+                </Suspense>
+            </SafeAreaView>
+        )
+    }
 }
 
 const mapStateToProps = store => {

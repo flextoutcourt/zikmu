@@ -13,7 +13,7 @@ function PlaylistItem({playlist}) {
                 playlist_id: playlist.id,
             })
         }}>
-            <View style={{width: 116, padding: 0, backgroundColor: 'green', margin: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: Dimensions.get('screen').width - 20}}>
+            <View style={{width: 116, padding: 0, margin: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: Dimensions.get('screen').width - 20}}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <Image source={{uri: playlist?.images[0]?.url}}
                     style={{width: 50, height: 50, margin: "auto"}} />

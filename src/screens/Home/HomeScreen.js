@@ -1,34 +1,43 @@
-import React, {useState, useEffect, useContext} from 'react'
-import { View, Text, FlatList, TouchableOpacity, Image, Dimensions } from 'react-native'
+import React, { Component } from 'react';
+import { StatusBar, StyleSheet, View } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import {useNavigation} from '@react-navigation/native';
+import { connect } from 'react-redux';
+import GenreComponent from '../../components/Home/Genres/GenreComponent';
+import RecentComponent from '../../components/Home/Recents/RecentComponent';
 
-import {ReactReduxContext, connect} from 'react-redux';
 
-import axios from 'axios';
-import Store from './../../redux/store/store';
 
-import RecentComponent from './../../components/Home/RecentComponent';
-import GenreComponent from '../../components/Home/GenreComponent';
+class HomeScreen extends Component{
 
-function HomeScreen() {
+    constructor(props){
+        super(props);
+    }
 
-    const {store} = useContext(ReactReduxContext);
-
-    const [genres, setGenres] = useState([]);
-
-    const navigation = useNavigation();
-
-    return (
-        <SafeAreaView style={{flex: 1, justifyContent: 'space-between', alignItems: 'flex-start', width: Dimensions.get('screen').width, backgroundColor: 'black'}}>
-            <RecentComponent />
-            <GenreComponent />
-        </SafeAreaView>
-    )
+    render(){
+        return (
+            <LinearGradient colors={['#B00D72', '#5523BF']} style={{paddingTop: -StatusBar.currentHeight, ...styles.container}}>
+                <View style={{flex: 1, marginTop: StatusBar.currentHeight}}>
+                    <RecentComponent />
+                    <GenreComponent />
+                </View>
+            </LinearGradient>
+        )
+    }
 }
 
 const mapStateToProps = store => {
-    props: store.props
+    return{
+        store: store
+    }
 }
+
+// define your styles
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#2c3e50',
+    },
+});
 
 export default connect(mapStateToProps)(HomeScreen);

@@ -1,10 +1,10 @@
-import {authorize, refresh} from 'react-native-app-auth';
+import { authorize, refresh } from 'react-native-app-auth';
 
 class AuthenticationHandler {
   constructor() {
     this.spotifyAuthConfig = {
-      clientId: 'f57a06423bf043b6bd5ecebe2b0e9c5a',
-      clientSecret: '659b8653e6b744e2a99f9363dac84688',
+      clientId: '8bf1e0110ef845e294f1f7b8a898483a',
+      clientSecret: '5bf46323f90249b3ba1417df139b5c4c',
       redirectUrl: 'info.enguehard.localhost.quentin://oauthredirect',
       scopes: [
         'playlist-read-private',
@@ -45,6 +45,7 @@ class AuthenticationHandler {
     const result = await refresh(this.spotifyAuthConfig, {
       refreshToken: refreshToken,
     });
+    alert(JSON.stringify(result));
     return result;
   }
 

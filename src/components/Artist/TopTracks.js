@@ -1,23 +1,23 @@
-import { useNavigation } from '@react-navigation/core';
-import React, {useState, useEffect, useContext} from 'react'
-import { View, Text, Image, Dimensions, FlatList, ScrollView } from 'react-native'
-import {connect, ReactReduxContext} from 'react-redux';
 import axios from 'axios';
+import React, { Suspense } from 'react';
+import { FlatList } from 'react-native';
+import { connect } from 'react-redux';
 import TrackItem from '../Track/TrackItem';
 
-function TopTracks({artist}) {
+class TopTracks extends React.Component {
 
-    const [topTracks, setTopTracks] = useState([]);
+    constructor(props){
+        super(props);
+        this.state = {
+            topTracks: null
+        }
+    }
 
-    const { store } = useContext(ReactReduxContext);
-
-    const navigation = useNavigation();
-    
-    const _get_artist_top_tracks = () => {
-        const promise = axios.get(`https://api.spotify.com/v1/artists/${artist.id}/top-tracks?country=FR`, {
+    _get_artist_top_tracks = () => {
+        const promise = axios.get(`https://api.spotify.com/v1/artists/${this.props.artist.id}/top-tracks?country=FR`, {
             headers: {
                 Accept: "application/json",
-                Authorization: "Bearer " + store.getState().authentication.accessToken,
+                Authorization: "Bearer " + this.props.store.authentication.accessToken,
                 "Content-Type": "application/json"
             }
         });
@@ -25,24 +25,33 @@ function TopTracks({artist}) {
         return response;
     }
 
-    _get_artist_top_tracks().then(json => setTopTracks(json));
+    componentDidMount(){
+        this._get_artist_top_tracks().then(json => this.setState({topTracks: json}));
+    }
 
-    return (
-        <FlatList
-            data={topTracks?.tracks}
-            scrollEnabled={false}
-            horizontal={false}
-            style={{marginBottom: 110}}
-            renderItem={({item, key}) => (
-                <TrackItem track={item} album={item.album} />
-            )}
-        />
-    )
+
+    render(){
+        return (
+            <Suspense fallback={null}>
+                <FlatList
+                    data={this.state.topTracks?.tracks}
+                    scrollEnabled={false}
+                    horizontal={false}
+                    style={{marginBottom: 110}}
+                    renderItem={({item, key}) => (
+                        <TrackItem track={item} album={item.album} />
+                    )}
+                />
+            </Suspense>
+        )
+    }
 }
 
 
 const mapStateToProps = store => {
-    props: store.props
+    return {
+        store: store
+    }
 }
 
 export default connect(mapStateToProps)(TopTracks)

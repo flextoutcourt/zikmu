@@ -1,23 +1,23 @@
-import { useNavigation } from '@react-navigation/core';
-import React, {useState, useEffect, useContext} from 'react'
-import { View, Text, Image, Dimensions, FlatList, ScrollView } from 'react-native'
-import {connect, ReactReduxContext} from 'react-redux';
 import axios from 'axios';
+import React, { Suspense } from 'react';
+import { FlatList } from 'react-native';
+import { connect } from 'react-redux';
 import ArtistItem from './ArtistItem';
 
-function RelatedArtists({artist}) {
+class RelatedArtists extends React.Component {
 
-    const [related, setRelated] = useState([]);
-
-    const { store } = useContext(ReactReduxContext);
-
-    const navigation = useNavigation();
-
-    const _get_artist_related = () => {
-        const promise = axios.get(`https://api.spotify.com/v1/artists/${artist.id}/related-artists`, {
+    constructor(props){
+        super(props);
+        this.state = {
+            related: null
+        }
+    }
+    
+    _get_artist_related = () => {
+        const promise = axios.get(`https://api.spotify.com/v1/artists/${this.props.artist.id}/related-artists`, {
             headers: {
                 Accept: "application/json",
-                Authorization: "Bearer " + store.getState().authentication.accessToken,
+                Authorization: "Bearer " + this.props.store.authentication.accessToken,
                 "Content-Type": "application/json"
             }
         });
@@ -25,23 +25,31 @@ function RelatedArtists({artist}) {
         return response;
     }
     
-    _get_artist_related().then(json => setRelated(json))
+    componentDidMount(){
+        this._get_artist_related().then(json => this.setState({related: json}));
+    }
 
-    return (
-        <FlatList
-            data={related?.artists}
-            scrollEnabled={true}
-            horizontal={true}
-            style={{marginBottom: 110}}
-            renderItem={({item, key}) => (
-                <ArtistItem artist={item} />
-            )}
-        />
-    )
+    render(){
+        return (
+            <Suspense fallback={null}>
+                <FlatList
+                    data={this.state.related?.artists}
+                    scrollEnabled={true}
+                    horizontal={true}
+                    style={{marginBottom: 110}}
+                    renderItem={({item, key}) => (
+                        <ArtistItem artist={item} />
+                    )}
+                />
+            </Suspense>
+        )
+    }
 }
 
 const mapStateToProps = store => {
-    props: store.props
+    return {
+        store: store
+    }
 }
 
 export default connect(mapStateToProps)(RelatedArtists)

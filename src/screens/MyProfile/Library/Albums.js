@@ -1,22 +1,26 @@
 //import liraries
 import axios from 'axios';
-import React, { Component, useContext, useState } from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
-import { ReactReduxContext } from 'react-redux';
+import React from 'react';
+import { FlatList, StatusBar, StyleSheet } from 'react-native';
+import LinearGradient from 'react-native-linear-gradient';
+import { connect } from 'react-redux';
 import AlbumItem from '../../../components/Album/AlbumItem';
 
 // create a component
-export default function albums(){
+class Albums extends React.Component{
 
-    const [albums, setalbums] = useState([]);
+    constructor(props){
+        super(props);
+        this.state = {
+            albums: null
+        }
+    }
 
-    const {store} = useContext(ReactReduxContext);
-
-    const _get_albums = (offset = 0) => {
-        const promise = axios.get('https://api.spotify.com/v1/me/albums', {
+    _get_albums = (offset = 0) => {
+        const promise = axios.get(`https://api.spotify.com/v1/me/albums?offset=${offset}`, {
             headers: {
                 Accept: "application/json",
-                Authorization: "Bearer " + store.getState().authentication.accessToken,
+                Authorization: "Bearer " + this.props.store.authentication.accessToken,
                 "Content-Type": "application/json"
             },
         });
@@ -24,24 +28,31 @@ export default function albums(){
         return response;
     }
 
-    _get_albums().then(data => setalbums(data));
+    componentDidMount(){
+        this._get_albums().then(data => this.setState({albums: data.items}));
+    }
 
-    return (
-        <View style={styles.container}>
-            <FlatList
-                data={albums?.items}
-                scrollEnabled={true}
-                horizontal={false}
-                // onEndReachedThreshold={0.4}
-                // onEndReached={() => {
-                //     _get_albumss(albums?.items?.length).then(json => setalbums(albums => albums?.items?.concat(json.items)))
-                // }}
-                renderItem={({item, key}) => (
-                    <AlbumItem album={item?.album} />
-                )}
-            />
-        </View>
-    );
+    render(){
+        return (
+            <LinearGradient colors={['#B00D72', '#5523BF']} style={{marginTop: -StatusBar.currentHeight}, styles.container}>
+                <FlatList
+                    data={this.state.albums}
+                    scrollEnabled={true}
+                    horizontal={false}
+                    numColumns={2}
+                    onEndReachedThreshold={0.1}
+                    onEndReached={() => {
+                        this._get_albums(this.state.albums.length - 1).then(data => {
+                            this.setState({albums: [...this.state.albums, ...data.items]});
+                        });
+                    }}
+                    renderItem={({item, key}) => (
+                        <AlbumItem album={item?.album} />
+                    )}
+                />
+            </LinearGradient>
+        )
+    }
 };
 
 // define your styles
@@ -53,3 +64,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#2c3e50',
     },
 });
+
+const mapStateToProps = store => {
+    return {
+        store: store
+    }
+}
+
+export default connect(mapStateToProps)(Albums)

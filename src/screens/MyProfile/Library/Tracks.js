@@ -7,19 +7,23 @@ import TrackItem from '../../../components/Track/TrackItem';
 import axios from 'axios';
 import { useNavigation } from '@react-navigation/native';
 
-const Tracks = () => {
+class Tracks extends React.Component {
 
-    const {store} = useContext(ReactReduxContext)
-
-    const [tracks, setTracks] = useState([]);
-
-    const navigation = useNavigation();
-
-    const _get_tracks = (offset = 0) => {
+    constructor(props){
+        super(props);
+        this.state = {
+            tracks: null
+        }
+        props.navigation.setOptions({
+            title: 'Mes favoris'
+        })
+    }
+    
+    _get_tracks = (offset = 0) => {
         const promise = axios.get('https://api.spotify.com/v1/me/tracks', {
             headers: {
                 Accept: "application/json",
-                Authorization: "Bearer " + store.getState().authentication.accessToken,
+                Authorization: "Bearer " + this.props.store.authentication.accessToken,
                 "Content-Type": "application/json"
             },
         });
@@ -27,37 +31,31 @@ const Tracks = () => {
         return response;
     }
 
-    _get_tracks().then(data => setTracks(data.data));
+    componentDidMount(){
+        this._get_tracks().then(data => setTracks(data.data));
+    }
 
-    navigation.setOptions({
-        title: 'Mes favoris'
-    })
 
-    return (
-        <View style={styles.container}>
-            <FlatList
-                data={tracks?.items}
-                scrollEnabled={true}
-                horizontal={false}
-                onEndReachedThreshold={0.1}
-                onEndReached={() => {
-                    _get_tracks(tracks.length).then(json => setTracks(tracks => tracks?.items?.concat(json.items)))
-                }}
-                renderItem={({item, key}) => (
-                    <TrackItem track={item.track} album={item?.track?.album} favorites={true} />
-                )}
-            />
-        </View>
-    );
+    render(){
+        return (
+            <View style={styles.container}>
+                <FlatList
+                    data={tracks?.items}
+                    scrollEnabled={true}
+                    horizontal={false}
+                    onEndReachedThreshold={0.1}
+                    onEndReached={() => {
+                        _get_tracks(tracks.length).then(json => setTracks(tracks => tracks?.items?.concat(json.items)))
+                    }}
+                    renderItem={({item, key}) => (
+                        <TrackItem track={item.track} album={item?.track?.album} favorites={true} />
+                    )}
+                />
+            </View>
+        );
+    }
 };
 
-const mapStateToProps = store => {
-    props: store.props
-}
-
-export default connect(mapStateToProps)(Tracks);
-
-// define your styles
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -66,3 +64,11 @@ const styles = StyleSheet.create({
         backgroundColor: '#2c3e50',
     },
 });
+
+const mapStateToProps = store => {
+    return {
+        store: store
+    }
+}
+
+export default connect(mapStateToProps)(Tracks);

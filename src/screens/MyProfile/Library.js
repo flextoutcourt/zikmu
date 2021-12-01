@@ -15,15 +15,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Library = () => {
 
-    const navigation = useNavigation();
-
-    const {store} = useContext(ReactReduxContext);
-
     const Tab = createMaterialTopTabNavigator();
 
     return (
         <SafeAreaView style={{flex: 1}}>
-            <Tab.Navigator>
+            <Tab.Navigator screenOptions={{
+                tabBarContentContainerStyle:{
+                    backgroundColor: 'transparent'
+                }
+            }}>
                 <Tab.Screen name="Playlists" component={Playlists} />
                 <Tab.Screen name="Albums" component={Albums} />
                 <Tab.Screen name="Artists" component={Artists} />
@@ -31,9 +31,4 @@ const Library = () => {
         </SafeAreaView>
     );
 };
-
-const mapStateToProps = store => {
-    props: store.props
-}
-
-export default connect(mapStateToProps)(Library);
+export default Library;
