@@ -33,7 +33,6 @@ class AuthenticationHandler {
   async onLogin() {
     try {
       const result = await authorize(this.spotifyAuthConfig);
-      alert(JSON.stringify(result));
       return result;
     } catch (error) {
       alert(error);
@@ -45,7 +44,6 @@ class AuthenticationHandler {
     const result = await refresh(this.spotifyAuthConfig, {
       refreshToken: refreshToken,
     });
-    alert(JSON.stringify(result));
     return result;
   }
 

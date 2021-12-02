@@ -86,7 +86,7 @@ function LoggedInNavigation(props) {
         return(
         <Stack.Navigator screenOptions={{
             gestureEnabled: true,
-			      headerShown: false
+			      headerShown: false,
         }}>
             <Stack.Screen options={{
             transitionSpec: {
@@ -148,14 +148,29 @@ function LoggedInNavigation(props) {
           <Stack.Screen name="Settings" component={SettingsScreen} />
           <Stack.Screen name="Category" component={Category} />
           <Stack.Screen name="Album" component={Album} options={{
-            haederShown: true
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: 'rgba(0,0,0,0)',
+            },
+            title: '',
+            headerShadowVisible: false,
           }} />
           <Stack.Screen name="Artist" component={Artist} options={{
-            haederShown: true
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: 'rgba(0,0,0,0)',
+            },
+            title: '',
+            headerShadowVisible: false,
           }} />
           <Stack.Screen name="MyTracks" component={Tracks} />
           <Stack.Screen name="Playlist" component={Playlist} options={{
-            haederShown: true
+            headerShown: true,
+            headerStyle: {
+              backgroundColor: 'rgba(0,0,0,0)',
+            },
+            title: '',
+            headerShadowVisible: false,
           }} />
         </Stack.Navigator>
       </View>

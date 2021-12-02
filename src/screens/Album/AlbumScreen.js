@@ -50,7 +50,15 @@ class AlbumScreen extends React.Component {
     }
 
     handlerScroll = (e) => {
-        this.setState({scrollY: e.nativeEvent.contentOffset.y})
+        if(e.contentOffset.y > 150){
+            this.props.navigation.setOptions({
+                headerShown: true,
+            })
+        }else{
+            this.props.navigation.setOptions({
+                headerShown: false
+            })
+        }
     }
     
     componentDidMount(){
@@ -59,20 +67,22 @@ class AlbumScreen extends React.Component {
             this.setState({disks :this._group_by_key(json.tracks.items, 'disc_number')});
             this.setState({test :this._group_by_key(json.tracks.items, 'disc_number')});
             this.props.navigation.setOptions({
+                headerTransparent: true,
+                headerTintColor: 'white',
                 headerTitle: () => (
                     <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: -15, overflow: 'hidden'}}>
                         {json?.images[0]
                             ?
-                                <Image source={{uri: json?.images[0]?.url}} style={{height: 48, width: 48, borderRadius: 10}} />
+                                <Image source={{uri: json?.images[0]?.url}} style={{height: 40, width: 40, borderRadius: 10}} />
                             :
                                 null
                         }
-                        <Text style={{color: 'black', marginLeft: 10, fontWeight: 'bold'}}>{json?.name}</Text>
+                        <Text style={{color: 'white', marginLeft: 10, fontWeight: 'bold'}}>{json?.name}</Text>
                     </View>
                 ),
                 headerRight: () => (
-                    <View style={{backgroundColor: "white"}}>
-                        <FontAwesome5Icon name='heart' size={24} color={"red"} />
+                    <View>
+                        <FontAwesome5Icon name='heart' size={24} color={"white"} solid={true} />
                     </View>
                 )
             })
@@ -81,32 +91,43 @@ class AlbumScreen extends React.Component {
 
     render(){
         const scale = this.state.scrollY.interpolate({
-            inputRange: [-Dimensions.get('window').height, 82],
-            outputRange: [6, 0.5],
+            inputRange: [-Dimensions.get('screen').height, 325],
+            outputRange: [3, 0.1],
             extrapolateRight: Extrapolate.CLAMP
         });
+        const opacity = this.state.scrollY.interpolate({
+            inputRange: [0, 325], 
+            outputRange: [1, 0],
+            extrapolate: Extrapolate.CLAMP
+        });
+        const mt = this.state.scrollY.interpolate({
+            inputRange: [0, 325],
+            outputRange: [10, -100],
+            extrapolate: Extrapolate.CLAMP
+        })
+        const br = this.state.scrollY.interpolate({
+            inputRange: [-10, 10], 
+            outputRange: [0, 10],
+            extrapolate: Extrapolate.CLAMP
+        });
         const transform = [{scale}];
-        console.log(scale);
         return (
             <LinearGradient colors={['#B00D72', '#5523BF']} style={{marginTop: -StatusBar.currentHeight}, styles.container}>
                 <Animated.ScrollView 
-                    onScroll={Animated.event(
-                        // scrollX = e.nativeEvent.contentOffset.x
-                        [{ nativeEvent: {
-                             contentOffset: {
-                               y: this.state.scrollY
-                             }
-                           }
-                         }]
-                      )}
+                    onScroll={
+                        Animated.event(
+                            [{nativeEvent: {contentOffset: {y: this.state.scrollY }}}],
+                            { listener: '', useNativeDriver: true },
+                        )
+                    }
                     showsVerticalScrollIndicator={false}
-                    scrollEventThrottle={1}
+                    scrollEventThrottle={400}
                     overScrollMode={'always'}
                 >
-                    <Animated.View style={{alignItems: 'center', elevation: 10, margin: 10, transform: transform, width: Dimensions.get('screen').width -20, height: Dimensions.get('screen').width - 20}}>
-                        <Image source={{uri: this.state.album?.images[0]?.url}} style={{...StyleSheet.absoluteFill, width: '100%', height: '100%', marginBottom: 15, borderRadius: 10}}/>
+                    <Animated.View style={{alignItems: 'flex-start', justifyContent: 'flex-start', elevation: 10, margin: 10,marginBottom: mt, transform: transform, width: Dimensions.get('screen').width - 20, height: Dimensions.get('screen').width - 20, opacity: opacity, marginTop: 2 * StatusBar.currentHeight}}>
+                        <Image source={{uri: this.state.album?.images[0]?.url}} style={{width: "100%", height: '100%', marginBottom: 15, borderRadius: 10}}/>
                     </Animated.View>
-                    <Text style={{fontSize: 24, color: 'white', textAlign: 'center'}}>{this.state.album?.name}</Text>
+                    <Animated.Text style={{fontSize: 24, color: 'white', textAlign: 'center', opacity: opacity}}>{this.state.album?.name}</Animated.Text>
                     {
                         this.state.disks && this.state.test
                         ?

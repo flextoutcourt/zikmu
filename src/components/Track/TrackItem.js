@@ -19,8 +19,11 @@ class TrackItem extends React.Component {
     }
 
     _play = (uri, track_number, disc_number = 1) => {
-        let offset = this._set_offset(disc_number, track_number);
-        let body = {};
+        let offset = 0,
+            body = {};
+        if(this.props.type == 'album'){
+            offset = this._set_offset(disc_number, track_number);
+        }
         if(this.props.type == "album"){
             body = {
                 "context_uri": uri,
@@ -29,6 +32,15 @@ class TrackItem extends React.Component {
                 },
                 "position_ms": 0,
             };
+        }else if(this.props.type == 'playlist'){
+            console.log(this.props.playlist_index);
+            body = {
+                "context_uri": this.props.playlist_uri,
+                "offset": {
+                    "position": this.props.playlist_index,
+                },
+                "position_ms": 0,
+            };            
         }else{
             body = {
                 "uris": [uri],
@@ -57,7 +69,7 @@ class TrackItem extends React.Component {
     render(){
         return (
             <TouchableOpacity onPress={() => 
-                this._play(this.props.type == "album" ? this.props.album?.uri : this.props.track?.uri, this.props.track?.track_number, this.props.track?.disc_number)
+                this._play(this.props.type == "album" ? this.props.album?.uri : this.props.type == "playlist" ? this.props.track?.uri : this.props.track?.uri, this.props.track?.track_number, this.props.track?.disc_number)
             }>
                 <View style={{width: 116, padding: 0, margin: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: Dimensions.get('screen').width - 20}}>
                     <View style={{flexDirection: 'row', alignItems: 'center', elevation: 5}}>
