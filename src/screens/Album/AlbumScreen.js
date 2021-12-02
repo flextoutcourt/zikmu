@@ -4,8 +4,9 @@ import { Dimensions, FlatList, Image, ScrollView, StatusBar, StyleSheet, Text, V
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import { connect } from 'react-redux';
+import Animated, {interpolate, Extrapolate, useAnimatedScrollHandler} from 'react-native-reanimated';
 import TrackItem from '../../components/Track/TrackItem';
-
+import {  onScrollEvent} from 'react-native-redash/lib/module/v1';
 
 class AlbumScreen extends React.Component {
 
@@ -14,7 +15,8 @@ class AlbumScreen extends React.Component {
         this.state = {
             album: null,
             disks: null,
-            test: null
+            test: null,
+            scrollY: new Animated.Value(0)
         }
     }
     
@@ -46,6 +48,10 @@ class AlbumScreen extends React.Component {
         return groups;
 
     }
+
+    handlerScroll = (e) => {
+        this.setState({scrollY: e.nativeEvent.contentOffset.y})
+    }
     
     componentDidMount(){
         this._get_album().then(json => {
@@ -74,17 +80,38 @@ class AlbumScreen extends React.Component {
     }
 
     render(){
+        const scale = this.state.scrollY.interpolate({
+            inputRange: [-Dimensions.get('window').height, 82],
+            outputRange: [6, 0.5],
+            extrapolateRight: Extrapolate.CLAMP
+        });
+        const transform = [{scale}];
+        console.log(scale);
         return (
             <LinearGradient colors={['#B00D72', '#5523BF']} style={{marginTop: -StatusBar.currentHeight}, styles.container}>
-                <ScrollView style={{flex: 1}}>
-                    <View style={{alignItems: 'center', elevation: 10, marginTop: 10}}>
-                        <Image source={{uri: this.state.album?.images[0]?.url}} style={{width: Dimensions.get('screen').width - 20, height: Dimensions.get('screen').width - 20, marginBottom: 15, borderRadius: 10}}/>
-                    </View>
+                <Animated.ScrollView 
+                    onScroll={Animated.event(
+                        // scrollX = e.nativeEvent.contentOffset.x
+                        [{ nativeEvent: {
+                             contentOffset: {
+                               y: this.state.scrollY
+                             }
+                           }
+                         }]
+                      )}
+                    showsVerticalScrollIndicator={false}
+                    scrollEventThrottle={1}
+                    overScrollMode={'always'}
+                >
+                    <Animated.View style={{alignItems: 'center', elevation: 10, margin: 10, transform: transform, width: Dimensions.get('screen').width -20, height: Dimensions.get('screen').width - 20}}>
+                        <Image source={{uri: this.state.album?.images[0]?.url}} style={{...StyleSheet.absoluteFill, width: '100%', height: '100%', marginBottom: 15, borderRadius: 10}}/>
+                    </Animated.View>
                     <Text style={{fontSize: 24, color: 'white', textAlign: 'center'}}>{this.state.album?.name}</Text>
                     {
                         this.state.disks && this.state.test
                         ?
                             <SectionList
+                                scrollEnabled={false}
                                 sections={this.state.disks.splice(1)}
                                 keyExtractor={({item, index}) => item * index}  
                                 renderItem={({item, section}) => (
@@ -100,7 +127,7 @@ class AlbumScreen extends React.Component {
                         :
                             null
                     }
-                </ScrollView>
+                </Animated.ScrollView>
             </LinearGradient>
         )
     }
