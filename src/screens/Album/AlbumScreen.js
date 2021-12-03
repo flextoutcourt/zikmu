@@ -48,20 +48,13 @@ class AlbumScreen extends React.Component {
         return groups;
 
     }
-
-    handlerScroll = (e) => {
-        if(e.contentOffset.y > 150){
-            this.props.navigation.setOptions({
-                headerShown: true,
-            })
-        }else{
-            this.props.navigation.setOptions({
-                headerShown: false
-            })
-        }
-    }
     
     componentDidMount(){
+        const opacity = this.state.scrollY.interpolate({
+            inputRange: [250, 325], 
+            outputRange: [0, 1],
+            extrapolate: Extrapolate.CLAMP
+        })
         this._get_album().then(json => {
             this.setState({album: json});
             this.setState({disks :this._group_by_key(json.tracks.items, 'disc_number')});
@@ -70,7 +63,11 @@ class AlbumScreen extends React.Component {
                 headerTransparent: true,
                 headerTintColor: 'white',
                 headerTitle: () => (
-                    <View style={{flexDirection: 'row', alignItems: 'center', marginLeft: -15, overflow: 'hidden'}}>
+                    <Animated.View style={{flexDirection: 'row', alignItems: 'center', marginLeft: -15, overflow: 'hidden', opacity: this.state.scrollY.interpolate({
+                        inputRange: [0, 325], 
+                        outputRange: [0, 1],
+                        extrapolate: Extrapolate.CLAMP
+                    })}}>
                         {json?.images[0]
                             ?
                                 <Image source={{uri: json?.images[0]?.url}} style={{height: 40, width: 40, borderRadius: 10}} />
@@ -78,7 +75,7 @@ class AlbumScreen extends React.Component {
                                 null
                         }
                         <Text style={{color: 'white', marginLeft: 10, fontWeight: 'bold'}}>{json?.name}</Text>
-                    </View>
+                    </Animated.View>
                 ),
                 headerRight: () => (
                     <View>

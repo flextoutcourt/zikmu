@@ -149,28 +149,18 @@ function LoggedInNavigation(props) {
           <Stack.Screen name="Category" component={Category} />
           <Stack.Screen name="Album" component={Album} options={{
             headerShown: true,
-            headerStyle: {
-              backgroundColor: 'rgba(0,0,0,0)',
-            },
+            headerTransparent: true,
             title: '',
-            headerShadowVisible: false,
           }} />
           <Stack.Screen name="Artist" component={Artist} options={{
             headerShown: true,
-            headerStyle: {
-              backgroundColor: 'rgba(0,0,0,0)',
-            },
             title: '',
-            headerShadowVisible: false,
           }} />
           <Stack.Screen name="MyTracks" component={Tracks} />
           <Stack.Screen name="Playlist" component={Playlist} options={{
             headerShown: true,
-            headerStyle: {
-              backgroundColor: 'rgba(0,0,0,0)',
-            },
+            headerTransparent: true,
             title: '',
-            headerShadowVisible: false,
           }} />
         </Stack.Navigator>
       </View>
