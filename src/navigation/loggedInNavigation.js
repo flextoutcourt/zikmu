@@ -148,19 +148,14 @@ function LoggedInNavigation(props) {
           <Stack.Screen name="Settings" component={SettingsScreen} />
           <Stack.Screen name="Category" component={Category} />
           <Stack.Screen name="Album" component={Album} options={{
-            headerShown: true,
-            headerTransparent: true,
-            title: '',
+            headerShown: false,
           }} />
           <Stack.Screen name="Artist" component={Artist} options={{
-            headerShown: true,
-            title: '',
+            headerShown: false,
           }} />
           <Stack.Screen name="MyTracks" component={Tracks} />
           <Stack.Screen name="Playlist" component={Playlist} options={{
-            headerShown: true,
-            headerTransparent: true,
-            title: '',
+            headerShown: false,
           }} />
         </Stack.Navigator>
       </View>
@@ -175,22 +170,22 @@ function LoggedInNavigation(props) {
                 let iconName = 'home';
                 if (route.name === 'Accueil') {
                   iconName = focused ? 'home' : 'home';
-				  color = focused ? 'purple' : 'white';
+          color = focused ? 'purple' : 'white';
                 } else if (route.name === 'Rechercher') {
                   iconName = focused ? 'search' : 'search';
-				  color = focused ? 'purple' : 'white';
+          color = focused ? 'purple' : 'white';
                 } else if (route.name === 'Librarie'){
                   iconName = focused ? 'book' : 'book';
-				  color = focused ? 'purple' : 'white';
+          color = focused ? 'purple' : 'white';
                 }
                 return <Icon name={iconName} size={24} color={color} />;
               },
               tabBarActiveTintColor: 'tomato',
               tabBarInactiveTintColor: 'gray',
               tabBarStyle: {
-                backgroundColor: 'black'
+                backgroundColor: 'purple',
               },
-              tabBarActiveBackgroundColor: 'transparent',
+              tabBarActiveBackgroundColor: 'red',
               tabBarInactiveBackgroundColor: 'black',
               tabBarActiveBackgroundColor: 'black',
               tabBarActiveTintColor: 'purple',

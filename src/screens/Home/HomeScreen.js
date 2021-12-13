@@ -17,10 +17,10 @@ class HomeScreen extends Component{
     render(){
         return (
             <LinearGradient colors={['#B00D72', '#5523BF']} style={{paddingTop: -StatusBar.currentHeight, ...styles.container}}>
-                <View style={{flex: 1, marginTop: StatusBar.currentHeight}}>
-                    <RecentComponent />
+                {/* <View style={{flex: 1, marginTop: StatusBar.currentHeight}}> */}
+                    {/* <RecentComponent />
                     <GenreComponent />
-                </View>
+                </View> */}
             </LinearGradient>
         )
     }

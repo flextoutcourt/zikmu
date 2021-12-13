@@ -2,9 +2,11 @@ import axios from 'axios';
 import React from 'react';
 import { Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
+import Animated, {interpolate, Extrapolate} from 'react-native-reanimated';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import { connect } from 'react-redux';
 import Albums from '../../components/Artist/Albums';
+import Header from '../../components/Artist/Header';
 import RelatedArtists from '../../components/Artist/RelatedArtists';
 import TopTracks from '../../components/Artist/TopTracks';
 
@@ -13,7 +15,8 @@ class ArtistScreen extends React.Component {
     constructor(props){
         super(props);
         this.state = {
-            artist: null
+            artist: null,
+            scrollY: new Animated.Value(0)
         }
     }
     _get_artist = () => {
@@ -51,16 +54,36 @@ class ArtistScreen extends React.Component {
     }
 
     render(){
+
+        const borderRadius = this.state.scrollY.interpolate({
+            inputRange: [0, 325],
+            outputRange: [0, this.state.artist?.images[2]?.height],
+            extrapolate: Extrapolate.CLAMP
+        })
+
+        const height = this.state.scrollY.interpolate({
+            inputRange: [-150, 0, 250],
+            outputRange: [this.state.artist?.images[0]?.height, this.state.artist?.images[1].height, 50],
+            extrapolate: Extrapolate.CLAMP
+        })
+
         return (
             <LinearGradient colors={['#B00D72', '#5523BF']} style={{marginTop: -StatusBar.currentHeight}, styles.container}>
-                <ScrollView style={{flex: 1, width: Dimensions.get('screen').width}}>
+                <Header y={this.state.scrollY} artist={this.state.artist} {...this.props} />
+                <Animated.ScrollView
+                 style={{flex: 1, width: Dimensions.get('screen').width, marginTop: - 2 * StatusBar.currentHeight}}
+                 onScroll={Animated.event(
+                     [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
+                     {listener: '', useNativeDriver: true}
+                 )}
+                 >
                     {
                         this.state.artist != null
                         ?
                             <>
-                                <View style={{alignItems: 'center', marginTop: 10}} >
-                                    <Image source={{uri: this.state.artist?.images[0]?.url}} style={{width: Dimensions.get('screen').width - 150, height: Dimensions.get('screen').width - 150, borderRadius: this.state.artist?.images[0].height}} />
-                                </View>
+                                <Animated.View style={{alignItems: 'center', marginTop: 2*StatusBar.currentHeight}} >
+                                    <Animated.Image source={{uri: this.state.artist?.images[0]?.url}} style={{width: height, height: height, borderRadius: borderRadius}} />
+                                </Animated.View>
                                 <Text style={{fontSize: 36, color: 'white', textAlign: 'center', marginTop: 10}}>{this.state.artist?.name}</Text>
                                 <TopTracks artist={this.state.artist} />
                                 <Albums artist={this.state.artist} />
@@ -69,7 +92,7 @@ class ArtistScreen extends React.Component {
                         :
                             <Text>test</Text>
                     }
-                </ScrollView>
+                </Animated.ScrollView>
             </LinearGradient>
         )
     }
