@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Dimensions, Image, Text, TouchableOpacity, View } from 'react-native';
+import { Dimensions, Image, Text, TouchableOpacity, View, FlatList } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import { connect, ReactReduxContext } from 'react-redux';
 
@@ -77,7 +77,20 @@ class TrackItem extends React.Component {
                         style={{width: 50, height: 50, borderRadius: 10}} />
                     </View>
                     <View style={{marginLeft: 10, flex: 1, flexDirection: 'row', justifyContent: 'space-between', paddingRight: 10}}>
-                        <Text style={{fontWeight: 'bold', color: 'white'}} numberOfLines={1}>{this.props.track?.name}</Text>
+                        <View>
+                            <Text style={{fontWeight: 'bold', color: 'white'}} numberOfLines={1}>{this.props.track?.name}</Text>
+                            <FlatList
+                                data={this.props.track?.artists}
+                                scrollEnabled={true}
+                                horizontal={true}
+                                ItemSeparatorComponent={() => (
+                                    <Text>, </Text>
+                                )}
+                                renderItem={({item, key}) => (
+                                    <Text style={{color: 'white'}}>{item.name}</Text>
+                                )}
+                            />
+                        </View>
                         <TouchableOpacity>
                             <Icon name="heart" size={24} solid={this.props.favorites ? true: false} color={"white"} style={{color: 'white'}} />
                         </TouchableOpacity>

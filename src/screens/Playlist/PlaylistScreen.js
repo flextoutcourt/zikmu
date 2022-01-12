@@ -136,7 +136,7 @@ class PlaylistScreen extends React.Component {
                     ?
                         <FlatList
                             data={this.state.playlist?.tracks?.items}
-                            scrollEnabled={true}
+                            scrollEnabled={false}
                             horizontal={false}
                             ListHeaderComponent={() => (
                                 <Animated.View style={{marginTop: 2 * StatusBar.currentHeight}}>
