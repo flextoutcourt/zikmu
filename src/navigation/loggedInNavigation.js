@@ -149,9 +149,6 @@ function LoggedInNavigation(props) {
           <Stack.Screen name="Category" component={Category} />
           <Stack.Screen name="Album" component={Album} options={{
             headerShown: true,
-            headerStyle: {
-              backgroundColor: "rgb(176, 13, 114)"
-            },
             headerTransparent: true,
             title: '',
           }} />

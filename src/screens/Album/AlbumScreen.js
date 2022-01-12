@@ -7,6 +7,7 @@ import { connect } from 'react-redux';
 import Animated, {interpolate, Extrapolate, useAnimatedScrollHandler} from 'react-native-reanimated';
 import TrackItem from '../../components/Track/TrackItem';
 import {  onScrollEvent} from 'react-native-redash/lib/module/v1';
+import Header from '../../components/Album/Header';
 
 class AlbumScreen extends React.Component {
 
@@ -110,7 +111,9 @@ class AlbumScreen extends React.Component {
         const transform = [{scale}];
         return (
             <LinearGradient colors={['#B00D72', '#5523BF']} style={{marginTop: -StatusBar.currentHeight}, styles.container}>
+                <Header y={this.state.scrollY} {...this.props} album={this.state.album} />
                 <Animated.ScrollView 
+                style={{marginTop: -2 * StatusBar.currentHeight}}
                     onScroll={
                         Animated.event(
                             [{nativeEvent: {contentOffset: {y: this.state.scrollY }}}],

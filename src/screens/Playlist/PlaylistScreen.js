@@ -6,6 +6,7 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import Animated, {interpolate, Extrapolate, useAnimatedScrollHandler} from 'react-native-reanimated';
 import { connect } from 'react-redux';
 import TrackItem from '../../components/Track/TrackItem';
+import Header from '../../components/Playlist/Header';
 
 
 
@@ -30,30 +31,6 @@ class PlaylistScreen extends React.Component {
         const response = promise.then(data => data.data);
         return response
     }
-
-    headerTitle = () => {
-        const opacity = this.state.scrollY.interpolate({
-            inputRange: [250, 325], 
-            outputRange: [0, 1],
-            extrapolate: Extrapolate.CLAMP
-        })
-        const background = this.state.scrollY.interpolate({
-            inputRange: [250,325],
-            outputRange: [0, 0.5],
-            extrapolate: Extrapolate.CLAMP
-        })
-        return (
-            <Animated.View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'center', opacity: opacity, backgroundColor: `rgba(0,0,0,${background})`}}>
-                {this.state.playlist?.images[0]
-                    ?
-                        <Image source={{uri: this.state.playlist?.images[0]?.url}} style={{height: 40, width: 40, borderRadius: 10}} />
-                    :
-                        null
-                }
-                <Text style={{color: 'white', marginLeft: 10, fontWeight: 'bold'}} >{this.state.playlist?.name}</Text>
-            </Animated.View>
-        )
-    }
     
     componentDidMount(){
         const opacity = this.state.scrollY.interpolate({
@@ -64,40 +41,17 @@ class PlaylistScreen extends React.Component {
         this._get_playlist().then(json => {
             this.setState({playlist: json});
             this.props.navigation.setOptions({
-                headerTitle: () => this.headerTitle(),
-                headerStyle: {
-                    backgroundColor: `rgba(0,0,0,${opacity})`,
-                },
-                headerTintColor: 'white',
-                headerRight: () => (
-                    <FontAwesome5Icon name='heart' size={24} solid={true} color={"white"} />
-                )
+                // headerTitle: () => this.headerTitle(),
+                // headerStyle: {
+                //     backgroundColor: `rgba(0,0,0,${opacity})`,
+                // },
+                // headerTintColor: 'white',
+                // headerRight: () => (
+                //     <FontAwesome5Icon name='heart' size={24} solid={true} color={"white"} />
+                // )
             });
         })
-    }
-
-    handleScroll = (scrollY) => {
-        // alert('called');
-        console.log(scrollY.nativeEvent.contentOffset.y);
-        if(scrollY > 275){
-            this.props.navigation.setOptions({
-                headerTitle: () => this.headerTitle(),
-                headerStyle: {
-                    backgroundColor: 'rgba(0,0,0,0.5)'
-                }
-            })
-        }else{
-            this.props.navigation.setOptions({
-                headerTitle: () => <></>,
-                headerStyle: {
-                    backgroundColor: 'rgba(0,0,0,0)'
-                }
-            })
-        }
-        return scrollY;
-    }
-
-    
+    }   
 
     render(){
         const scale = this.state.scrollY.interpolate({
@@ -123,7 +77,9 @@ class PlaylistScreen extends React.Component {
         const transform = [{scale}];
         return (
             <LinearGradient colors={['#B00D72', '#5523BF']} style={{marginTop: -StatusBar.currentHeight,  ...styles.container, paddingTop: StatusBar.currentHeight}}>
+                <Header y={this.state.scrollY} playlist={this.state.playlist} {...this.props} />
                 <Animated.ScrollView 
+                    style={{marginTop: -2 * StatusBar.currentHeight}}
                     onScroll={Animated.event(
                             [{nativeEvent: {contentOffset: {y: this.state.scrollY }}}],
                             { listener: '', useNativeDriver: true },
@@ -139,7 +95,7 @@ class PlaylistScreen extends React.Component {
                             scrollEnabled={false}
                             horizontal={false}
                             ListHeaderComponent={() => (
-                                <Animated.View style={{marginTop: 2 * StatusBar.currentHeight}}>
+                                <Animated.View style={{marginTop: StatusBar.currentHeight}}>
                                     <Animated.View style={{alignItems: 'flex-start', justifyContent: 'flex-start', elevation: 10, margin: 10, marginBottom: mt, transform: transform, width: Dimensions.get('screen').width -20, height: Dimensions.get('screen').width - 20, position: "relative", opacity: opacity}}>
                                         <Animated.Image source={{uri: this.state.playlist?.images[0]?.url}} style={{width: '100%', height: '100%', borderRadius: br}} />
                                         <Animated.Text style={{position: 'absolute', top: 5, left: 10, backgroundColor: 'red', borderRadius: 9, padding: 5, elevation: 10, opacity: opacity}}>
