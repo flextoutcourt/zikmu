@@ -1,144 +1,155 @@
-import React, { Component } from 'react';
-import {View, StyleSheet, ScrollView, FlatList, TouchableOpacity, Text, Image, StatusBar, Dimensions} from 'react-native';
-import SeekBar from '../Player/Seek';
-import Lyrics from '../Player/Lyrics';
+import React, {Component} from 'react';
+import {
+  View,
+  StyleSheet,
+  Dimensions,
+} from 'react-native';
 import axios from 'axios';
-import { Icon } from 'react-native-vector-icons/FontAwesome5';
-import { connect } from 'react-redux';
+import {Icon} from 'react-native-vector-icons/FontAwesome5';
+import {connect} from 'react-redux';
 
 class Bigplayer extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      listening: false,
+      paroles: false,
+    };
+  }
 
-    constructor(props){
-        super(props);
-        this.state = {
-            listening: false,
-            paroles: false
-        }
+  componentDidMount() {
+    setInterval(() => {
+      this._get_listening().then(json => {
+        this.setState({listening: json});
+      });
+    }, 1000);
+  }
+
+  _get_listening = () => {
+    const promise = axios.get('https://api.spotify.com/v1/me/player', {
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
+        'Content-Type': 'application/json',
+      },
+    });
+    const response = promise.then(data => data.data);
+    return response;
+  };
+
+  _pause = () => {
+    fetch('https://api.spotify.com/v1/me/player/pause', {
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
+        'Content-Type': 'application/json',
+      },
+      method: 'PUT',
+    });
+  };
+
+  _play = () => {
+    fetch('https://api.spotify.com/v1/me/player/play', {
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
+        'Content-Type': 'application/json',
+      },
+      method: 'PUT',
+    });
+  };
+
+  _next = () => {
+    fetch('https://api.spotify.com/v1/me/player/next', {
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
+        'Content-Type': 'application/json',
+      },
+      method: 'POST',
+    });
+  };
+
+  _prev = () => {
+    if (this.state.listening?.progress_ms > 10000) {
+      this._seek(0);
+    } else {
+      fetch('https://api.spotify.com/v1/me/player/previous', {
+        headers: {
+          Accept: 'application/json',
+          Authorization:
+            'Bearer ' + this.props.store.authentication.accessToken,
+          'Content-Type': 'application/json',
+        },
+        method: 'POST',
+      });
     }
+  };
 
-    componentDidMount(){
-        setInterval(() => {
-            this._get_listening().then(json => {
-                this.setState({listening: json})
-            });
-        }, 1000);
+  _seek = position => {
+    fetch(
+      `https://api.spotify.com/v1/me/player/seek?position_ms=${Math.round(
+        position * 1000,
+      )}`,
+      {
+        headers: {
+          Accept: 'application/json',
+          Authorization:
+            'Bearer ' + this.props.store.authentication.accessToken,
+          'Content-Type': 'application/json',
+        },
+        method: 'PUT',
+      },
+    ).catch(e => {
+      console.log(e);
+    });
+  };
+
+  _shuffle = () => {
+    fetch(
+      `https://api.spotify.com/v1/me/player/shuffle?state=${!this.state
+        .listening?.shuffle_state}`,
+      {
+        headers: {
+          Accept: 'application/json',
+          Authorization:
+            'Bearer ' + this.props.store.authentication.accessToken,
+          'Content-Type': 'application/json',
+        },
+        method: 'PUT',
+      },
+    );
+  };
+
+  _repeat = () => {
+    let state;
+    if (this.state.listening?.repeat_state == 'context') {
+      state = 'track';
+    } else if (this.state.listening?.repeat_state == 'track') {
+      state = 'off';
+    } else {
+      state = 'context';
     }
+    fetch(`https://api.spotify.com/v1/me/player/repeat?state=${state}`, {
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
+        'Content-Type': 'application/json',
+      },
+      method: 'PUT',
+    });
+  };
 
-    _get_listening = () => {
-        const promise = axios.get('https://api.spotify.com/v1/me/player', {
-            headers: {
-                Accept: "application/json",
-                Authorization: "Bearer " + this.props.store.authentication.accessToken,
-                "Content-Type": "application/json"
-            },
-        });
-        const response = promise.then(data => data.data);
-        return response;
-    }
-
-
-    _pause = () => {
-        fetch("https://api.spotify.com/v1/me/player/pause", {
-            headers: {
-                Accept: "application/json",
-                Authorization: "Bearer " + this.props.store.authentication.accessToken,
-                "Content-Type": "application/json"
-            },
-            method: "PUT"
-        })
-    }
-
-    _play = () => {
-        fetch("https://api.spotify.com/v1/me/player/play", {
-            headers: {
-                Accept: "application/json",
-                Authorization: "Bearer " + this.props.store.authentication.accessToken,
-                "Content-Type": "application/json"
-            },
-            method: "PUT"
-        })
-    }
-
-    _next = () => {
-        fetch('https://api.spotify.com/v1/me/player/next', {
-            headers: {
-                Accept: "application/json",
-                Authorization: "Bearer " + this.props.store.authentication.accessToken,
-                "Content-Type": "application/json"
-            },
-            method: 'POST'
-        });
-    }
-
-    _prev = () => {
-        if(this.state.listening?.progress_ms > 10000){
-            this._seek(0);
-        }else{
-            fetch('https://api.spotify.com/v1/me/player/previous', {
-                headers: {
-                    Accept: "application/json",
-                    Authorization: "Bearer " + this.props.store.authentication.accessToken,
-                    "Content-Type": "application/json"
-                },
-                method: 'POST'
-            })
-        }
-    }
-
-    _seek = (position) => {
-        fetch(`https://api.spotify.com/v1/me/player/seek?position_ms=${Math.round(position * 1000)}`, {
-            headers: {
-                Accept: "application/json",
-                Authorization: "Bearer " + this.props.store.authentication.accessToken,
-                "Content-Type": "application/json"
-            },
-            method: "PUT"
-        })
-        .catch(e => {
-            console.log(e);
-        })
-    }
-
-    _shuffle = () => {
-        fetch(`https://api.spotify.com/v1/me/player/shuffle?state=${!this.state.listening?.shuffle_state}`, {
-            headers: {
-                Accept: "application/json",
-                Authorization: "Bearer " + this.props.store.authentication.accessToken,
-                "Content-Type": "application/json"
-            },
-            method: 'PUT'
-        })
-    }
-
-    _repeat = () => {
-        let state;
-        if(this.state.listening?.repeat_state == 'context'){
-            state = 'track';
-        }else if(this.state.listening?.repeat_state == 'track'){
-            state = 'off';
-        }else{
-            state = 'context';
-        }
-        fetch(`https://api.spotify.com/v1/me/player/repeat?state=${state}`, {
-            headers: {
-                Accept: "application/json",
-                Authorization: "Bearer " + this.props.store.authentication.accessToken,
-                "Content-Type": "application/json"
-            },
-            method: 'PUT'
-        })
-    }
-
-    render() {
-        return (
-            <View style={{padding: 10}}>
-                {/* <View style={{flex: 2.5}}>
+  render() {
+    return (
+      <View style={{padding: 10}}>
+        {/* <View style={{flex: 2.5}}>
                     <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20, marginTop: StatusBar.currentHeight}}>
                         <TouchableOpacity onPress={() => true}>
-                            <Icon name="arrow-left" size={24} color={"white"}/> 
+                            <Icon name="arrow-left" size={24} color={"white"}/>
                         </TouchableOpacity>
                         <TouchableOpacity>
-                            <Icon name="ellipsis-v" size={24} color={"white"}/> 
+                            <Icon name="ellipsis-v" size={24} color={"white"}/>
                         </TouchableOpacity>
                     </View>
                     <Text numberOfLines={1} style={{fontSize: 24, textAlign: 'center', color: 'white', marginBottom: 20}}>{this.state.listening?.item?.album?.name}</Text>
@@ -197,7 +208,7 @@ class Bigplayer extends Component {
                                     <Icon name="pause" size={48} style={{marginLeft: 5, marginRight: 5, color: "white"}} />
                                 </TouchableOpacity>
                             :
-                                <TouchableOpacity 
+                                <TouchableOpacity
                                     onPress={() => {
                                         this._play()
                                     }}
@@ -225,20 +236,23 @@ class Bigplayer extends Component {
                 <View style={{backgroundColor: 'blue', borderRadius: 10, marginBottom: 50, height: this.state.paroles ? null : 450, width: '100%', marginVertical: 25, elevation: 5, position: this.state.paroles ? 'absolute' : 'relative', top: this.state.paroles ? 5 : null, left: this.state.paroles ? 5 : null, right: this.state.paroles ? 5 : null, bottom: this.state.paroles ? 5 : null, overflow: 'hidden'}}>
                     <Lyrics track={this.state.listening?.item} style={{color: 'white'}} />
                 </View> */}
-                <View style={{height: Dimensions.get('screen').height, backgroundColor: 'blue'}}>
-
-                </View>
-            </View>
-        );
-    }
+        <View
+          style={{
+            height: Dimensions.get('screen').height,
+            backgroundColor: 'blue',
+          }}
+        />
+      </View>
+    );
+  }
 }
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({});
 
 const mapStateToProps = store => {
-    return {
-        store: store
-    }
-}
+  return {
+    store: store,
+  };
+};
 
 export default connect(mapStateToProps)(Bigplayer);
