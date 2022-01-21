@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { Dimensions, Image, Text, TouchableOpacity, View } from 'react-native';
+import {Dimensions, FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {connect, ReactReduxContext} from 'react-redux';
