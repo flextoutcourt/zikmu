@@ -1,8 +1,17 @@
-import React, { useContext } from 'react';
-import {Dimensions, FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
+import React from 'react';
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+
+import GLOBAL from './../../screens/Entry/EntryScreen';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {connect, ReactReduxContext} from 'react-redux';
+import {connect} from 'react-redux';
 
 class TrackItem extends React.Component {
   constructor(props) {
@@ -21,10 +30,10 @@ class TrackItem extends React.Component {
   _play = (uri, track_number, disc_number = 1) => {
     let offset = 0,
       body = {};
-    if (this.props.type == 'album') {
+    if (this.props.type === 'album') {
       offset = this._set_offset(disc_number, track_number);
     }
-    if (this.props.type == 'album') {
+    if (this.props.type === 'album') {
       body = {
         context_uri: uri,
         offset: {
@@ -32,7 +41,7 @@ class TrackItem extends React.Component {
         },
         position_ms: 0,
       };
-    } else if (this.props.type == 'playlist') {
+    } else if (this.props.type === 'playlist') {
       console.log(this.props.playlist_index);
       body = {
         context_uri: this.props.playlist_uri,
@@ -66,71 +75,76 @@ class TrackItem extends React.Component {
 
   render() {
     return (
-      <TouchableOpacity
-        onPress={() =>
-          this._play(
-            this.props.type == 'album'
-              ? this.props.album?.uri
-              : this.props.type == 'playlist'
-              ? this.props.track?.uri
-              : this.props.track?.uri,
-            this.props.track?.track_number,
-            this.props.track?.disc_number,
-          )
-        }>
-        <View
-          style={{
-            width: 116,
-            padding: 0,
-            margin: 5,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            width: Dimensions.get('screen').width - 20,
-          }}>
-          <View
-            style={{flexDirection: 'row', alignItems: 'center', elevation: 5}}>
-            <Image
-              source={{uri: this.props.album?.images[2]?.url}}
-              style={{width: 50, height: 50, borderRadius: 10}}
-            />
-          </View>
+      <View>
+        <TouchableOpacity
+          onPress={() =>
+            this._play(
+              this.props.type === 'album'
+                ? this.props.album?.uri
+                : this.props.type === 'playlist'
+                ? this.props.track?.uri
+                : this.props.track?.uri,
+              this.props.track?.track_number,
+              this.props.track?.disc_number,
+            )
+          }>
           <View
             style={{
-              marginLeft: 10,
-              flex: 1,
+              padding: 0,
+              margin: 5,
               flexDirection: 'row',
+              alignItems: 'center',
               justifyContent: 'space-between',
-              paddingRight: 10,
+              width: Dimensions.get('screen').width - 20,
             }}>
-            <View>
-              <Text
-                style={{fontWeight: 'bold', color: 'white'}}
-                numberOfLines={1}>
-                {this.props.track?.name}
-              </Text>
-              <FlatList
-                data={this.props.track?.artists}
-                scrollEnabled={true}
-                horizontal={true}
-                ItemSeparatorComponent={() => <Text>, </Text>}
-                renderItem={({item, key}) => (
-                  <Text style={{color: 'white'}}>{item.name}</Text>
-                )}
+            <View
+              style={{
+                flexDirection: 'row',
+                alignItems: 'center',
+                elevation: 5,
+              }}>
+              <Image
+                source={{uri: this.props.album?.images[2]?.url}}
+                style={{width: 50, height: 50, borderRadius: 10}}
               />
             </View>
-            <TouchableOpacity>
-              <Icon
-                name="heart"
-                size={24}
-                solid={this.props.favorites ? true : false}
-                color={'white'}
-                style={{color: 'white'}}
-              />
-            </TouchableOpacity>
+            <View
+              style={{
+                marginLeft: 10,
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                paddingRight: 10,
+              }}>
+              <View>
+                <Text
+                  style={{fontWeight: 'bold', color: 'white'}}
+                  numberOfLines={1}>
+                  {this.props.track?.name}
+                </Text>
+                <FlatList
+                  data={this.props.track?.artists}
+                  scrollEnabled={true}
+                  horizontal={true}
+                  ItemSeparatorComponent={() => <Text>, </Text>}
+                  renderItem={({item, key}) => (
+                    <Text style={{color: 'white'}}>{item.name}</Text>
+                  )}
+                />
+              </View>
+              <TouchableOpacity>
+                <Icon
+                  name="heart"
+                  size={24}
+                  solid={!!this.props.favorites}
+                  color={'white'}
+                  style={{color: 'white'}}
+                />
+              </TouchableOpacity>
+            </View>
           </View>
-        </View>
-      </TouchableOpacity>
+        </TouchableOpacity>
+      </View>
     );
   }
 }
