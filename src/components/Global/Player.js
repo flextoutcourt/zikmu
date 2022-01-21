@@ -16,7 +16,7 @@ import {connect, ReactReduxContext} from 'react-redux';
 import * as rootNavigation from './../../utils/RootNavigation';
 import Lyrics from './Player/Lyrics';
 import SeekBar from './Player/Seek';
-import LinearGradient from 'react-native-linear-gradient';
+
 
 class Player extends React.Component {
   constructor(props) {
@@ -322,8 +322,7 @@ class Player extends React.Component {
                         style={{marginLeft: 5, marginRight: 5, color: 'white'}}
                       />
                     </TouchableOpacity>
-
-                                            }
+}
                   <TouchableOpacity onPress={() => this._next()}>
                     <Icon
                       name="caret-right"
