@@ -9,7 +9,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 
-function AlbumItem({album}) {
+function AlbumItem({album, search = false}) {
   const navigation = useNavigation();
 
   return (
@@ -24,7 +24,7 @@ function AlbumItem({album}) {
           alignItems: 'center',
           justifyContent: 'flex-start',
           maxWidth: Dimensions.get('screen').width / 2,
-          margin: 10,
+          margin: search ? 5 : 10,
         }}>
         <Image
           source={{uri: album?.images[1]?.url}}
