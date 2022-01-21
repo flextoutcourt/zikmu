@@ -1,4 +1,4 @@
-import { authorize, refresh } from 'react-native-app-auth';
+import {authorize, refresh} from 'react-native-app-auth';
 
 class AuthenticationHandler {
   constructor() {
@@ -21,7 +21,7 @@ class AuthenticationHandler {
         'user-top-read',
         'user-follow-modify',
         'user-read-playback-state',
-        'user-modify-playback-state'
+        'user-modify-playback-state',
       ],
       serviceConfiguration: {
         authorizationEndpoint: 'https://accounts.spotify.com/authorize',
@@ -37,7 +37,7 @@ class AuthenticationHandler {
     } catch (error) {
       alert(error);
       console.log(JSON.stringify(error));
-    } 
+    }
   }
 
   async refreshLogin(refreshToken) {
@@ -46,7 +46,6 @@ class AuthenticationHandler {
     });
     return result;
   }
-
 }
 
 const authHandler = new AuthenticationHandler();

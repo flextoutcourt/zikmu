@@ -1,13 +1,20 @@
 import React, {Component} from 'react';
-import {Text, View, TouchableOpacity, Alert, Image, StatusBar} from 'react-native';
-import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
+import {
+  Text,
+  View,
+  TouchableOpacity,
+  Alert,
+  Image,
+  StatusBar,
+} from 'react-native';
+import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 //Authentication handler
 import authHandler from '../../utils/authenticationHandler';
 
-import Player from '../../components/Global/Player'
+import Player from '../../components/Global/Player';
 
 //Redux imports
 import {connect} from 'react-redux';
@@ -23,11 +30,13 @@ import LoggedinNavigation from '../../navigation/loggedInNavigation';
 import GuestNavigation from '../../navigation/guestNavigation';
 
 class EntryScreen extends Component {
-
   state = {refreshToken: ''};
 
   componentDidUpdate(prevProps) {
-    if (this.props.refreshToken !== prevProps.refreshToken && !this.props.accessToken) {
+    if (
+      this.props.refreshToken !== prevProps.refreshToken &&
+      !this.props.accessToken
+    ) {
       this.tryAutoLogin();
     }
     if (this.props.accessToken !== prevProps.accessToken) {
@@ -36,19 +45,19 @@ class EntryScreen extends Component {
   }
 
   tryAutoLogin = async () => {
-      this.props.setLoadingTrue();
-      const authenticationObject = await authHandler.refreshLogin(
-        this.props.refreshToken,
-      );
+    this.props.setLoadingTrue();
+    const authenticationObject = await authHandler.refreshLogin(
+      this.props.refreshToken,
+    );
 
-      this.props.setAccessToken({
-        accessToken: authenticationObject.accessToken,
-      });
-      this.props.setRefreshToken({
-        refreshToken: authenticationObject.refreshToken,
-      });
+    this.props.setAccessToken({
+      accessToken: authenticationObject.accessToken,
+    });
+    this.props.setRefreshToken({
+      refreshToken: authenticationObject.refreshToken,
+    });
 
-      this.props.setLoadingFalse();
+    this.props.setLoadingFalse();
   };
 
   render() {
@@ -66,7 +75,10 @@ class EntryScreen extends Component {
       return (
         <SafeAreaProvider>
           <SafeAreaView style={{flex: 1, paddingTop: -StatusBar.currentHeight}}>
-            <StatusBar backgroundColor={"rgba(0,0,0, 0.5)"} translucent={true}  />
+            <StatusBar
+              backgroundColor={'rgba(0,0,0, 0.5)'}
+              translucent={true}
+            />
             <LoggedinNavigation />
             <Player />
           </SafeAreaView>
@@ -77,11 +89,11 @@ class EntryScreen extends Component {
     return (
       <SafeAreaProvider>
         <SafeAreaView style={{flex: 1, marginTop: -StatusBar.currentHeight}}>
-          <StatusBar backgroundColor={"rgba(0,0,0, 0.5)"} translucent={true}  />
+          <StatusBar backgroundColor={'rgba(0,0,0, 0.5)'} translucent={true} />
           <GuestNavigation />
         </SafeAreaView>
       </SafeAreaProvider>
-    )
+    );
   }
 }
 
@@ -89,7 +101,7 @@ const mapStateToProps = state => {
   return {
     authentication: state.authentication,
     accessToken: state.authentication.accessToken,
-    refreshToken: state.authentication.refreshToken
+    refreshToken: state.authentication.refreshToken,
   };
 };
 
@@ -100,7 +112,4 @@ const mapDispatchToProps = {
   setLoadingFalse,
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(EntryScreen);
+export default connect(mapStateToProps, mapDispatchToProps)(EntryScreen);

@@ -7,8 +7,8 @@ import EntryScreen from './src/screens/Entry/EntryScreen';
 export default function App() {
   return (
     <Provider store={store}>
-       <EntryScreen />
+      <EntryScreen />
     </Provider>
   );
 }
- //on fais des test mais apparement ca fonctionne pas du tout d'envoyer un fichier a la volée
+//on fais des test mais apparement ca fonctionne pas du tout d'envoyer un fichier a la volée
