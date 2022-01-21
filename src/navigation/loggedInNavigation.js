@@ -165,7 +165,7 @@ function LoggedInNavigation(props) {
             name="Album"
             component={Album}
             options={{
-              headerShown: true,
+              headerShown: false,
               headerTransparent: true,
               title: '',
             }}
@@ -174,7 +174,7 @@ function LoggedInNavigation(props) {
             name="Artist"
             component={Artist}
             options={{
-              headerShown: true,
+              headerShown: false,
               title: '',
             }}
           />
@@ -183,7 +183,7 @@ function LoggedInNavigation(props) {
             name="Playlist"
             component={Playlist}
             options={{
-              headerShown: true,
+              headerShown: false,
               headerTransparent: true,
               title: '',
             }}
