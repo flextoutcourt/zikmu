@@ -60,9 +60,10 @@ class CategoryScreen extends React.Component {
               onEndReachedThreshold={0.5}
               onEndReached={() =>
                 this._get_playlist(this.playlist.next).then(json => {
-                  this.setState({playlistItems(playlistItems =>
-                    playlistItems.concat(json.playlists.items),
-                  )})
+                  this.setState({
+                    playlistItems: playlistItems =>
+                      playlistItems.concat(json.playlists.items),
+                  });
                 })
               }
               renderItem={({item, key}) => (
