@@ -59,16 +59,16 @@ class CategoryScreen extends React.Component {
               horizontal={false}
               onEndReachedThreshold={0.5}
               onEndReached={() =>
-                _get_playlist(this.playlist.next).then(json => {
-                  setPlaylistItems(playlistItems =>
+                this._get_playlist(this.playlist.next).then(json => {
+                  this.setState({playlistItems(playlistItems =>
                     playlistItems.concat(json.playlists.items),
-                  );
+                  )})
                 })
               }
               renderItem={({item, key}) => (
                 <TouchableOpacity
                   onPress={() =>
-                    navigation.navigate('Playlist', {
+                    this.props.navigation.navigate('Playlist', {
                       playlist_id: item.id,
                     })
                   }>
