@@ -22,6 +22,10 @@ import Animated, {
 import TrackItem from '../../components/Track/TrackItem';
 import {onScrollEvent} from 'react-native-redash/lib/module/v1';
 import Header from '../../components/Album/Header';
+import moment from "moment";
+import ArtistItem from '../../components/Artist/ArtistItem'
+import Albums from "../../components/Artist/Albums";
+import Artist from "../MyProfile/Library/Artists";
 
 class AlbumScreen extends React.Component {
   constructor(props) {
@@ -205,6 +209,34 @@ class AlbumScreen extends React.Component {
                   disks={this.state.test}
                   type={'album'}
                 />
+              )}
+              ListFooterComponent={() => (
+                  <View style={{padding: 15}}>
+                      <View>
+                          <Text>{moment(this.state.album?.release_date).format('DD MMMM YYYY')}</Text>
+                          <Text>{this.state.album?.total_tracks} titres - {moment.duration(this.state.album?.full_duration).hours() !== 0 ? moment.duration(this.state.album?.full_duration).hours() + ' h ' : null}{moment.duration(this.state.album?.full_duration).minutes() + ' min '}{moment.duration(this.state.album?.full_duration).seconds() + ' s'}</Text>
+                          <FlatList
+                              data={this.state.album?.artists}
+                              keyExtractor={(item, index) => index.toString()}
+                              renderItem={({item}) => (
+                                  <ArtistItem artist_id={item?.id} />
+                              )}
+                          />
+                      </View>
+                      <FlatList
+                          data={this.state.album?.copyrights}
+                          keyExtractor={(item, index) => index.toString()}
+                          renderItem={({item}) => {
+                              return(
+                                  <View style={{flexDirection: 'row', marginVertical: 5}}>
+                                      <FontAwesome5Icon name={'copyright'} size={18} color='white' />
+                                      <Text style={{marginLeft: 10}}>{item?.text}</Text>
+                                  </View>
+                              )
+                          }}
+                      />
+                      <Text>{this.state.album?.copyrights[0].text}</Text>
+                  </View>
               )}
               renderSectionHeader={({section: {title}}) => (
                 <View
