@@ -33,7 +33,9 @@ class Artistitem extends Component {
     render() {
         return (
             <TouchableOpacity onPress={() => {
-                alert(this.state.artist?.name);
+                this.props.navigation.navigate('Artist', {
+                    artist_id: this.props.artist_id
+                })
             }}
                               style={{flexDirection: 'row', alignItems: 'center'}}>
                 <Image source={{uri: this.state.artist?.images[2]?.url}} style={{height: 48, width: 48, borderRadius: this.state.artist?.images[2].height, marginRight: 15}} />
