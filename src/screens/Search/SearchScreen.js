@@ -8,15 +8,15 @@ import {
   StyleSheet,
   Text,
   TextInput,
-  TouchableOpacity,
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import Animated from 'react-native-reanimated';
 import {connect} from 'react-redux';
 import ArtistItem from '../../components/Artist/ArtistItem';
 import TrackItem from '../../components/Track/TrackItem';
 import AlbumItem from '../../components/Album/AlbumItem';
+import GenreList from "../../components/Genres/GenreList";
+import Artist from "../../components/Artist/Artist";
 
 /** components */
 
@@ -73,18 +73,6 @@ class SearchScreen extends React.Component {
   componentDidMount() {}
 
   render() {
-    // const mh = this.state.scrollY.interpolate({
-    //   inputRange: [0, 70],
-    //   outputRange: [10, 0],
-    // });
-    // const w = this.state.scrollY.interpolate({
-    //   inputRange: [0, 70],
-    //   outputRange: [
-    //     Dimensions.get('screen').width - 20,
-    //     Dimensions.get('screen').width,
-    //   ],
-    //   extrapolate: Extrapolate.CLAMP,
-    // });
     return (
       <LinearGradient
         colors={['#B00D72', '#5523BF']}
@@ -116,7 +104,13 @@ class SearchScreen extends React.Component {
               />
             </View>
           </LinearGradient>
-          <View style={{paddingHorizontal: 10}}>
+            {this.state.results === null
+                ?
+                    <GenreList />
+                :
+                    null
+            }
+            <View style={{paddingHorizontal: 10}}>
             <View>
               {this._renderHeaderComponent(
                 'Artistes',
@@ -127,7 +121,7 @@ class SearchScreen extends React.Component {
                   numColumns={3}
                   data={this.state.results?.artists?.items}
                   scrollEnabled={false}
-                  renderItem={({item, key}) => <ArtistItem artist={item} />}
+                  renderItem={({item, key}) => <Artist artist={item} {...this.props} />}
                 />
               ) : (
                 <Text>Chargement...</Text>
