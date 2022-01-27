@@ -5,7 +5,7 @@ import React from 'react';
 import {Dimensions, FlatList, StatusBar, StyleSheet} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {connect} from 'react-redux';
-import ArtistItem from '../../../components/Artist/ArtistItem';
+import ArtistAlt from '../../../components/Artist/ArtistAlt';
 
 // create a component
 class Artist extends React.Component {
@@ -50,7 +50,7 @@ class Artist extends React.Component {
           horizontal={false}
           numColumns={3}
           keyExtractor={item => item.id}
-          renderItem={({item, key}) => <ArtistItem artist={item} />}
+          renderItem={({item, key}) => <ArtistAlt artist={item} {...this.props} />}
           onEndReachedThreshold={0.1}
           onEndReached={() => {
             this._get_artist(
@@ -64,7 +64,7 @@ class Artist extends React.Component {
             });
             // this._get_artist(this.state.artists[this.state.artists.length - 1].id).then(data => console.log(data.artists.items))
           }}
-          contentContainerStyle={{alignItems: 'center'}}
+          contentContainerStyle={{alignItems: 'center', marginTop: 20, paddingBottom: 140}}
           style={{width: Dimensions.get('screen').width, flex: 1}}
         />
       </LinearGradient>
