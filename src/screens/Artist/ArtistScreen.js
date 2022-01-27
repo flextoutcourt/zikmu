@@ -72,26 +72,52 @@ class ArtistScreen extends React.Component {
   }
 
   render() {
-    const borderRadius = this.state.scrollY.interpolate({
-      inputRange: [0, 325],
-      outputRange: [0, this.state.artist?.images[2]?.height],
+    const scale = this.state.scrollY.interpolate({
+      inputRange: [-Dimensions.get('screen').height, 0, 125],
+      outputRange: [2, 1, 0.5],
+      extrapolateRight: Extrapolate.CLAMP,
+    });
+    const opacity = this.state.scrollY.interpolate({
+      inputRange: [0, 200],
+      outputRange: [1, 1],
+      extrapolate: Extrapolate.CLAMP,
+    });
+    const mb = this.state.scrollY.interpolate({
+      inputRange: [0, 125],
+      outputRange: [10, -75],
+      extrapolate: Extrapolate.CLAMP,
+    });
+
+    const br = this.state.scrollY.interpolate({
+      inputRange: [0, 10],
+      outputRange: [0, 10],
       extrapolate: Extrapolate.CLAMP,
     });
 
     const height = this.state.scrollY.interpolate({
-      inputRange: [-150, 0, 250],
-      outputRange: [
-        this.state.artist?.images[0]?.height,
-        this.state.artist?.images[1].height,
-        50,
-      ],
-      extrapolate: Extrapolate.CLAMP,
+      inputRange: [0, 125],
+      outputRange: [Dimensions.get('screen').width, Dimensions.get('screen').width],
+      extrapolate: Extrapolate.CLAMP
     });
+
+    const mt = this.state.scrollY.interpolate({
+      inputRange: [0, 125],
+      outputRange: [0, 125],
+      extrapolate: Extrapolate.CLAMP
+    });
+
+    const borderRadius = this.state.scrollY.interpolate({
+      inputRange: [0, 125],
+      outputRange: [0, 350],
+      extrapolate: Extrapolate.CLAMP
+    });
+
+    const transform = [{scale}];
 
     return (
       <LinearGradient
         colors={['#B00D72', '#5523BF']}
-        style={({marginTop: -StatusBar.currentHeight}, styles.container)}>
+        style={({marginTop: - 2.5 * StatusBar.currentHeight}, styles.container)}>
         <Header
           y={this.state.scrollY}
           artist={this.state.artist}
@@ -101,7 +127,7 @@ class ArtistScreen extends React.Component {
           style={{
             flex: 1,
             width: Dimensions.get('screen').width,
-            marginTop: -2 * StatusBar.currentHeight,
+            marginTop: -2.5 * StatusBar.currentHeight,
           }}
           onScroll={Animated.event(
             [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
@@ -112,7 +138,9 @@ class ArtistScreen extends React.Component {
               <Animated.View
                 style={{
                   alignItems: 'center',
-                  marginTop: 2 * StatusBar.currentHeight,
+                  transform: transform,
+                  marginTop: mt,
+                  marginBottom: mb,
                 }}>
                 <Animated.Image
                   source={{uri: this.state.artist?.images[0]?.url}}

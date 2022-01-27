@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+
 import Animated, {
   interpolate,
   Extrapolate,
@@ -88,25 +89,39 @@ class PlaylistScreen extends React.Component {
 
   render() {
     const scale = this.state.scrollY.interpolate({
-      inputRange: [-Dimensions.get('screen').height, 325],
-      outputRange: [3, 0.1],
+      inputRange: [-Dimensions.get('screen').height, 0, 125],
+      outputRange: [2, 1, 0.5],
       extrapolateRight: Extrapolate.CLAMP,
     });
     const opacity = this.state.scrollY.interpolate({
-      inputRange: [0, 325],
-      outputRange: [1, 0],
+      inputRange: [0, 200],
+      outputRange: [1, 1],
       extrapolate: Extrapolate.CLAMP,
     });
-    const mt = this.state.scrollY.interpolate({
-      inputRange: [0, 325],
-      outputRange: [10, -100],
+    const mb = this.state.scrollY.interpolate({
+      inputRange: [0, 125],
+      outputRange: [10, -75],
       extrapolate: Extrapolate.CLAMP,
     });
+
     const br = this.state.scrollY.interpolate({
-      inputRange: [-10, 10],
+      inputRange: [0, 10],
       outputRange: [0, 10],
       extrapolate: Extrapolate.CLAMP,
     });
+
+    const height = this.state.scrollY.interpolate({
+      inputRange: [0, 125],
+      outputRange: [Dimensions.get('screen').width, Dimensions.get('screen').width],
+      extrapolate: Extrapolate.CLAMP
+    });
+
+    const mt = this.state.scrollY.interpolate({
+      inputRange: [0, 125],
+      outputRange: [0, 125],
+      extrapolate: Extrapolate.CLAMP
+    });
+
     const transform = [{scale}];
     return (
       <LinearGradient
@@ -122,7 +137,7 @@ class PlaylistScreen extends React.Component {
           {...this.props}
         />
         <Animated.ScrollView
-          style={{marginTop: -2 * StatusBar.currentHeight}}
+          style={{marginTop: - 2.5 * StatusBar.currentHeight}}
           onScroll={Animated.event(
             [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
             {listener: '', useNativeDriver: true},
@@ -134,17 +149,17 @@ class PlaylistScreen extends React.Component {
               scrollEnabled={false}
               horizontal={false}
               ListHeaderComponent={() => (
-                <Animated.View style={{marginTop: StatusBar.currentHeight}}>
+                <Animated.View style={{}}>
                   <Animated.View
                     style={{
                       alignItems: 'flex-start',
                       justifyContent: 'flex-start',
                       elevation: 10,
-                      margin: 10,
-                      marginBottom: mt,
+                      marginBottom: mb,
+                      marginTop: mt,
                       transform: transform,
-                      width: Dimensions.get('screen').width - 20,
-                      height: Dimensions.get('screen').width - 20,
+                      width: height,
+                      height: height,
                       position: 'relative',
                       opacity: opacity,
                     }}>
@@ -155,7 +170,7 @@ class PlaylistScreen extends React.Component {
                     <Animated.Text
                       style={{
                         position: 'absolute',
-                        top: 5,
+                        bottom: 5,
                         left: 10,
                         backgroundColor: 'red',
                         borderRadius: 9,
@@ -163,7 +178,7 @@ class PlaylistScreen extends React.Component {
                         elevation: 10,
                         opacity: opacity,
                       }}>
-                      {this.state.playlist?.followers?.total}
+                      {this.state.playlist?.followers?.total} {this.state.playlist?.followers?.total > 1 ? 'Followers' : 'Follower'}
                     </Animated.Text>
                   </Animated.View>
                   <Animated.View style={{opacity: opacity}}>
