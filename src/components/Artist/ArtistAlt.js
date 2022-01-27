@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {View, StyleSheet, TouchableOpacity, Image, Text, Dimensions} from 'react-native';
 
-class Artist extends Component {
+class ArtistAlt extends Component {
 
 	constructor(props){
 		super(props);
@@ -64,4 +64,4 @@ const mapStateToProps = store => {
 	}
 }
 
-export default connect(mapStateToProps)(Artist);
+export default connect(mapStateToProps)(ArtistAlt);

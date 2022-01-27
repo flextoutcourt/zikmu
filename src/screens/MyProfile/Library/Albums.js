@@ -68,6 +68,7 @@ class Albums extends React.Component {
               this.setState({albums: [...this.state.albums, ...data.items]});
             });
           }}
+          contentContainerStyle={{paddingBottom: 120}}
           renderItem={({item, key}) => <AlbumItem album={item?.album} />}
         />
       </LinearGradient>
