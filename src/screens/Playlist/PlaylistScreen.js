@@ -21,6 +21,7 @@ import Animated, {
 import {connect} from 'react-redux';
 import TrackItem from '../../components/Track/TrackItem';
 import Header from '../../components/Playlist/Header';
+import Icon from "react-native-ionicons";
 
 class PlaylistScreen extends React.Component {
   constructor(props) {
@@ -28,6 +29,7 @@ class PlaylistScreen extends React.Component {
     this.state = {
       playlist: null,
       scrollY: new Animated.Value(0),
+      englithment: null
     };
   }
 
@@ -48,6 +50,31 @@ class PlaylistScreen extends React.Component {
     return response;
   };
 
+  _to_array_tracks = () => {
+    let tracks_array = [];
+    this.state.playlist?.tracks.items.map(item => {
+      tracks_array.push(item.track?.id);
+    });
+    return tracks_array.toString();
+  }
+
+  _enlight_playlist = () => {
+
+    const promise = axios.get(
+      `https://api.spotify.com/v1/recommendations?seed_tracks=${this._to_array_tracks()}&limit=10`,
+      {
+        headers: {
+          Accept: 'application/json',
+          Authorization:
+            'Bearer ' + this.props.store.authentication.accessToken,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    const response = promise.then(data => alert(JSON.stringify(data)));
+    return response;
+  }
+
   componentDidMount() {
     const opacity = this.state.scrollY.interpolate({
       inputRange: [250, 325],
@@ -56,16 +83,6 @@ class PlaylistScreen extends React.Component {
     });
     this._get_playlist().then(json => {
       this.setState({playlist: json});
-      this.props.navigation.setOptions({
-        // headerTitle: () => this.headerTitle(),
-        // headerStyle: {
-        //     backgroundColor: `rgba(0,0,0,${opacity})`,
-        // },
-        // headerTintColor: 'white',
-        // headerRight: () => (
-        //     <FontAwesome5Icon name='heart' size={24} solid={true} color={"white"} />
-        // )
-      });
     });
   }
 
@@ -159,6 +176,39 @@ class PlaylistScreen extends React.Component {
                       {this.state.playlist?.name}
                     </Text>
                   </Animated.View>
+                  <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'flex-start'}}>
+                    <View style={{padding: 10, alignItems: 'flex-start', justifyContent: 'flex-start'}}>
+                      <TouchableOpacity onPress={() => this._enlight_playlist().then(json => alert(JSON.stringify(json)))} style={{borderStyle: 'solid', borderRadius: 100, borderColor: "white", borderWidth: 1, paddingHorizontal: 10, paddingVertical: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                        <FontAwesome5Icon name="lightbulb" size={16} color="white" style={{marginRight: 5}}/>
+                        <Text style={{color: 'white'}}>
+                          Enrichir
+                        </Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={{padding: 5, paddingVertical: 10, alignItems: 'flex-start', justifyContent: 'flex-start'}}>
+                      <TouchableOpacity onPress={() => alert('telecharger la playlist')} style={{padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                        <FontAwesome5Icon name="download" size={16} color="white" style={{marginRight: 5}}/>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={{padding: 5, paddingVertical: 10, alignItems: 'flex-start', justifyContent: 'flex-start'}}>
+                      <TouchableOpacity onPress={() => alert('Ajouter un collaborateur')} style={{padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                        <FontAwesome5Icon name="user-plus" size={16} color="white" style={{marginRight: 5}}/>
+                      </TouchableOpacity>
+                    </View>
+                    <View style={{padding: 5, paddingVertical: 10, alignItems: 'flex-start', justifyContent: 'flex-start'}}>
+                      <TouchableOpacity onPress={() => alert('Voir les détails')} style={{padding: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                        <FontAwesome5Icon name="ellipsis-v" size={16} color="white" style={{marginRight: 5}}/>
+                      </TouchableOpacity>
+                    </View>
+                  </View>
+                  <View style={{flex: 1,padding: 10, marginVertical: 10, alignItems: 'center', justifyContent: 'flex-start'}}>
+                    <TouchableOpacity onPress={() => this._enlight_playlist().then(json => alert(JSON.stringify(json)))} style={{borderStyle: 'solid', borderRadius: 100, borderColor: "white", borderWidth: 1, paddingHorizontal: 10, paddingVertical: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+                      <FontAwesome5Icon name="plus" size={16} color="white" style={{marginRight: 5}}/>
+                      <Text style={{color: 'white'}}>
+                        Ajouter des titres
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
                 </Animated.View>
               )}
               renderItem={({item, key, index}) => (
@@ -179,6 +229,25 @@ class PlaylistScreen extends React.Component {
               )}
             />
           ) : null}
+         <LinearGradient colors={['#B00D72', '#5523BF']} style={{marginTop: 25, padding: 10}}>
+           <View style={{padding: 10, alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
+             <TouchableOpacity onPress={() => this._enlight_playlist().then(json => alert(JSON.stringify(json)))} style={{paddingHorizontal: 10, paddingVertical: 5, flexDirection: 'row', alignItems: 'center', justifyContent: 'center'}}>
+               <Text style={{color: 'white', textAlign: 'center', fontSize: 24}}>
+                 Nos Suggestions
+               </Text>
+             </TouchableOpacity>
+             <FlatList
+               data={this.state.suggested?.tracks?.items}
+               keyExtractor={(item, index) => index.toString()}
+               renderItem={(item, key) => (
+                   <TrackItem track={item.track} />
+               )}
+               />
+             <View style={{height: 800, width: Dimensions.get('screen').width - 20}}>
+
+             </View>
+           </View>
+         </LinearGradient>
         </Animated.ScrollView>
       </LinearGradient>
     );
