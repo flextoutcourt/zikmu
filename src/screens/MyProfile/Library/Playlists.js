@@ -67,6 +67,7 @@ class Playlists extends React.Component {
             });
           }}
           renderItem={({item, key}) => <PlaylistItem playlist={item} />}
+          contentContainerStyle={{paddingBottom: 120}}
         />
       </LinearGradient>
     );
