@@ -16,7 +16,7 @@ import ArtistItem from '../../components/Artist/ArtistItem';
 import TrackItem from '../../components/Track/TrackItem';
 import AlbumItem from '../../components/Album/AlbumItem';
 import GenreList from "../../components/Genres/GenreList";
-import Artist from "../../components/Artist/Artist";
+import ArtistAlt from "../../components/Artist/ArtistAlt";
 
 /** components */
 
