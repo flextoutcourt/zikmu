@@ -17,6 +17,7 @@ import Albums from '../../components/Artist/Albums';
 import Header from '../../components/Artist/Header';
 import RelatedArtists from '../../components/Artist/RelatedArtists';
 import TopTracks from '../../components/Artist/TopTracks';
+import SubHeader from "../../components/Artist/SubHeader";
 
 class ArtistScreen extends React.Component {
   constructor(props) {
@@ -65,7 +66,7 @@ class ArtistScreen extends React.Component {
           </View>
         ),
         headerRight: () => (
-          <FontAwesome5Icon name="heart" size={24} color={'red'} />
+            <FontAwesome5Icon name="heart" size={24} color={'red'} />
         ),
       });
     });
@@ -79,7 +80,7 @@ class ArtistScreen extends React.Component {
     });
     const opacity = this.state.scrollY.interpolate({
       inputRange: [0, 200],
-      outputRange: [1, 1],
+      outputRange: [0, 1],
       extrapolate: Extrapolate.CLAMP,
     });
     const mb = this.state.scrollY.interpolate({
@@ -101,8 +102,8 @@ class ArtistScreen extends React.Component {
     });
 
     const mt = this.state.scrollY.interpolate({
-      inputRange: [0, 125],
-      outputRange: [0, 125],
+      inputRange: [0, Dimensions.get('window').height * 4],
+      outputRange: [Dimensions.get('screen').width, 0],
       extrapolate: Extrapolate.CLAMP
     });
 
@@ -123,11 +124,13 @@ class ArtistScreen extends React.Component {
           artist={this.state.artist}
           {...this.props}
         />
+        <SubHeader y={this.state.scrollY} {...this.props} artist={this.state.artist}/>
         <Animated.ScrollView
           style={{
             flex: 1,
             width: Dimensions.get('screen').width,
             marginTop: -2.5 * StatusBar.currentHeight,
+            zIndex: 9
           }}
           onScroll={Animated.event(
             [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
@@ -138,31 +141,37 @@ class ArtistScreen extends React.Component {
               <Animated.View
                 style={{
                   alignItems: 'center',
-                  transform: transform,
-                  marginTop: mt,
-                  marginBottom: mb,
+                  position: 'relative'
                 }}>
-                <Animated.Image
-                  source={{uri: this.state.artist?.images[0]?.url}}
-                  style={{
-                    width: height,
-                    height: height,
-                    borderRadius: borderRadius,
-                  }}
-                />
+                {/*<Animated.Image*/}
+                {/*  source={{uri: this.state.artist?.images[0]?.url}}*/}
+                {/*  style={{*/}
+                {/*    width: Dimensions.get('screen').width,*/}
+                {/*    height:Dimensions.get('screen').width,*/}
+                {/*    position: 'absolute',*/}
+                {/*    top: 0,*/}
+                {/*    left: 0,*/}
+                {/*    right: 0,*/}
+                {/*  }}*/}
+                {/*/>*/}
               </Animated.View>
-              <Text
+              <Animated.Text
                 style={{
                   fontSize: 36,
                   color: 'white',
                   textAlign: 'center',
-                  marginTop: 10,
+                  marginTop: mt,
                 }}>
                 {this.state.artist?.name}
-              </Text>
-              <TopTracks artist={this.state.artist} />
-              <Albums artist={this.state.artist} />
-              <RelatedArtists artist={this.state.artist} />
+              </Animated.Text>
+              <Animated.View style={{
+                marginTop: 0,
+              }}>
+                <TopTracks artist={this.state.artist} />
+                <Albums artist={this.state.artist} />
+                <RelatedArtists artist={this.state.artist} />
+              </Animated.View>
+
             </>
           ) : (
             <Text>test</Text>

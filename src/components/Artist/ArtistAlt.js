@@ -40,7 +40,7 @@ class ArtistAlt extends Component {
 				}}
 				style={{flexDirection: 'column', alignItems: 'center'}}
 			>
-				<Image source={{uri: this.state.artist?.images[2]?.url}} style={{...styles.images, borderRadius: this.state.artist?.images[2].height}} />
+				<Image source={{uri: this.state.artist?.images[1]?.url}} style={{...styles.images, borderRadius: this.state.artist?.images[1].height}} />
 				<Text style={{color: 'white', fontSize: 16, fontWeight: "800"}}>{this.state.artist?.name}</Text>
 			</TouchableOpacity>
 		);
