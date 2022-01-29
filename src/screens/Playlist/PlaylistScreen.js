@@ -13,7 +13,6 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-
 import Animated, {
   interpolate,
   Extrapolate,
@@ -58,11 +57,27 @@ class PlaylistScreen extends React.Component {
     });
     return tracks_array.toString();
   }
+  _to_array_genres = () => {
+    let genre_array = [];
+    this.state.playlist?.tracks.items.map(item => {
+      genre_array.push(item.genre.id)
+    });
+    return genre_array.toString();
+  }
+  _to_array_artists = () => {
+    let artist_array = [];
+    this.state.playlist?.tracks.items.map(item => {
+      item.track.artists.map((artist) => {
+        artist_array.push(artist.id);
+      })
+    });
+    return artist_array.toString();
+  }
 
   _enlight_playlist = () => {
-
+    console.log(this._to_array_artists());
     const promise = axios.get(
-      `https://api.spotify.com/v1/recommendations?seed_tracks=${this._to_array_tracks()}&limit=10`,
+      `https://api.spotify.com/v1/recommendations?seed_tracks=${this.state.playlist.tracks.items[0].track.id}&limit=10`,
       {
         headers: {
           Accept: 'application/json',

@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {View, StyleSheet, TouchableOpacity, Image, Text} from 'react-native';
+import {NavigationActions} from "react-navigation";
 
 class Artistitem extends Component {
 

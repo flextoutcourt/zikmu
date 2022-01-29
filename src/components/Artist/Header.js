@@ -25,10 +25,22 @@ class Header extends Component {
     });
 
     const background = this.props.y.interpolate({
-      inputRange: [0, 125, 200],
+      inputRange: [0, 125, 325],
       outputRange: [0, 0, 0.5],
       extrapolate: Extrapolate.CLAMP,
     });
+
+    const mt = this.props.y.interpolate({
+        inputRange: [0, Dimensions.get('window').height],
+        outputRange: [0, -125],
+        extrapolate: Extrapolate.CLAMP
+    })
+
+      const maskOpacity = this.props.y.interpolate({
+          inputRange: [0, Dimensions.get('screen').width],
+          outputRange: [0, 1],
+          extrapolate: Extrapolate.CLAMP
+      })
 
     return (
       <Animated.View
