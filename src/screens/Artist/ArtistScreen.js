@@ -169,9 +169,9 @@ class ArtistScreen extends React.Component {
                 marginTop: 0,
               }}>
                 <YourLikes artist={this.state.artist} />
-                <TopTracks artist={this.state.artist} isOne={true} />
-                <Albums artist={this.state.artist} {...this.props} />
-                <RelatedArtists artist={this.state.artist} {...this.props}/>
+                <TopTracks artist={this.state.artist} />
+                <Albums {...this.props} artist={this.state.artist}/>
+                <RelatedArtists {...this.props} artist={this.state.artist}/>
               </Animated.View>
 
             </>
