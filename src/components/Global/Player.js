@@ -247,7 +247,7 @@ class Player extends React.Component {
                               <Icon name="caret-right" size={48} style={{color: 'white'}} />
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => {this._repeat()}}>
-                              <Icon name="redo" size={24} style={{color: this.state.listening?.repeat_state == 'context' ? 'green' : this.state.listening?.repeat_state == 'track' ? 'purple' : 'white' }} />
+                              <Icon name="redo" size={24} style={{color: this.state.listening?.repeat_state == 'context' ? 'green' : this.state.listening?.repeat_state == 'track' ? '#B00D70' : 'white' }} />
                             </TouchableOpacity>
                           </View>
                           <View style={{justifyContent: 'flex-end', alignItems: 'flex-end', marginRight: 25, marginTop: 10}}>
@@ -280,8 +280,8 @@ class Player extends React.Component {
                               </TouchableOpacity>
                             </View>
                             <View style={{marginLeft: 5, flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
-                              <FontAwesome name={this._display_device_icon(this.state.listening?.device?.type)} size={16} style={{color: 'purple', fontWeight: 'bold'}} />
-                              <Text style={{marginLeft: 5, color: "purple", fontWeight: 'bold'}}>{this.state.listening?.device?.name}</Text>
+                              <FontAwesome name={this._display_device_icon(this.state.listening?.device?.type)} size={16} style={{color: '#B00D70', fontWeight: 'bold'}} />
+                              <Text style={{marginLeft: 5, color: "#B00D70", fontWeight: 'bold'}}>{this.state.listening?.device?.name}</Text>
                             </View>
                           </View>
                         </View>

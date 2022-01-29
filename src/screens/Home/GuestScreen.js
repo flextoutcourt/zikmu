@@ -84,7 +84,7 @@ export default function GuestScreen() {
             <View style={{flex: 1}}>
                 <TouchableHighlight
                     onPress={(e) => { navigation.navigate('Login') }}
-                    style={{backgroundColor: "purple", padding: 10, borderRadius: 10, elevation: 10}}
+                    style={{backgroundColor: "#B00D70", padding: 10, borderRadius: 10, elevation: 10}}
                 >
                     <Text>Se connecter</Text>
                 </TouchableHighlight>

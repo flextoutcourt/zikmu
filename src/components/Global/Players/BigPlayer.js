@@ -221,7 +221,7 @@ class Bigplayer extends Component {
                             <Icon name="caret-right" size={48} style={{color: 'white'}} />
                         </TouchableOpacity>
                         <TouchableOpacity onPress={() => {this._repeat()}}>
-                            <Icon name="redo" size={24} style={{color: this.state.listening?.repeat_state == 'context' ? 'green' : this.state.listening?.repeat_state == 'track' ? 'purple' : 'white' }} />
+                            <Icon name="redo" size={24} style={{color: this.state.listening?.repeat_state == 'context' ? 'green' : this.state.listening?.repeat_state == 'track' ? '#B00D70' : 'white' }} />
                         </TouchableOpacity>
                     </View>
                     <View style={{justifyContent: 'flex-end', alignItems: 'flex-end', marginRight: 25, marginTop: 10}}>
