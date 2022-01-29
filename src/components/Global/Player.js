@@ -7,6 +7,8 @@ import * as rootNavigation from './../../utils/RootNavigation';
 import Lyrics from './Player/Lyrics';
 import SeekBar from './Player/Seek';
 import LinearGradient from 'react-native-linear-gradient';
+import FontAwesome from "react-native-vector-icons/FontAwesome";
+import Liked from "../Track/Liked";
 
 
 class Player extends React.Component {
@@ -134,12 +136,29 @@ class Player extends React.Component {
     })
   }
 
+  _display_device_icon = (device_type) => {
+    switch (device_type) {
+      case "Smartphone":
+        return 'mobile';
+        break;
+      case "speaker":
+        return 'volume-up';
+        break;
+      case "computer":
+        return 'desktop';
+        break;
+      default:
+        return 'mobile';
+        break;
+    }
+  }
+
   render(){
     return (
         this.state.listening
             ?
             <TouchableOpacity
-                style={{position: 'absolute', bottom: this.state.big ? 0 : 60, top : this.state.big ? 0 : null , left: this.state.big ? 0 : 2, right: this.state.big ? 0 : 2, backgroundColor: this.state.big ? "#030303" : "#030303", zIndex: 99, padding: 0, borderRadius: this.state.big ? 0 : 10}}
+                style={{position: 'absolute', bottom: this.state.big ? 0 : 60, top : this.state.big ? 0 : null , left: this.state.big ? 0 : 2, right: this.state.big ? 0 : 2, backgroundColor: this.state.big ? "#030303" : "#353b48", zIndex: 99, padding: 0, borderRadius: this.state.big ? 0 : 10}}
                 onPress={() => {!this.state.big ? this.setState({big: true}) : null}}
                 activeOpacity={this.state.big ? 1 : 0.2}
             >
@@ -250,28 +269,25 @@ class Player extends React.Component {
                       <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <View style={{flexDirection: 'row', alignItems: 'center', flex: 3, overflow: 'hidden'}}>
                           <Image source={{uri: this.state.listening?.item?.album?.images[0]?.url}} style={{width: 50, height: 50, margin: "auto", borderRadius: 10}} />
-                          <View style={{marginLeft: 5}}>
-                            <Text style={{color: 'white'}} numberOfLines={1}>{this.state.listening?.item?.name}</Text>
-                            <FlatList
-                                data={this.state.listening?.item?.artists}
-                                scrollEnabled={false}
-                                horizontal={true}
-                                ItemSeparatorComponent={() => (
-                                    <Text>, </Text>
-                                )}
-                                renderItem={({item, key}) => (
-                                    <TouchableOpacity onPress={() => rootNavigation.navigate('Artist', {
-                                      artist_id: item.id
-                                    })}>
-                                      <Text style={{color: 'white'}}>{item.name}</Text>
-                                    </TouchableOpacity>
-                                )}
-                            />
+                          <View>
+                            <View style={{marginLeft: 5, flexDirection: 'row'}}>
+                              <Text style={{color: 'white'}} numberOfLines={1}>{this.state.listening?.item?.name}</Text>
+                              <Text> - </Text>
+                              <TouchableOpacity onPress={() => rootNavigation.navigate('Artist', {
+                                artist_id: this.state.listening?.item?.artists[0].id
+                              })}>
+                                <Text style={{color: 'white'}}>{this.state.listening?.item?.artists[0]?.name}</Text>
+                              </TouchableOpacity>
+                            </View>
+                            <View style={{marginLeft: 5, flexDirection: 'row', marginTop: 5, alignItems: 'center'}}>
+                              <FontAwesome name={this._display_device_icon(this.state.listening?.device?.type)} size={16} style={{color: 'purple', fontWeight: 'bold'}} />
+                              <Text style={{marginLeft: 5, color: "purple", fontWeight: 'bold'}}>{this.state.listening?.device?.name}</Text>
+                            </View>
                           </View>
                         </View>
                         <View style={{flex: 1, flexDirection: 'row', height: '100%', alignItems: 'center', zIndex: 99}}>
                           <Icon name="home" size={24} style={{marginLeft: 5, marginRight: 5}} />
-                          <Icon name="heart" size={24} style={{marginLeft: 5, marginRight: 5, color: 'white'}} />
+                          <Liked track={this.state.listening?.item} />
                           {
                             this.state.listening.is_playing
                                 ?
