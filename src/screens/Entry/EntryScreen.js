@@ -14,7 +14,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 //Authentication handler
 import authHandler from '../../utils/authenticationHandler';
 
-import Player from '../../components/Global/Player';
+import PlayerAlt from '../../components/Global/PlayerAlt';
 
 //Redux imports
 import {connect} from 'react-redux';
@@ -80,7 +80,7 @@ class EntryScreen extends Component {
               translucent={true}
             />
             <LoggedinNavigation />
-            <Player />
+            <PlayerAlt />
           </SafeAreaView>
         </SafeAreaProvider>
       );

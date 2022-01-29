@@ -40,7 +40,7 @@ class RelatedArtists extends React.Component {
               data={this.state.related?.artists}
               horizontal={true}
               style={{marginBottom: 110}}
-              renderItem={({item, key}) => <ArtistAlt artist={item} {...this.props.navigation} />}
+              renderItem={({item, key}) => <ArtistAlt {...this.props} artist={item} />}
           />
         </View>
 

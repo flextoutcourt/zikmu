@@ -1,10 +1,11 @@
 import React, {useContext} from 'react';
-import {Linking, View, Text, Button} from 'react-native';
+import {Linking, View, Text, Button, StyleSheet} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {navigationRef} from './../utils/RootNavigation';
+import {BlurView} from 'expo-blur';
 
 import {ReactReduxContext, connect} from 'react-redux';
 
@@ -21,6 +22,7 @@ import SearchScreen from '../screens/Search/SearchScreen';
 
 import Library from '../screens/MyProfile/Library';
 import Tracks from '../screens/MyProfile/Library/Tracks';
+import LinearGradient from "react-native-linear-gradient";
 
 export const config = {
   screens: {
@@ -201,26 +203,27 @@ function LoggedInNavigation(props) {
             let iconName = 'home';
             if (route.name === 'Accueil') {
               iconName = focused ? 'home' : 'home';
-              color = focused ? 'purple' : 'white';
+              color = focused ? '#B00D70' : 'white';
             } else if (route.name === 'Rechercher') {
               iconName = focused ? 'search' : 'search';
-              color = focused ? 'purple' : 'white';
+              color = focused ? '#B00D70' : 'white';
             } else if (route.name === 'Librarie') {
               iconName = focused ? 'book' : 'book';
-              color = focused ? 'purple' : 'white';
+              color = focused ? '#B00D70' : 'white';
             }
             return <Icon name={iconName} size={24} color={color} />;
           },
-          tabBarActiveTintColor: 'tomato',
-          tabBarInactiveTintColor: 'gray',
+          tabBarActiveTintColor: '#B00D70',
+          tabBarInactiveTintColor: 'white',
           tabBarStyle: {
-            backgroundColor: 'black',
+              position: 'absolute',
+              bottom: 0,
+              borderTopWidth: 0,
+              elevation: 0
           },
-          tabBarActiveBackgroundColor: 'transparent',
-          tabBarInactiveBackgroundColor: 'black',
-          tabBarActiveBackgroundColor: 'black',
-          tabBarActiveTintColor: 'purple',
-          gestureEnabled: true,
+            tabBarBackground: () => (
+                <BlurView tint="dark" intensity={85} style={StyleSheet.absoluteFill} />
+            ),
           headerShown: false,
         })}>
         <Tab.Screen name="Accueil" component={HomeNavigationStack} />

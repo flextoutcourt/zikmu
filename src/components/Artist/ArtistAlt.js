@@ -9,12 +9,12 @@ class ArtistAlt extends Component {
 	constructor(props){
 		super(props);
 		this.state = {
-			artist: null,
+			artist: props.artist,
 		}
 	}
 
 	componentDidMount(){
-		this._get_artist(this.props.artist?.id).then(j => {
+		this._get_artist(this.state.artist?.id).then(j => {
 			this.setState({artist: j});
 		})
 	}
@@ -35,7 +35,7 @@ class ArtistAlt extends Component {
 		return (
 			<TouchableOpacity
 				onPress={() => {
-					this.props.navigation.navigate('Artist', {
+					this.props.navigation.push('Artist', {
 						artist_id: this.props.artist?.id
 					})
 				}}

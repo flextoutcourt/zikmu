@@ -13,10 +13,15 @@ import GLOBAL from './../../screens/Entry/EntryScreen';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
 import Liked from "./Liked";
+import Collab from "./Collab";
 
 class TrackItem extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      track: props.track,
+      isCollab: false
+    }
   }
 
   _set_offset = (disc_number, track_number) => {
@@ -84,10 +89,10 @@ class TrackItem extends React.Component {
               this.props.type === 'album'
                 ? this.props.album?.uri
                 : this.props.type === 'playlist'
-                ? this.props.track?.uri
-                : this.props.track?.uri,
-              this.props.track?.track_number,
-              this.props.track?.disc_number,
+                ? this.state.track?.uri
+                : this.state.track?.uri,
+              this.state.track?.track_number,
+              this.state.track?.disc_number,
             )
           }>
           <View
@@ -123,23 +128,22 @@ class TrackItem extends React.Component {
                   style={{fontWeight: 'bold', color: 'white', maxWidth: (Dimensions.get('screen').width / 3 ) * 1.7}}
                   numberOfLines={1}
                 >
-                  {this.props.track?.name}
+                  {this.state.track?.name}
                 </Text>
                 <FlatList
-                  data={this.props.track?.artists}
+                  data={this.state.track?.artists}
                   scrollEnabled={true}
                   horizontal={true}
                   ItemSeparatorComponent={() => <Text>, </Text>}
                   renderItem={({item, key}) => (
                     <Text style={{color: 'white'}}>{item.name}</Text>
                   )}
+                  contentContainerStyle={{maxWidth: Dimensions.get('screen').width / 1.9}}
                 />
               </View>
               <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                <View style={{alignSelf: 'flex-end', marginRight: 10, elevation: 10, width: 36, height: 36}}>
-                  <Image source={{uri: 'https://picsum.photos/48/48'}} style={{width: '100%', height: '100%', borderRadius: 50}} />
-                </View>
-                <Liked track={this.props.track} />
+                <Collab isCollab={this.state.track?.name === '696' || this.state.track?.name === "2014"} />
+                <Liked track={this.state.track} />
               </View>
             </View>
           </View>

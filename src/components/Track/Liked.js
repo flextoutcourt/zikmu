@@ -82,10 +82,10 @@ class Liked extends React.Component{
 			<TouchableOpacity onPress={() => this._like(this.props.track?.id)}>
 				<Icon
 					name="heart"
-					size={24}
+					size={this.props.iconSize ?? 24}
 					solid={!!this.state.liked}
-					color={'white'}
-					style={{color: 'white'}}
+					color={this.state.liked ? '#B00D70' : 'white'}
+					style={{color: this.state.liked ? '#B00D70' : 'white'}}
 				/>
 			</TouchableOpacity>
 		)
