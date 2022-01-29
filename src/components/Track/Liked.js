@@ -1,0 +1,102 @@
+import Icon from "react-native-vector-icons/FontAwesome5";
+import {TouchableOpacity, Vibration} from "react-native";
+import React from "react";
+import {connect} from "react-redux";
+import axios from "axios";
+
+class Liked extends React.Component{
+
+	constructor(props){
+		super(props);
+		this.state = {
+			liked: false,
+		}
+	}
+
+	_check_like = (track_id) => {
+		axios.get(`https://api.spotify.com/v1/me/tracks/contains?ids=${track_id}`, {
+			headers: {
+				Accept: 'application/json',
+				Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
+				'Content-Type': 'application/json',
+			},
+			method: 'PUT',
+		})
+		.then(data => data.data)
+		.then(json => {
+			this.setState({
+				liked: json[0],
+			})
+		})
+		.catch(e => {
+			alert(JSON.stringify(e));
+		});
+	}
+
+	_like = (track_id) => {
+		Vibration.vibrate(10);
+		if(this.state.liked === false){
+			fetch(`https://api.spotify.com/v1/me/tracks?ids=${track_id}`, {
+				method: 'PUT',
+				headers: {
+					Accept: 'application/json',
+					Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
+					'Content-Type': 'application/json',
+				}
+			})
+			.then(() => {
+				this.setState({
+					liked: true,
+				})
+			})
+			.catch(e => alert(e))
+		}else{
+			//délike
+			this._unlike(track_id);
+		}
+	}
+
+	_unlike = (track_id) => {
+		fetch(`https://api.spotify.com/v1/me/tracks?ids=${track_id}`, {
+			method: 'DELETE',
+			headers: {
+				Accept: 'application/json',
+				Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
+				'Content-Type': 'application/json',
+			}
+		})
+		.then(() => {
+			this.setState({
+				liked: false,
+			})
+		})
+		.catch(e => alert(JSON.stringify(e)));
+	}
+
+	componentDidMount() {
+		this._check_like(this.props.track?.id)
+	}
+
+	render(){
+		return(
+			<TouchableOpacity onPress={() => this._like(this.props.track?.id)}>
+				<Icon
+					name="heart"
+					size={24}
+					solid={!!this.state.liked}
+					color={'white'}
+					style={{color: 'white'}}
+				/>
+			</TouchableOpacity>
+		)
+	}
+
+}
+
+const mapStateToProps = store => {
+	return {
+		store: store,
+	}
+}
+
+export default connect(mapStateToProps)(Liked);
