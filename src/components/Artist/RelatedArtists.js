@@ -1,8 +1,8 @@
 import axios from 'axios';
 import React, {Suspense} from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, Text, View} from 'react-native';
 import {connect} from 'react-redux';
-import ArtistItem from './ArtistItem';
+import ArtistAlt from './ArtistAlt';
 
 class RelatedArtists extends React.Component {
   constructor(props) {
@@ -34,15 +34,16 @@ class RelatedArtists extends React.Component {
 
   render() {
     return (
-      <Suspense fallback={null}>
-        <FlatList
-          data={this.state.related?.artists}
-          scrollEnabled={true}
-          horizontal={true}
-          style={{marginBottom: 110}}
-          renderItem={({item, key}) => <ArtistItem artist={item} />}
-        />
-      </Suspense>
+        <View style={{flex: 1}}>
+          <Text style={{fontSize: 20, fontWeight: 'bold', paddingHorizontal: 10}}>Similaires a {this.props.artist?.name}</Text>
+          <FlatList
+              data={this.state.related?.artists}
+              horizontal={true}
+              style={{marginBottom: 110}}
+              renderItem={({item, key}) => <ArtistAlt artist={item} {...this.props.navigation} />}
+          />
+        </View>
+
     );
   }
 }

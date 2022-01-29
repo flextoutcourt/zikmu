@@ -4,7 +4,7 @@ import {
   FlatList,
   Image,
   Text,
-  TouchableOpacity,
+  TouchableOpacity, Vibration,
   View,
 } from 'react-native';
 
@@ -12,6 +12,7 @@ import GLOBAL from './../../screens/Entry/EntryScreen';
 
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
+import Liked from "./Liked";
 
 class TrackItem extends React.Component {
   constructor(props) {
@@ -28,6 +29,7 @@ class TrackItem extends React.Component {
   };
 
   _play = (uri, track_number, disc_number = 1) => {
+    Vibration.vibrate(10)
     let offset = 0,
       body = {};
     if (this.props.type === 'album') {
@@ -91,7 +93,7 @@ class TrackItem extends React.Component {
           <View
             style={{
               padding: 0,
-              margin: 5,
+              margin: 10,
               flexDirection: 'row',
               alignItems: 'center',
               justifyContent: 'space-between',
@@ -118,8 +120,9 @@ class TrackItem extends React.Component {
               }}>
               <View>
                 <Text
-                  style={{fontWeight: 'bold', color: 'white'}}
-                  numberOfLines={1}>
+                  style={{fontWeight: 'bold', color: 'white', maxWidth: (Dimensions.get('screen').width / 3 ) * 1.7}}
+                  numberOfLines={1}
+                >
                   {this.props.track?.name}
                 </Text>
                 <FlatList
@@ -132,15 +135,12 @@ class TrackItem extends React.Component {
                   )}
                 />
               </View>
-              <TouchableOpacity>
-                <Icon
-                  name="heart"
-                  size={24}
-                  solid={!!this.props.favorites}
-                  color={'white'}
-                  style={{color: 'white'}}
-                />
-              </TouchableOpacity>
+              <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                <View style={{alignSelf: 'flex-end', marginRight: 10, elevation: 10, width: 36, height: 36}}>
+                  <Image source={{uri: 'https://picsum.photos/48/48'}} style={{width: '100%', height: '100%', borderRadius: 50}} />
+                </View>
+                <Liked track={this.props.track} />
+              </View>
             </View>
           </View>
         </TouchableOpacity>

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, {Suspense} from 'react';
-import {FlatList} from 'react-native';
+import {Dimensions, FlatList, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import AlbumItem from '../Album/AlbumItem';
 
@@ -34,14 +34,15 @@ class Albums extends React.Component {
 
   render() {
     return (
-      <Suspense fallback={null}>
-        <FlatList
-          data={this.state.albums?.items}
-          horizontal={true}
-          style={{marginBottom: 110}}
-          renderItem={({item, key}) => <AlbumItem album={item} />}
-        />
-      </Suspense>
+        <View style={{flex: 1}}>
+          <Text style={{fontSize: 20, fontWeight: 'bold', paddingHorizontal: 10}}>Albums de {this.props.artist?.name}</Text>
+          <FlatList
+              data={this.state.albums?.items}
+              horizontal={true}
+              style={{marginBottom: 50}}
+              renderItem={({item, key}) => <AlbumItem album={item} />}
+          />
+        </View>
     );
   }
 }

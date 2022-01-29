@@ -18,6 +18,7 @@ import Header from '../../components/Artist/Header';
 import RelatedArtists from '../../components/Artist/RelatedArtists';
 import TopTracks from '../../components/Artist/TopTracks';
 import SubHeader from "../../components/Artist/SubHeader";
+import YourLikes from '../../components/Artist/YourLikes';
 
 class ArtistScreen extends React.Component {
   constructor(props) {
@@ -103,7 +104,7 @@ class ArtistScreen extends React.Component {
 
     const mt = this.state.scrollY.interpolate({
       inputRange: [0, Dimensions.get('window').height * 4],
-      outputRange: [Dimensions.get('screen').width, 0],
+      outputRange: [Dimensions.get('screen').width + 15, 0],
       extrapolate: Extrapolate.CLAMP
     });
 
@@ -167,9 +168,10 @@ class ArtistScreen extends React.Component {
               <Animated.View style={{
                 marginTop: 0,
               }}>
-                <TopTracks artist={this.state.artist} />
-                <Albums artist={this.state.artist} />
-                <RelatedArtists artist={this.state.artist} />
+                <YourLikes artist={this.state.artist} />
+                <TopTracks artist={this.state.artist} isOne={true} />
+                <Albums artist={this.state.artist} {...this.props} />
+                <RelatedArtists artist={this.state.artist} {...this.props}/>
               </Animated.View>
 
             </>

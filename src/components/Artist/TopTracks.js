@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, {Suspense} from 'react';
-import {FlatList} from 'react-native';
+import {FlatList, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import TrackItem from '../Track/TrackItem';
 
@@ -36,17 +36,18 @@ class TopTracks extends React.Component {
 
   render() {
     return (
-      <Suspense fallback={null}>
-        <FlatList
-          data={this.state.topTracks?.tracks}
-          scrollEnabled={false}
-          horizontal={false}
-          style={{marginBottom: 110}}
-          renderItem={({item, key}) => (
-            <TrackItem track={item} album={item.album} />
-          )}
-        />
-      </Suspense>
+        <View style={{flex: 1}}>
+            <Text style={{fontSize: 20, fontWeight: 'bold', padding: 10, color: 'white'}}>Populaires</Text>
+            <FlatList
+                data={this.state.topTracks?.tracks}
+                scrollEnabled={false}
+                horizontal={false}
+                style={{marginBottom: 50}}
+                renderItem={({item, key}) => (
+                    <TrackItem track={item} album={item.album} />
+                )}
+            />
+        </View>
     );
   }
 }

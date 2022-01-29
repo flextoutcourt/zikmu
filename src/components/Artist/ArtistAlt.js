@@ -2,13 +2,14 @@ import axios from 'axios';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import {View, StyleSheet, TouchableOpacity, Image, Text, Dimensions} from 'react-native';
+import * as rootNavigation from '../../utils/RootNavigation'
 
 class ArtistAlt extends Component {
 
 	constructor(props){
 		super(props);
 		this.state = {
-			artist: null
+			artist: null,
 		}
 	}
 
@@ -38,7 +39,7 @@ class ArtistAlt extends Component {
 						artist_id: this.props.artist?.id
 					})
 				}}
-				style={{flexDirection: 'column', alignItems: 'center'}}
+				style={{flexDirection: 'column', alignItems: 'center', margin: 10}}
 			>
 				<Image source={{uri: this.state.artist?.images[1]?.url}} style={{...styles.images, borderRadius: this.state.artist?.images[1].height}} />
 				<Text style={{color: 'white', fontSize: 16, fontWeight: "800"}}>{this.state.artist?.name}</Text>
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
 	images: {
 		height: (Dimensions.get('screen').width - margin * numItems * 2) / numItems,
 		width: (Dimensions.get('screen').width - margin * numItems * 2) / numItems,
-		marginRight: margin + (margin * 0.5)
+		marginRight: 0
 	}
 })
 
