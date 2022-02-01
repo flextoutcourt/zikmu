@@ -1,15 +1,6 @@
-import React, {Component, useRef} from 'react';
-import {
-	View,
-	StyleSheet,
-	Image,
-	Text,
-	StatusBar,
-	Dimensions,
-	TouchableOpacity,
-} from 'react-native';
-import Animated, {interpolate, Extrapolate} from 'react-native-reanimated';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import React, {Component} from 'react';
+import {Dimensions, StyleSheet,} from 'react-native';
+import Animated, {Extrapolate} from 'react-native-reanimated';
 import LinearGradient from "react-native-linear-gradient";
 
 class SubHeader extends Component {
@@ -57,7 +48,7 @@ class SubHeader extends Component {
 					source={{uri: this.props.artist?.images[0]?.url}}
 					style={{
 						width: Dimensions.get('screen').width,
-						height:Dimensions.get('screen').width,
+						height: Dimensions.get('screen').width,
 						position: 'absolute',
 						top: 0,
 						left: 0,
@@ -78,7 +69,9 @@ class SubHeader extends Component {
 						transform: transform
 					}}
 				>
-					<LinearGradient colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.3)', 'rgba(0,0,0,0.5)' , 'rgba(0,0,0,1)', 'rgba(0,0,0,1)']} style={{width: Dimensions.get('screen').width, height: Dimensions.get('screen').width}}/>
+					<LinearGradient
+						colors={['rgba(0,0,0,0)', 'rgba(0,0,0,0.3)', 'rgba(0,0,0,0.5)', 'rgba(0,0,0,1)', 'rgba(0,0,0,1)']}
+						style={{width: Dimensions.get('screen').width, height: Dimensions.get('screen').width}}/>
 				</Animated.View>
 			</>
 		);

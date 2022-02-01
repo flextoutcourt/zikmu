@@ -37,7 +37,7 @@ class GenreList extends React.Component {
 			<FlatList
 				data={this.state.genres?.categories?.items}
 				numColumns={3}
-				renderItem={(item, key) => <GenreItem genre={item} />}
+				renderItem={(item, key) => <GenreItem genre={item}/>}
 			/>
 		);
 	}
