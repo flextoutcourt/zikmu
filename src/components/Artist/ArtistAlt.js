@@ -1,19 +1,18 @@
 import axios from 'axios';
-import React, { Component } from 'react';
-import { connect } from 'react-redux';
-import {View, StyleSheet, TouchableOpacity, Image, Text, Dimensions} from 'react-native';
-import * as rootNavigation from '../../utils/RootNavigation'
+import React, {Component} from 'react';
+import {connect} from 'react-redux';
+import {Dimensions, Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
 class ArtistAlt extends Component {
 
-	constructor(props){
+	constructor(props) {
 		super(props);
 		this.state = {
 			artist: props.artist,
 		}
 	}
 
-	componentDidMount(){
+	componentDidMount() {
 		this._get_artist(this.state.artist?.id).then(j => {
 			this.setState({artist: j});
 		})
@@ -23,7 +22,7 @@ class ArtistAlt extends Component {
 		const promise = axios.get(`https://api.spotify.com/v1/artists/${artist_id}`, {
 			headers: {
 				Accept: 'application/json',
-				Authorization: 'Bearer '+ this.props.store.authentication.accessToken,
+				Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
 				"Content-Type": 'application/json'
 			}
 		});
@@ -41,7 +40,8 @@ class ArtistAlt extends Component {
 				}}
 				style={{flexDirection: 'column', alignItems: 'center', margin: 10}}
 			>
-				<Image source={{uri: this.state.artist?.images[1]?.url}} style={{...styles.images, borderRadius: this.state.artist?.images[1].height}} />
+				<Image source={{uri: this.state.artist?.images[1]?.url}}
+				       style={{...styles.images, borderRadius: this.state.artist?.images[1].height}}/>
 				<Text style={{color: 'white', fontSize: 16, fontWeight: "800"}}>{this.state.artist?.name}</Text>
 			</TouchableOpacity>
 		);
@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
 })
 
 const mapStateToProps = store => {
-	return{
+	return {
 		store: store
 	}
 }

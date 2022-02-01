@@ -4,9 +4,9 @@ import React from "react";
 import {connect} from "react-redux";
 import axios from "axios";
 
-class Liked extends React.Component{
+class Liked extends React.Component {
 
-	constructor(props){
+	constructor(props) {
 		super(props);
 		this.state = {
 			liked: false,
@@ -22,20 +22,20 @@ class Liked extends React.Component{
 			},
 			method: 'PUT',
 		})
-		.then(data => data.data)
-		.then(json => {
-			this.setState({
-				liked: json[0],
+			.then(data => data.data)
+			.then(json => {
+				this.setState({
+					liked: json[0],
+				})
 			})
-		})
-		.catch(e => {
-			alert(JSON.stringify(e));
-		});
+			.catch(e => {
+				alert(JSON.stringify(e));
+			});
 	}
 
 	_like = (track_id) => {
 		Vibration.vibrate(10);
-		if(this.state.liked === false){
+		if (this.state.liked === false) {
 			fetch(`https://api.spotify.com/v1/me/tracks?ids=${track_id}`, {
 				method: 'PUT',
 				headers: {
@@ -44,13 +44,13 @@ class Liked extends React.Component{
 					'Content-Type': 'application/json',
 				}
 			})
-			.then(() => {
-				this.setState({
-					liked: true,
+				.then(() => {
+					this.setState({
+						liked: true,
+					})
 				})
-			})
-			.catch(e => alert(e))
-		}else{
+				.catch(e => alert(e))
+		} else {
 			//délike
 			this._unlike(track_id);
 		}
@@ -65,20 +65,20 @@ class Liked extends React.Component{
 				'Content-Type': 'application/json',
 			}
 		})
-		.then(() => {
-			this.setState({
-				liked: false,
+			.then(() => {
+				this.setState({
+					liked: false,
+				})
 			})
-		})
-		.catch(e => alert(JSON.stringify(e)));
+			.catch(e => alert(JSON.stringify(e)));
 	}
 
 	componentDidMount() {
 		this._check_like(this.props.track?.id)
 	}
 
-	render(){
-		return(
+	render() {
+		return (
 			<TouchableOpacity onPress={() => this._like(this.props.track?.id)}>
 				<Icon
 					name="heart"

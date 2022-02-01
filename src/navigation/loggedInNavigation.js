@@ -1,5 +1,5 @@
 import React, {useContext} from 'react';
-import {Linking, View, Text, Button, StyleSheet} from 'react-native';
+import {Button, StyleSheet, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -7,10 +7,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import {navigationRef} from './../utils/RootNavigation';
 import {BlurView} from 'expo-blur';
 
-import {ReactReduxContext, connect} from 'react-redux';
-
-import MyFavoriteMusicScreen from '../screens/MyFavoriteMusic/MyFavoriteMusicScreen';
-import MyProfileScreen from '../screens/MyProfile/MyProfileScreen';
+import {connect, ReactReduxContext} from 'react-redux';
 
 import HomeScreen from './../screens/Home/HomeScreen';
 import Category from './../screens/Category/CategoryScreen';
@@ -22,222 +19,221 @@ import SearchScreen from '../screens/Search/SearchScreen';
 
 import Library from '../screens/MyProfile/Library';
 import Tracks from '../screens/MyProfile/Library/Tracks';
-import LinearGradient from "react-native-linear-gradient";
 
 export const config = {
-  screens: {
-    Home: {
-      path: 'home',
-    },
-    Settings: {
-      path: 'callback',
-    },
-    Test: {
-      path: 'test',
-    },
-    Category: {
-      path: 'category',
-    },
-    Playlist: {
-      path: 'playlist',
-    },
-    Album: {
-      path: 'album',
-    },
-    Track: {
-      path: 'track',
-    },
-    Artist: {
-      path: 'artist',
-    },
-  },
+	screens: {
+		Home: {
+			path: 'home',
+		},
+		Settings: {
+			path: 'callback',
+		},
+		Test: {
+			path: 'test',
+		},
+		Category: {
+			path: 'category',
+		},
+		Playlist: {
+			path: 'playlist',
+		},
+		Album: {
+			path: 'album',
+		},
+		Track: {
+			path: 'track',
+		},
+		Artist: {
+			path: 'artist',
+		},
+	},
 };
 
 const Tab = createBottomTabNavigator();
 
 function LoggedInNavigation(props) {
-  const {store} = useContext(ReactReduxContext);
+	const {store} = useContext(ReactReduxContext);
 
-  function SettingsScreen({navigation}) {
-    return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Text>Settings!</Text>
-        <Button
-          title="Go to Home"
-          onPress={() => navigation.navigate('Home')}
-        />
-      </View>
-    );
-  }
+	function SettingsScreen({navigation}) {
+		return (
+			<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+				<Text>Settings!</Text>
+				<Button
+					title="Go to Home"
+					onPress={() => navigation.navigate('Home')}
+				/>
+			</View>
+		);
+	}
 
-  function TestScreen({navigation}) {
-    return (
-      <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <Text>Test !</Text>
-        <Button
-          title="Go to Home"
-          onPress={() => navigation.navigate('Home')}
-        />
-      </View>
-    );
-  }
+	function TestScreen({navigation}) {
+		return (
+			<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+				<Text>Test !</Text>
+				<Button
+					title="Go to Home"
+					onPress={() => navigation.navigate('Home')}
+				/>
+			</View>
+		);
+	}
 
-  const Tab = createBottomTabNavigator();
+	const Tab = createBottomTabNavigator();
 
-  const Stack = createNativeStackNavigator();
+	const Stack = createNativeStackNavigator();
 
-  function HomeNavigationStack() {
-    return (
-      <Stack.Navigator
-        screenOptions={{
-          gestureEnabled: true,
-          headerShown: false,
-        }}>
-        <Stack.Screen
-          options={{
-            transitionSpec: {
-              open: config,
-              close: config,
-            },
-          }}
-          name="Home"
-          component={HomeScreen}
-        />
-        <Stack.Screen name="Settings" component={SettingsScreen} />
-        <Stack.Screen name="Category" component={Category} />
-        <Stack.Screen name="Album" component={Album} />
-        <Stack.Screen name="Artist" component={Artist} />
-        <Stack.Screen name="Track" component={Track} />
-        <Stack.Screen name="Playlist" component={Playlist} />
-      </Stack.Navigator>
-    );
-  }
+	function HomeNavigationStack() {
+		return (
+			<Stack.Navigator
+				screenOptions={{
+					gestureEnabled: true,
+					headerShown: false,
+				}}>
+				<Stack.Screen
+					options={{
+						transitionSpec: {
+							open: config,
+							close: config,
+						},
+					}}
+					name="Home"
+					component={HomeScreen}
+				/>
+				<Stack.Screen name="Settings" component={SettingsScreen}/>
+				<Stack.Screen name="Category" component={Category}/>
+				<Stack.Screen name="Album" component={Album}/>
+				<Stack.Screen name="Artist" component={Artist}/>
+				<Stack.Screen name="Track" component={Track}/>
+				<Stack.Screen name="Playlist" component={Playlist}/>
+			</Stack.Navigator>
+		);
+	}
 
-  function SearchNavigationStack() {
-    return (
-      <Stack.Navigator
-        screenOptions={{
-          gestureEnabled: true,
-          headerShown: false,
-        }}>
-        <Stack.Screen
-          options={{
-            transitionSpec: {
-              open: config,
-              close: config,
-            },
-          }}
-          name="Search"
-          component={SearchScreen}
-        />
-        <Stack.Screen name="Settings" component={SettingsScreen} />
-        <Stack.Screen name="Category" component={Category} />
-        <Stack.Screen name="Album" component={Album} />
-        <Stack.Screen name="Artist" component={Artist} />
-        <Stack.Screen name="Track" component={Track} />
-        <Stack.Screen name="Playlist" component={Playlist} />
-      </Stack.Navigator>
-    );
-  }
+	function SearchNavigationStack() {
+		return (
+			<Stack.Navigator
+				screenOptions={{
+					gestureEnabled: true,
+					headerShown: false,
+				}}>
+				<Stack.Screen
+					options={{
+						transitionSpec: {
+							open: config,
+							close: config,
+						},
+					}}
+					name="Search"
+					component={SearchScreen}
+				/>
+				<Stack.Screen name="Settings" component={SettingsScreen}/>
+				<Stack.Screen name="Category" component={Category}/>
+				<Stack.Screen name="Album" component={Album}/>
+				<Stack.Screen name="Artist" component={Artist}/>
+				<Stack.Screen name="Track" component={Track}/>
+				<Stack.Screen name="Playlist" component={Playlist}/>
+			</Stack.Navigator>
+		);
+	}
 
-  function libraryNavigationStack() {
-    return (
-      <View style={{flex: 1}}>
-        <Stack.Navigator
-          screenOptions={{
-            gestureEnabled: true,
-          }}
-          defaultScreenOptions={{
-            headerShown: false,
-          }}>
-          <Stack.Screen
-            options={{
-              transitionSpec: {
-                open: config,
-                close: config,
-              },
-              headerShown: false,
-            }}
-            name="Test"
-            component={Library}
-          />
-          <Stack.Screen name="Settings" component={SettingsScreen} />
-          <Stack.Screen name="Category" component={Category} />
-          <Stack.Screen
-            name="Album"
-            component={Album}
-            options={{
-              headerShown: false,
-              headerTransparent: true,
-              title: '',
-            }}
-          />
-          <Stack.Screen
-            name="Artist"
-            component={Artist}
-            options={{
-              headerShown: false,
-              title: '',
-            }}
-          />
-          <Stack.Screen name="MyTracks" component={Tracks} />
-          <Stack.Screen
-            name="Playlist"
-            component={Playlist}
-            options={{
-              headerShown: false,
-              headerTransparent: true,
-              title: '',
-            }}
-          />
-        </Stack.Navigator>
-      </View>
-    );
-  }
+	function libraryNavigationStack() {
+		return (
+			<View style={{flex: 1}}>
+				<Stack.Navigator
+					screenOptions={{
+						gestureEnabled: true,
+					}}
+					defaultScreenOptions={{
+						headerShown: false,
+					}}>
+					<Stack.Screen
+						options={{
+							transitionSpec: {
+								open: config,
+								close: config,
+							},
+							headerShown: false,
+						}}
+						name="Test"
+						component={Library}
+					/>
+					<Stack.Screen name="Settings" component={SettingsScreen}/>
+					<Stack.Screen name="Category" component={Category}/>
+					<Stack.Screen
+						name="Album"
+						component={Album}
+						options={{
+							headerShown: false,
+							headerTransparent: true,
+							title: '',
+						}}
+					/>
+					<Stack.Screen
+						name="Artist"
+						component={Artist}
+						options={{
+							headerShown: false,
+							title: '',
+						}}
+					/>
+					<Stack.Screen name="MyTracks" component={Tracks}/>
+					<Stack.Screen
+						name="Playlist"
+						component={Playlist}
+						options={{
+							headerShown: false,
+							headerTransparent: true,
+							title: '',
+						}}
+					/>
+				</Stack.Navigator>
+			</View>
+		);
+	}
 
-  return (
-    <NavigationContainer ref={navigationRef}>
-      <Tab.Navigator
-        screenOptions={({route}) => ({
-          tabBarIcon: ({focused, color, size}) => {
-            let iconName = 'home';
-            if (route.name === 'Accueil') {
-              iconName = focused ? 'home' : 'home';
-              color = focused ? '#B00D70' : 'white';
-            } else if (route.name === 'Rechercher') {
-              iconName = focused ? 'search' : 'search';
-              color = focused ? '#B00D70' : 'white';
-            } else if (route.name === 'Librarie') {
-              iconName = focused ? 'book' : 'book';
-              color = focused ? '#B00D70' : 'white';
-            }
-            return <Icon name={iconName} size={24} color={color} />;
-          },
-          tabBarActiveTintColor: '#B00D70',
-          tabBarInactiveTintColor: 'white',
-          tabBarStyle: {
-              position: 'absolute',
-              bottom: 0,
-              borderTopWidth: 0,
-              elevation: 0
-          },
-            tabBarBackground: () => (
-                <BlurView tint="dark" intensity={85} style={StyleSheet.absoluteFill} />
-            ),
-          headerShown: false,
-        })}>
-        <Tab.Screen name="Accueil" component={HomeNavigationStack} />
-        <Tab.Screen name="Rechercher" component={SearchNavigationStack} />
-        <Tab.Screen name="Librarie" component={libraryNavigationStack} />
-      </Tab.Navigator>
-    </NavigationContainer>
-  );
+	return (
+		<NavigationContainer ref={navigationRef}>
+			<Tab.Navigator
+				screenOptions={({route}) => ({
+					tabBarIcon: ({focused, color, size}) => {
+						let iconName = 'home';
+						if (route.name === 'Accueil') {
+							iconName = focused ? 'home' : 'home';
+							color = focused ? '#B00D70' : 'white';
+						} else if (route.name === 'Rechercher') {
+							iconName = focused ? 'search' : 'search';
+							color = focused ? '#B00D70' : 'white';
+						} else if (route.name === 'Librarie') {
+							iconName = focused ? 'book' : 'book';
+							color = focused ? '#B00D70' : 'white';
+						}
+						return <Icon name={iconName} size={24} color={color}/>;
+					},
+					tabBarActiveTintColor: '#B00D70',
+					tabBarInactiveTintColor: 'white',
+					tabBarStyle: {
+						position: 'absolute',
+						bottom: 0,
+						borderTopWidth: 0,
+						elevation: 0
+					},
+					tabBarBackground: () => (
+						<BlurView tint="dark" intensity={85} style={StyleSheet.absoluteFill}/>
+					),
+					headerShown: false,
+				})}>
+				<Tab.Screen name="Accueil" component={HomeNavigationStack}/>
+				<Tab.Screen name="Rechercher" component={SearchNavigationStack}/>
+				<Tab.Screen name="Librarie" component={libraryNavigationStack}/>
+			</Tab.Navigator>
+		</NavigationContainer>
+	);
 }
 
 const mapStateToProps = store => {
-  return {
-    store: store,
-  };
+	return {
+		store: store,
+	};
 };
 
 export default connect(mapStateToProps)(LoggedInNavigation);

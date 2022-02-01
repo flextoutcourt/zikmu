@@ -1,11 +1,12 @@
 import React from 'react';
-import {Dimensions, Image, Text, View, StyleSheet} from 'react-native';
+import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 
 class GenreItem extends React.Component {
 	constructor(props) {
 		super(props);
 	}
+
 	componentDidMount() {
 
 	}
