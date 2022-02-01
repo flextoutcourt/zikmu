@@ -38,7 +38,7 @@ export default function SeekBar({
         onSlidingComplete={onSeek}
         style={styles.slider}
         minimumTrackTintColor="#fff"
-        maximumTrackTintColor="rgba(255, 255, 255, 0.14)"
+        maximumTrackTintColor="rgba(255, 255, 255, 0.50)"
         thumbStyle={styles.thumb}
         trackStyle={styles.track}
       />
