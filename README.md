@@ -1,6 +1,6 @@
 # zikmu
 
-##Création d'une application mobile
+## Création d'une application mobile
 
 Zikmu est une plateforme française de distribution numérique dédiée a l'écoute de musique en streaming sans publicité sous la forme d'une application mobile développée a l'aide des langages React Native, Le Framework Laravel, NodeJS, Composer. Cette application repose sur l'utilisation de l'API Spotify.
 
@@ -16,4 +16,4 @@ L'application possède aussi toute une interface d'administration répertoriant 
 
 L'application permettra aussi d'améliorer ses playlists grâce a un algorithme basé sur les titres déjà présent dans les favoris de l'utilisateur ainsi qu'aux préférences de l'utilisateur, ou encore les tendances actuelles du pays de l'utilisateur
 
-##Documentation 
+## Documentation 
