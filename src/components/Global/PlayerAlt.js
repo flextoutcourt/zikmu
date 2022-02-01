@@ -321,7 +321,7 @@ class PlayerAlt extends React.Component{
 						<TouchableOpacity onPress={() => this._deploy_big_player()}>
 							<View style={{margin: 10}}>
 								<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-									<Animated.View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 3, flexWrap: 'wrap'}}>
+									<Animated.View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 3, flexWrap: this.state.big ? 'wrap' : 'nowrap'}}>
 										<Animated.Image source={{uri: this.state.listening?.item?.album?.images[0]?.url}} style={{minWidth: this.state.player.track_image.width ?? 40, minHeight: this.state.player.track_image.height ?? 40, maxWidth: this.state.player.track_image.width, maxHeight: this.state.player.track_image.height, margin: "auto", borderRadius: 10, flex: this.state.player.track_image.flex}} />
 										<Animated.View style={{flex: 6, minWidth: this.state.big ? Dimensions.get('screen').width - 20 : 'auto', maxWidth: this.state.big ? Dimensions.get('screen').width - 20 : 'auto'}}>
 											<Animated.View style={{marginLeft: 5, flexDirection: 'row', alignItems: 'center', justifyContent: this.state.player.track_infos.flexType, fontSize: this.state.player.track_infos.fontSize}}>
