@@ -42,7 +42,7 @@ class ArtistAlt extends Component {
 			>
 				<Image source={{uri: this.state.artist?.images[1]?.url}}
 				       style={{...styles.images, borderRadius: this.state.artist?.images[1].height}}/>
-				<Text style={{color: 'white', fontSize: 16, fontWeight: "800"}}>{this.state.artist?.name}</Text>
+				<Text style={{...styles.text, color: 'white', fontSize: 16, fontWeight: "800"}}>{this.state.artist?.name}</Text>
 			</TouchableOpacity>
 		);
 	}
@@ -56,6 +56,9 @@ const styles = StyleSheet.create({
 		height: (Dimensions.get('screen').width - margin * numItems * 2) / numItems,
 		width: (Dimensions.get('screen').width - margin * numItems * 2) / numItems,
 		marginRight: 0
+	},
+	text: {
+		maxWidth: (Dimensions.get('screen').width - margin * numItems * 2) / numItems,
 	}
 })
 
