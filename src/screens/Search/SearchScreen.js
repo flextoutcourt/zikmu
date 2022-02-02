@@ -6,6 +6,7 @@ import {connect} from 'react-redux';
 import TrackItem from '../../components/Track/TrackItem';
 import AlbumItem from '../../components/Album/AlbumItem';
 import GenreList from "../../components/Genres/GenreList";
+import ArtistAlt from '../../components/Artist/ArtistAlt';
 
 /** components */
 
@@ -54,7 +55,7 @@ class SearchScreen extends React.Component {
 					backgroundColor: 'red',
 					width: Dimensions.get('screen').width,
 				}}>
-				<Text style={styles.titles}>{label}</Text>
+				<Text style={{...styles.titles, marginLeft: 10}}>{label}</Text>
 			</View>
 		) : null;
 	};
@@ -100,7 +101,7 @@ class SearchScreen extends React.Component {
 						:
 						null
 					}
-					<View style={{paddingHorizontal: 10}}>
+					<View>
 						<View>
 							{this._renderHeaderComponent(
 								'Artistes',
@@ -111,7 +112,7 @@ class SearchScreen extends React.Component {
 									numColumns={3}
 									data={this.state.results?.artists?.items}
 									scrollEnabled={false}
-									renderItem={({item, key}) => <Artist artist={item} {...this.props} />}
+									renderItem={({item, key}) => <ArtistAlt artist={item} {...this.props} />}
 								/>
 							) : (
 								<Text>Chargement...</Text>
@@ -139,7 +140,7 @@ class SearchScreen extends React.Component {
 								<Text>Loading</Text>
 							)}
 						</View>
-						<View style={{marginBottom: 110}}>
+						<View style={{marginBottom: 110, paddingHorizontal: 10}}>
 							{this._renderHeaderComponent(
 								'Albums',
 								this.state.results?.albums,
