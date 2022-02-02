@@ -1,9 +1,9 @@
 import axios from 'axios';
 import React from 'react';
-import {Dimensions, FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View,} from 'react-native';
+import {Dimensions, FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
-import Animated, {Extrapolate,} from 'react-native-reanimated';
+import Animated, {Extrapolate} from 'react-native-reanimated';
 import {connect} from 'react-redux';
 import TrackItem from '../../components/Track/TrackItem';
 import Header from '../../components/Playlist/Header';
@@ -31,8 +31,7 @@ class PlaylistScreen extends React.Component {
 				},
 			},
 		);
-		const response = promise.then(data => data.data);
-		return response;
+        return promise.then(data => data.data);
 	};
 
 	_to_array_tracks = () => {
@@ -72,8 +71,7 @@ class PlaylistScreen extends React.Component {
 				},
 			},
 		);
-		const response = promise.then(data => alert(JSON.stringify(data)));
-		return response;
+        return promise.then(data => alert(JSON.stringify(data)));
 	}
 
 	componentDidMount() {

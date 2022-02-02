@@ -4,7 +4,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import Icon from 'react-native-vector-icons/FontAwesome5';
-import {navigationRef} from './../utils/RootNavigation';
+import {navigationRef} from '../utils/RootNavigation';
 import {BlurView} from 'expo-blur';
 
 import {connect, ReactReduxContext} from 'react-redux';

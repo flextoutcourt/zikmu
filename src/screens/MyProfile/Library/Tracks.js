@@ -24,12 +24,11 @@ class Tracks extends React.Component {
 				'Content-Type': 'application/json',
 			},
 		});
-		const response = promise.then(data => data);
-		return response;
+        return promise.then(data => data);
 	};
 
 	componentDidMount() {
-		this._get_tracks().then(data => setTracks(data.data));
+		this._get_tracks().then(data => this.setState({tracks: data.data}));
 	}
 
 	render() {
@@ -41,8 +40,8 @@ class Tracks extends React.Component {
 					horizontal={false}
 					onEndReachedThreshold={0.1}
 					onEndReached={() => {
-						_get_tracks(tracks.length).then(json =>
-							setTracks(tracks => tracks?.items?.concat(json.items)),
+						this._get_tracks(this.state.tracks.length).then(json =>
+							this.setState(tracks => {tracks: tracks?.items?.concat(json.items)}),
 						);
 					}}
 					renderItem={({item, key}) => (

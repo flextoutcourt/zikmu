@@ -337,21 +337,16 @@ class PlayerAlt extends React.Component {
 
 	_display_device_icon = (device_type) => {
 		// alert(device_type);
-		switch (device_type) {
-			case "Smartphone":
-				return 'mobile';
-				break;
-			case "Speaker":
-				return 'volume-up';
-				break;
-			case "Computer":
-				return 'laptop';
-				break;
-			default:
-				return 'mobile';
-				break;
-		}
-	}
+        if (device_type === 'Smartphone') {
+            return 'mobile';
+        } else if (device_type === 'Speaker') {
+            return 'volume-up';
+        } else if (device_type === 'Computer') {
+            return 'laptop';
+        } else {
+            return 'mobile';
+        }
+    }
 
 	_deploy_devices_menu = () => {
 
