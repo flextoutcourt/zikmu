@@ -733,8 +733,8 @@ class PlayerAlt extends React.Component {
 															width: Dimensions.get('screen').width - 20
 														}}>
 															<SeekBar
-																trackLength={this.state.listening?.item?.duration_ms / 1000 ?? 0}
-																currentPosition={this.state.listening?.progress_ms / 1000}
+																trackLength={!isNaN(this.state.listening?.item?.duration_ms / 1000) ? this.state.listening?.item?.duration_ms / 1000 : 10}
+																currentPosition={!isNaN(this.state.listening?.progress_ms / 1000) ? this.state.listening?.progress_ms / 1000 : 0}
 																onSeek={this._seek}/>
 														</View>
 														<View style={{
@@ -959,11 +959,17 @@ class PlayerAlt extends React.Component {
 											<FontAwesome name={"close"} size={24} color={"white"}/>
 										</TouchableOpacity>
 									</View>
-									<View style={{elevation: 10, shadowColor: '#000'}}>
-										<Text style={{marginLeft: 10, fontSize: 16, color: 'white'}}>En cours de lecture :</Text>
-										<TrackItem track={this.state.listening?.item} album={this.state.listening?.item?.album} />
-										{this.state.listening?.context ? <Text style={{marginLeft: 10, marginBottom: 10, fontSize: 16, color: 'white'}}>Prochains titres {this.state.context?.type == 'album' ? "de " + this.state.listening?.item?.album?.name : null} : </Text> : null}
-									</View>
+									{
+										this.state.waiting_list.big
+										?
+											<View style={{elevation: 10, shadowColor: '#000'}}>
+												<Text style={{marginLeft: 10, fontSize: 16, color: 'white'}}>En cours de lecture :</Text>
+												<TrackItem track={this.state.listening?.item} album={this.state.listening?.item?.album} />
+												{this.state.listening?.context ? <Text style={{marginLeft: 10, marginBottom: 10, fontSize: 16, color: 'white'}}>Prochains titres {this.state.context?.type == 'album' ? "de " + this.state.listening?.item?.album?.name : null} : </Text> : null}
+											</View>
+										:
+											null
+									}
 									<ScrollView style={{height: Dimensions.get('screen').height * 2, elevation: -5}}>
 										{
 											this.state.waiting_list.big
