@@ -58,7 +58,7 @@ class AlbumItemWithOffset extends React.Component{
                 <FlatList
                     data={this.state.tracks}
                     renderItem={({item, key}) => (
-                        <TrackItem track={this.props.context.type == 'album' ? item : item.track} album={this.props.context == 'album' ? this.state.album : item.track.album} />
+                        <TrackItem track={this.props.context.type == 'album' ? item : item.track} album={this.props.context.type == 'album' ? this.state.album : item.track.album} />
                     )}
                 />
             </View>
