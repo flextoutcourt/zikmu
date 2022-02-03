@@ -10,9 +10,26 @@ class AlbumItemWithOffset extends React.Component{
         super(props);
         this.state = {
             tracks: null,
-            album: null
+            album: null,
+            test: null,
         }
     }
+
+    _group_by_key = array => {
+        let groups = [];
+        array.map((item, key) => {
+            if (groups[item.disc_number]) {
+                groups[item.disc_number].data.push(item);
+            } else {
+                groups[item.disc_number] = {
+                    title: 'Disque ' + item.disc_number,
+                    data: [],
+                };
+                groups[item.disc_number].data.push(item);
+            }
+        });
+        return groups;
+    };
 
     _get_next_titles = () => {
         axios.get(`${this.props.context?.href}/tracks`, {
@@ -23,7 +40,10 @@ class AlbumItemWithOffset extends React.Component{
             }
         })
         .then(data => data.data)
-        .then(response => this.setState({tracks: this._sort_titles(response.items)}));
+        .then(response => this.setState({
+            tracks: this._sort_titles(response.items),
+            test: (this.props.context.type === 'album' ? this._group_by_key(response.items, 'disc_number'): null)
+        }));
     }
 
     _sort_titles = (titles) => {
@@ -48,8 +68,10 @@ class AlbumItemWithOffset extends React.Component{
     }
 
     componentDidMount() {
-        this._get_next_titles();
-        this._get_album_details();
+        setTimeout(() => {
+            this._get_next_titles();
+            this._get_album_details();
+        }, 400)
     }
 
     render(){
@@ -58,7 +80,12 @@ class AlbumItemWithOffset extends React.Component{
                 <FlatList
                     data={this.state.tracks}
                     renderItem={({item, key}) => (
-                        <TrackItem track={this.props.context.type == 'album' ? item : item.track} album={this.props.context == 'album' ? this.state.album : item.track.album} />
+                        <TrackItem
+                            track={this.props.context.type == 'album' ? item : item.track}
+                            album={this.props.context.type == 'album' ? this.state.album : item.track.album}
+                            type={this.props.context.type == 'album' ? 'album' : this.props.context.type == 'playlist' ? 'playlist' : null}
+                            disks={this.state.test}
+                        />
                     )}
                 />
             </View>

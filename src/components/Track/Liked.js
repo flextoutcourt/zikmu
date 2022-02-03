@@ -30,7 +30,7 @@ class Liked extends React.Component {
 					})
 				})
 				.catch(e => {
-					alert(JSON.stringify(e));
+					// alert(JSON.stringify(e));
 				});
 		}
 	}

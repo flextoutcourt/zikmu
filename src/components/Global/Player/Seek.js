@@ -32,8 +32,8 @@ export default function SeekBar({
 				</Text>
 			</View>
 			<Slider
-				maximumValue={Math.max(trackLength, 1, currentPosition + 1)}
-				value={currentPosition}
+				maximumValue={Math.max(trackLength, 1, currentPosition + 1) ?? 150}
+				value={currentPosition ?? 0}
 				onSlidingStart={onSlidingStart}
 				onSlidingComplete={onSeek}
 				style={styles.slider}
