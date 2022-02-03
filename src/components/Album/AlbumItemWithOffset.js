@@ -28,7 +28,6 @@ class AlbumItemWithOffset extends React.Component{
                 groups[item.disc_number].data.push(item);
             }
         });
-        alert(JSON.stringify(groups));
         return groups;
     };
 
@@ -69,8 +68,10 @@ class AlbumItemWithOffset extends React.Component{
     }
 
     componentDidMount() {
-        this._get_next_titles();
-        this._get_album_details();
+        setTimeout(() => {
+            this._get_next_titles();
+            this._get_album_details();
+        }, 400)
     }
 
     render(){
