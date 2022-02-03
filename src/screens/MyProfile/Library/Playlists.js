@@ -1,7 +1,7 @@
 //import liraries
 import axios from 'axios';
 import React from 'react';
-import {FlatList, StatusBar, StyleSheet, Text, TouchableOpacity,} from 'react-native';
+import {FlatList, StatusBar, StyleSheet, Text, TouchableOpacity} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {connect} from 'react-redux';
 import PlaylistItem from '../../../components/Playlist/PlaylistItem';
@@ -27,8 +27,7 @@ class Playlists extends React.Component {
 				},
 			},
 		);
-		const response = promise.then(data => data.data);
-		return response;
+        return promise.then(data => data.data);
 	};
 
 	componentDidMount() {

@@ -20,6 +20,8 @@ import axios from 'axios';
 import {connect} from 'react-redux';
 import {BottomTabBarHeightContext} from '@react-navigation/bottom-tabs';
 import SeekBar from './Player/Seek';
+import TrackItem from '../Track/TrackItem';
+import AlbumItemWithOffset from '../Album/AlbumItemWithOffset';
 
 class PlayerAlt extends React.Component {
 
@@ -337,21 +339,16 @@ class PlayerAlt extends React.Component {
 
 	_display_device_icon = (device_type) => {
 		// alert(device_type);
-		switch (device_type) {
-			case "Smartphone":
-				return 'mobile';
-				break;
-			case "Speaker":
-				return 'volume-up';
-				break;
-			case "Computer":
-				return 'laptop';
-				break;
-			default:
-				return 'mobile';
-				break;
-		}
-	}
+        if (device_type === 'Smartphone') {
+            return 'mobile';
+        } else if (device_type === 'Speaker') {
+            return 'volume-up';
+        } else if (device_type === 'Computer') {
+            return 'laptop';
+        } else {
+            return 'mobile';
+        }
+    }
 
 	_deploy_devices_menu = () => {
 
@@ -962,15 +959,31 @@ class PlayerAlt extends React.Component {
 											<FontAwesome name={"close"} size={24} color={"white"}/>
 										</TouchableOpacity>
 									</View>
-									<ScrollView style={{height: Dimensions.get('screen').height * 2}}>
-										<View style={{flex: 1, padding: 30}}>
-											<View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-												<FontAwesome name={'infos'} size={48} color={'white'} />
-												<View style={{marginLeft: 20}}>
-													<Text style={{color: 'white', fontSize: 22, fontWeight: 'bold'}}>Développement en attente d'un endpoint</Text>
+									<View style={{elevation: 10, shadowColor: '#000'}}>
+										<Text style={{marginLeft: 10, fontSize: 16, color: 'white'}}>En cours de lecture :</Text>
+										<TrackItem track={this.state.listening?.item} album={this.state.listening?.item?.album} />
+										{this.state.listening?.context ? <Text style={{marginLeft: 10, marginBottom: 10, fontSize: 16, color: 'white'}}>Prochains titres {this.state.context?.type == 'album' ? "de " + this.state.listening?.item?.album?.name : null} : </Text> : null}
+									</View>
+									<ScrollView style={{height: Dimensions.get('screen').height * 2, elevation: -5}}>
+										{
+											this.state.waiting_list.big
+											?
+												<View style={{flex: 1}}>
+													<View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+														{
+															this.state.listening.context
+																?
+																<View>
+																	<AlbumItemWithOffset context={this.state.listening?.context} listening={this.state.listening} />
+																</View>
+																:
+																null
+														}
+													</View>
 												</View>
-											</View>
-										</View>
+											:
+												null
+										}
 									</ScrollView>
 								</Animated.View>
 								<Animated.View style={{position: 'absolute', top: this.state.share_menu.top, left: this.state.share_menu.left, right: this.state.share_menu.right, bottom: this.state.share_menu.bottom, height: this.state.share_menu.height, backgroundColor: '#2f3640', paddingTop: 10, flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>

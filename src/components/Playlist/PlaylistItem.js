@@ -15,7 +15,6 @@ function PlaylistItem({playlist}) {
 			}}>
 			<View
 				style={{
-					width: 116,
 					padding: 0,
 					margin: 5,
 					flexDirection: 'row',

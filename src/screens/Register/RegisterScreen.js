@@ -173,7 +173,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = {setAccessToken, setRefreshToken, setSigingIn};
 
-var styles = StyleSheet.create({
+const styles = StyleSheet.create({
 	title: {
 		fontSize: 24,
 		textAlign: 'center',

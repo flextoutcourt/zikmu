@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, {Suspense} from 'react';
-import {Dimensions, FlatList, Image, Text, TouchableOpacity, View,} from 'react-native';
+import {Dimensions, FlatList, Image, Text, TouchableOpacity, View} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {connect} from 'react-redux';
 
@@ -22,8 +22,7 @@ class CategoryScreen extends React.Component {
 				'Content-Type': 'application/json',
 			},
 		});
-		const response = promise.then(data => data.data);
-		return response;
+        return promise.then(data => data.data);
 	};
 
 	componentDidMount() {

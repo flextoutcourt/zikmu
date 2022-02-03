@@ -24,8 +24,7 @@ class Albums extends React.Component {
 				},
 			},
 		);
-		const response = promise.then(data => data.data);
-		return response;
+        return promise.then(data => data.data);
 	};
 
 	componentDidMount() {

@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React from 'react';
-import {Dimensions, Image, StatusBar, StyleSheet, Text, View,} from 'react-native';
+import {Dimensions, Image, StatusBar, StyleSheet, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Animated, {Extrapolate} from 'react-native-reanimated';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
@@ -9,7 +9,7 @@ import Albums from '../../components/Artist/Albums';
 import Header from '../../components/Artist/Header';
 import RelatedArtists from '../../components/Artist/RelatedArtists';
 import TopTracks from '../../components/Artist/TopTracks';
-import SubHeader from "../../components/Artist/SubHeader";
+import SubHeader from '../../components/Artist/SubHeader';
 import YourLikes from '../../components/Artist/YourLikes';
 
 class ArtistScreen extends React.Component {
@@ -22,19 +22,18 @@ class ArtistScreen extends React.Component {
 	}
 
 	_get_artist = () => {
-		const promise = axios.get(
-			`https://api.spotify.com/v1/artists/${this.props.route.params.artist_id}`,
-			{
-				headers: {
-					Accept: 'application/json',
-					Authorization:
-						'Bearer ' + this.props.store.authentication.accessToken,
-					'Content-Type': 'application/json',
-				},
-			},
-		);
-		const response = promise.then(data => data.data);
-		return response;
+        const promise = axios.get(
+            `https://api.spotify.com/v1/artists/${this.props.route.params.artist_id}`,
+            {
+                headers: {
+                    Accept: 'application/json',
+                    Authorization:
+                        'Bearer ' + this.props.store.authentication.accessToken,
+                    'Content-Type': 'application/json',
+                },
+            },
+        );
+        return promise.then(data => data.data);
 	};
 
 	componentDidMount() {

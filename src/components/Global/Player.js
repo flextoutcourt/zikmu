@@ -1,15 +1,15 @@
 import axios from 'axios';
 import React from 'react';
 import {
-	Dimensions,
-	FlatList,
-	Image,
-	ScrollView,
-	StatusBar,
-	Text,
-	TouchableHighlight,
-	TouchableOpacity,
-	View
+    Dimensions,
+    FlatList,
+    Image,
+    ScrollView,
+    StatusBar,
+    Text,
+    TouchableHighlight,
+    TouchableOpacity,
+    View,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
@@ -17,8 +17,8 @@ import * as rootNavigation from './../../utils/RootNavigation';
 import Lyrics from './Player/Lyrics';
 import SeekBar from './Player/Seek';
 import LinearGradient from 'react-native-linear-gradient';
-import FontAwesome from "react-native-vector-icons/FontAwesome";
-import Liked from "../Track/Liked";
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import Liked from '../Track/Liked';
 
 
 class Player extends React.Component {
@@ -49,8 +49,7 @@ class Player extends React.Component {
 				"Content-Type": "application/json"
 			},
 		});
-		const response = promise.then(data => data.data);
-		return response;
+        return promise.then(data => data.data);
 	}
 
 	_pause = () => {
@@ -146,21 +145,16 @@ class Player extends React.Component {
 	}
 
 	_display_device_icon = (device_type) => {
-		switch (device_type) {
-			case "Smartphone":
-				return 'mobile';
-				break;
-			case "speaker":
-				return 'volume-up';
-				break;
-			case "computer":
-				return 'desktop';
-				break;
-			default:
-				return 'mobile';
-				break;
-		}
-	}
+        if (device_type === 'Smartphone') {
+            return 'mobile';
+        } else if (device_type === 'speaker') {
+            return 'volume-up';
+        } else if (device_type === 'computer') {
+            return 'desktop';
+        } else {
+            return 'mobile';
+        }
+    }
 
 	render() {
 		return (

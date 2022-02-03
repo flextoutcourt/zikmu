@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Dimensions, StyleSheet, View,} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
 import axios from 'axios';
 import {Icon} from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
@@ -29,8 +29,7 @@ class Bigplayer extends Component {
 				'Content-Type': 'application/json',
 			},
 		});
-		const response = promise.then(data => data.data);
-		return response;
+        return promise.then(data => data.data);
 	};
 
 	_pause = () => {

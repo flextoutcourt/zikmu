@@ -1,14 +1,14 @@
 import axios from 'axios';
 import React from 'react';
-import {Dimensions, FlatList, Image, SectionList, StatusBar, StyleSheet, Text, View,} from 'react-native';
+import {Dimensions, FlatList, Image, SectionList, StatusBar, StyleSheet, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
-import Animated, {Extrapolate,} from 'react-native-reanimated';
+import Animated, {Extrapolate} from 'react-native-reanimated';
 import TrackItem from '../../components/Track/TrackItem';
 import Header from '../../components/Album/Header';
-import moment from "moment";
-import ArtistItem from '../../components/Artist/ArtistItem'
+import moment from 'moment';
+import ArtistItem from '../../components/Artist/ArtistItem';
 
 class AlbumScreen extends React.Component {
 	constructor(props) {
@@ -33,8 +33,7 @@ class AlbumScreen extends React.Component {
 				},
 			},
 		);
-		const response = promise.then(data => data.data);
-		return response;
+        return promise.then(data => data.data);
 	};
 
 	_group_by_key = array => {

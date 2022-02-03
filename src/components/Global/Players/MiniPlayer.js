@@ -28,8 +28,7 @@ class Miniplayer extends Component {
 				'Content-Type': 'application/json',
 			},
 		});
-		const response = promise.then(data => data.data);
-		return response;
+        return promise.then(data => data.data);
 	};
 
 	_pause = () => {

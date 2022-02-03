@@ -13,19 +13,18 @@ class GenreList extends React.Component {
 	}
 
 	_get_available_genres = () => {
-		const promise = axios.get(
-			`https://api.spotify.com/v1/browse/categories?country=FR`,
-			{
-				headers: {
-					Accept: 'application/json',
-					Authorization:
-						'Bearer ' + this.props.store.authentication.accessToken,
-					'Content-Type': 'application/json',
-				},
-			},
-		);
-		const response = promise.then(data => data.data);
-		return response;
+        const promise = axios.get(
+            `https://api.spotify.com/v1/browse/categories?country=FR`,
+            {
+                headers: {
+                    Accept: 'application/json',
+                    Authorization:
+                        'Bearer ' + this.props.store.authentication.accessToken,
+                    'Content-Type': 'application/json',
+                },
+            },
+        ), response = promise.then(data => data.data);
+        return response;
 	};
 
 	componentDidMount() {
