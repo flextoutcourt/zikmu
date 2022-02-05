@@ -426,11 +426,11 @@ class PlayerAlt extends React.Component {
 			}).start();
 		}else{
 			Animated.spring(this.state.share_menu.top, {
-				toValue: Dimensions.get('screen').height * 0.30,
+				toValue: Dimensions.get('screen').height * 0.10,
 				useNativeDriver: false,
 			}).start();
 			Animated.spring(this.state.share_menu.height, {
-				toValue: Dimensions.get('screen').height * 0.70,
+				toValue: Dimensions.get('screen').height * 0.90,
 				useNativeDriver: false,
 			}).start();
 		}
@@ -993,20 +993,79 @@ class PlayerAlt extends React.Component {
 										}
 									</ScrollView>
 								</Animated.View>
-								<Animated.View style={{position: 'absolute', top: this.state.share_menu.top, left: this.state.share_menu.left, right: this.state.share_menu.right, bottom: this.state.share_menu.bottom, height: this.state.share_menu.height, backgroundColor: '#2f3640', paddingTop: 10, flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
-									<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row', paddingHorizontal: 30}}>
-										<TouchableOpacity onPress={() => this._deploy_share_menu()}>
-											<FontAwesome name={"close"} size={24} color={"white"}/>
-										</TouchableOpacity>
-									</View>
+								<Animated.View style={{position: 'absolute', top: this.state.share_menu.top, left: this.state.share_menu.left, right: this.state.share_menu.right, bottom: this.state.share_menu.bottom, height: this.state.share_menu.height, backgroundColor: '#2f3640', flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
+									<LinearGradient colors={['red', '#2f3640']} style={{flex: 1, borderRadius: 10, paddingTop: 10}}>
+										<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', paddingHorizontal: 30}}>
+											<Text style={{fontSize: 16, fontWeight: 'bold'}}>Partager</Text>
+											<TouchableOpacity onPress={() => this._deploy_share_menu()}>
+												<FontAwesome name={"close"} size={24} color={"white"}/>
+											</TouchableOpacity>
+										</View>
 										<View style={{flex: 1, padding: 30}}>
-											<View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-												<FontAwesome name={'share'} size={48} color={'white'} />
-												<View style={{marginLeft: 20}}>
-													<Text style={{color: 'white', fontSize: 22, fontWeight: 'bold'}}>Menu de partage</Text>
+											<View style={{flexDirection: 'row', justifyContent: 'center'}}>
+												<View style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 10, marginVertical: 30}}>
+													<View style={{height: Dimensions.get('screen').width / 2, width: Dimensions.get('screen').width / 2, elevation: 10}}>
+														<Image source={{uri: this.state.listening?.item?.album?.images[1]?.url}} style={{...StyleSheet.absoluteFill, borderTopLeftRadius: 10, borderTopRightRadius: 10}}/>
+													</View>
+													<View style={{width: Dimensions.get('screen').width / 2, backgroundColor: 'red', padding: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10}}>
+														<Text style={{marginTop: 5}}>Partager</Text>
+													</View>
+												</View>
+											</View>
+											<View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 30, flexWrap: 'wrap'}}>
+												<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+													<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
+														<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/facebook.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
+													</TouchableOpacity>
+													<Text style={{marginTop: 5}}>Copier le lien</Text>
+												</View>
+												<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+													<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
+														<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/whatsapp.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
+													</TouchableOpacity>
+													<Text style={{marginTop: 5}}>Whatsapp</Text>
+												</View>
+												<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+													<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
+														<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/instagram.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
+													</TouchableOpacity>
+													<Text style={{marginTop: 5}}>Stories</Text>
+												</View>
+												<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+													<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
+														<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/messenger.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
+													</TouchableOpacity>
+													<Text style={{marginTop: 5}}>Messenger</Text>
+												</View>
+											</View>
+											<View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 15, flexWrap: 'wrap'}}>
+												<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+													<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48, borderColor: "#3B579D", borderWidth: 4}}>
+														<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/facebook.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48, borderWidth: 3, borderColor: '#2f3640'}} />
+													</TouchableOpacity>
+													<Text style={{marginTop: 5}}>Stories</Text>
+												</View>
+												<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+													<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
+														<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/twitter.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
+													</TouchableOpacity>
+													<Text style={{marginTop: 5}}>Twitter</Text>
+												</View>
+												<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+													<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
+														<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/snapchat.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
+													</TouchableOpacity>
+													<Text style={{marginTop: 5}}>Snapchat</Text>
+												</View>
+												<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+													<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
+														<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/facebook.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
+													</TouchableOpacity>
+													<Text>Sms</Text>
 												</View>
 											</View>
 										</View>
+									</LinearGradient>
 								</Animated.View>
 								<Animated.View style={{position: 'absolute', top: this.state.track_infos.top, left: this.state.track_infos.left, right: this.state.track_infos.right, bottom: this.state.track_infos.bottom, height: this.state.track_infos.height, backgroundColor: '#2f3640', paddingTop: 10, flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
 									<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row', paddingHorizontal: 30}}>
