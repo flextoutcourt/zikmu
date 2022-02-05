@@ -1,8 +1,10 @@
 //import liraries
 import React from 'react';
-import {FlatList, StyleSheet, View} from 'react-native';
+import {ActivityIndicator, Dimensions, FlatList, ScrollView, StatusBar, StyleSheet, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import TrackItem from '../../../components/Track/TrackItem';
+import LinearGradient from 'react-native-linear-gradient';
+import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 
 class Tracks extends React.Component {
@@ -17,33 +19,46 @@ class Tracks extends React.Component {
 	}
 
 	_get_tracks = (offset = 0) => {
-		const promise = axios.get('https://api.spotify.com/v1/me/tracks', {
+		const promise = axios.get(`https://api.spotify.com/v1/me/tracks?offset=${offset}&limit=50`, {
 			headers: {
 				Accept: 'application/json',
 				Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
 				'Content-Type': 'application/json',
 			},
 		});
-        return promise.then(data => data);
+        return promise.then(data => data.data);
 	};
 
 	componentDidMount() {
-		this._get_tracks().then(data => this.setState({tracks: data.data}));
+		this._get_tracks().then(data => this.setState({tracks: data.items}));
+	}
+
+	_get_liked_count = () => {
+		return 1777;
 	}
 
 	render() {
 		return (
-			<View style={styles.container}>
+			<LinearGradient
+				colors={['#B00D72', '#5523BF']}
+				style={{...styles.container}}>
 				<FlatList
-					data={tracks?.items}
+					data={this.state.tracks}
 					scrollEnabled={true}
 					horizontal={false}
-					onEndReachedThreshold={0.1}
+					style={{paddingTop: StatusBar.currentHeight}}
+					contentContainerStyle={{paddingBottom: 150}}
+					onEndReachedThreshold={0.5}
 					onEndReached={() => {
-						this._get_tracks(this.state.tracks.length).then(json =>
-							this.setState(tracks => {tracks: tracks?.items?.concat(json.items)}),
-						);
+						this._get_tracks(this.state.tracks.length - 1).then(data => {
+							this.setState({
+								tracks: [...this.state.tracks, ...data.items]
+							})
+						})
 					}}
+					ListFooterComponent={() => (
+						<ActivityIndicator size={'large'} />
+					)}
 					renderItem={({item, key}) => (
 						<TrackItem
 							track={item.track}
@@ -52,7 +67,7 @@ class Tracks extends React.Component {
 						/>
 					)}
 				/>
-			</View>
+			</LinearGradient>
 		);
 	}
 }
