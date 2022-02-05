@@ -176,7 +176,11 @@ function LoggedInNavigation(props) {
 							title: '',
 						}}
 					/>
-					<Stack.Screen name="MyTracks" component={Tracks}/>
+					<Stack.Screen name="MyTracks" component={Tracks} options={{
+						headerShown: false,
+						headerTransparent: true,
+						title: '',
+					}}/>
 					<Stack.Screen
 						name="Playlist"
 						component={Playlist}

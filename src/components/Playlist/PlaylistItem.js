@@ -23,10 +23,12 @@ function PlaylistItem({playlist}) {
 					width: Dimensions.get('screen').width - 20,
 				}}>
 				<View style={{flexDirection: 'row', alignItems: 'center'}}>
-					<Image
-						source={{uri: playlist?.images[0]?.url}}
-						style={{width: 50, height: 50, margin: 'auto'}}
-					/>
+					<View style={{backgroundColor: 'black', elevation: 10, borderRadius: 10}}>
+						<Image
+							source={{uri: playlist?.images[0]?.url}}
+							style={{width: 50, height: 50, margin: 'auto', borderRadius: 10}}
+						/>
+					</View>
 					<View style={{marginLeft: 10}}>
 						<Text style={{fontWeight: 'bold', color: 'white'}}>
 							{playlist?.name}

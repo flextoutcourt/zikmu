@@ -1,10 +1,12 @@
 //import liraries
 import axios from 'axios';
 import React from 'react';
-import {FlatList, StatusBar, StyleSheet, Text, TouchableOpacity} from 'react-native';
+import {FlatList, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {connect} from 'react-redux';
 import PlaylistItem from '../../../components/Playlist/PlaylistItem';
+import * as rootNavigation from './../../../utils/RootNavigation';
+
 
 // create a component
 class Playlists extends React.Component {
@@ -43,9 +45,14 @@ class Playlists extends React.Component {
 					ListHeaderComponent={() => (
 						<TouchableOpacity
 							onPress={() => {
-								navigation.navigate('MyTracks');
+								rootNavigation.push('MyTracks');
 							}}>
-							<Text>Mes titres likés</Text>
+							<View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 5, marginTop: 10, marginBottom: 5}}>
+								<View style={{backgroundColor: 'black', borderRadius: 10, width: 48, height: 48, elevation: 10}}>
+									<Image source={{uri: 'https://picsum.photos/150'}} style={{height: 48, width: 48, borderRadius: 10}} />
+								</View>
+								<Text style={{marginLeft: 15, fontWeight: 'bold', color: 'white'}}>Mes titres likés</Text>
+							</View>
 						</TouchableOpacity>
 					)}
 					data={this.state.playlists}
