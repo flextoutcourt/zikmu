@@ -234,7 +234,6 @@ class PlayerAlt extends React.Component {
 		// })
 	}
 
-
 	_get_listening = () => {
 		const promise = axios.get('https://api.spotify.com/v1/me/player', {
 			headers: {
