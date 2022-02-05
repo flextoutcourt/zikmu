@@ -92,6 +92,7 @@ class PlayerAlt extends React.Component {
 			}
 		}
 	}
+
 	handleBackButton = () => {
 		if(this.state.big){
 			this._deploy_big_player();
@@ -99,6 +100,7 @@ class PlayerAlt extends React.Component {
 		}
 		return false;
 	}
+
 	_deploy_big_player = () => {
 		if (this.state.big) {
 			Animated.spring(this.state.player.bottom, {
@@ -214,6 +216,7 @@ class PlayerAlt extends React.Component {
 			big: !this.state.big
 		})
 	}
+
 	componentDidMount() {
 		setInterval(() => {
 			this._get_listening().then(json => {
@@ -224,11 +227,13 @@ class PlayerAlt extends React.Component {
 		// 	this.handleBackButton();
 		// })
 	}
+
 	componentWillUnmount() {
 		// BackHandler.removeEventListener('hardwareBackPress', () => {
 		// 	this.handleBackButton();
 		// })
 	}
+
 	_get_listening = () => {
 		const promise = axios.get('https://api.spotify.com/v1/me/player', {
 			headers: {
@@ -239,6 +244,7 @@ class PlayerAlt extends React.Component {
 		});
 		return promise.then(data => data.data);
 	}
+
 	_pause = () => {
 		fetch("https://api.spotify.com/v1/me/player/pause", {
 			headers: {
@@ -249,6 +255,7 @@ class PlayerAlt extends React.Component {
 			method: "PUT"
 		})
 	}
+
 	_play = () => {
 		fetch("https://api.spotify.com/v1/me/player/play", {
 			headers: {
@@ -259,6 +266,7 @@ class PlayerAlt extends React.Component {
 			method: "PUT"
 		})
 	}
+
 	_next = () => {
 		fetch('https://api.spotify.com/v1/me/player/next', {
 			headers: {
@@ -269,6 +277,7 @@ class PlayerAlt extends React.Component {
 			method: 'POST'
 		});
 	}
+
 	_prev = () => {
 		if (this.state.listening?.progress_ms > 10000) {
 			this._seek(0);
@@ -283,6 +292,7 @@ class PlayerAlt extends React.Component {
 			})
 		}
 	}
+
 	_seek = (position) => {
 		fetch(`https://api.spotify.com/v1/me/player/seek?position_ms=${Math.round(position * 1000)}`, {
 			headers: {
@@ -296,6 +306,7 @@ class PlayerAlt extends React.Component {
 				console.log(e);
 			})
 	}
+
 	_shuffle = () => {
 		fetch(`https://api.spotify.com/v1/me/player/shuffle?state=${!this.state.listening?.shuffle_state}`, {
 			headers: {
@@ -306,6 +317,7 @@ class PlayerAlt extends React.Component {
 			method: 'PUT'
 		})
 	}
+
 	_repeat = () => {
 		let state;
 		if (this.state.listening?.repeat_state == 'context') {
@@ -324,6 +336,7 @@ class PlayerAlt extends React.Component {
 			method: 'PUT'
 		})
 	}
+
 	_display_device_icon = (device_type) => {
 		// alert(device_type);
         if (device_type === 'Smartphone') {
@@ -336,6 +349,7 @@ class PlayerAlt extends React.Component {
             return 'mobile';
         }
     }
+
 	_deploy_devices_menu = () => {
 
 		if(this.state.device_menu.big){
@@ -367,6 +381,7 @@ class PlayerAlt extends React.Component {
 		}))
 
 	}
+
 	_deploy_waiting_list = () => {
 
 		if(this.state.waiting_list.big){
@@ -397,6 +412,7 @@ class PlayerAlt extends React.Component {
 		}))
 
 	}
+
 	_deploy_share_menu = () => {
 
 		if(this.state.share_menu.big){
@@ -427,6 +443,7 @@ class PlayerAlt extends React.Component {
 		}))
 
 	}
+
 	_deploy_track_infos = () => {
 
 		if(this.state.track_infos.big){
@@ -457,6 +474,7 @@ class PlayerAlt extends React.Component {
 		}))
 
 	}
+
 	_get_available_devices = () => {
 		axios.get('https://api.spotify.com/v1/me/player/devices', {
 			headers: {
@@ -474,6 +492,7 @@ class PlayerAlt extends React.Component {
 				}));
 			});
 	}
+
 	_check_current_device = (devices) => {
 		let to_return = {
 			active: {},
@@ -488,6 +507,7 @@ class PlayerAlt extends React.Component {
 		})
 		return to_return;
 	}
+
 	_transfer_playback = async (device_id) => {
 		let body = {
 			'devices_ids': [
@@ -507,6 +527,7 @@ class PlayerAlt extends React.Component {
 			this._get_available_devices();
 		})
 	}
+
 	single_share = async (customOptions) => {
 		try{
 			await Share.shareSingle(customOptions);
@@ -514,6 +535,7 @@ class PlayerAlt extends React.Component {
 			console.log(err)
 		}
 	}
+
 	render() {
 		return (
 			this.state.listening
