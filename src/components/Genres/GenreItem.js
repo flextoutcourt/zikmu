@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, Image, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {connect} from 'react-redux';
 
 class GenreItem extends React.Component {
@@ -13,10 +13,10 @@ class GenreItem extends React.Component {
 
 	render() {
 		return (
-			<View style={{marginHorizontal: 10}}>
+			<TouchableOpacity onPress={() => alert(`open genre ${this.props.genre.item.name}`)} style={{marginHorizontal: 10}}>
 				<Image source={{uri: this.props.genre.item.icons[0].url}} style={styles.image}/>
 				<Text style={{textAlign: 'center'}}>{this.props.genre?.item?.name}</Text>
-			</View>
+			</TouchableOpacity>
 		);
 	}
 }
