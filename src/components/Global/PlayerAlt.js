@@ -10,7 +10,7 @@ import {
 	UIManager,
 	StyleSheet,
 	View,
-	BackHandler, ScrollView, Image,
+	BackHandler, ScrollView, Image, Share,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import * as rootNavigation from '../../utils/RootNavigation';
@@ -426,11 +426,11 @@ class PlayerAlt extends React.Component {
 			}).start();
 		}else{
 			Animated.spring(this.state.share_menu.top, {
-				toValue: Dimensions.get('screen').height * 0.10,
+				toValue: Dimensions.get('screen').height * 0,
 				useNativeDriver: false,
 			}).start();
 			Animated.spring(this.state.share_menu.height, {
-				toValue: Dimensions.get('screen').height * 0.90,
+				toValue: Dimensions.get('screen').height * 1,
 				useNativeDriver: false,
 			}).start();
 		}
@@ -525,6 +525,14 @@ class PlayerAlt extends React.Component {
 		.finally(() => {
 			this._get_available_devices();
 		})
+	}
+
+	single_share = async (customOptions) => {
+		try{
+			await Share.shareSingle(customOptions);
+		} catch(err){
+			console.log(err)
+		}
 	}
 
 	render() {
@@ -994,9 +1002,9 @@ class PlayerAlt extends React.Component {
 									</ScrollView>
 								</Animated.View>
 								<Animated.View style={{position: 'absolute', top: this.state.share_menu.top, left: this.state.share_menu.left, right: this.state.share_menu.right, bottom: this.state.share_menu.bottom, height: this.state.share_menu.height, backgroundColor: '#2f3640', flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
-									<LinearGradient colors={['red', '#2f3640']} style={{flex: 1, borderRadius: 10, paddingTop: 10}}>
+									<LinearGradient colors={['#8e44ad', '#2f3640']} style={{flex: 1, borderRadius: 10, paddingTop: StatusBar.currentHeight}}>
 										<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', paddingHorizontal: 30}}>
-											<Text style={{fontSize: 16, fontWeight: 'bold'}}>Partager</Text>
+											<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white'}}>Partager</Text>
 											<TouchableOpacity onPress={() => this._deploy_share_menu()}>
 												<FontAwesome name={"close"} size={24} color={"white"}/>
 											</TouchableOpacity>
@@ -1005,10 +1013,32 @@ class PlayerAlt extends React.Component {
 											<View style={{flexDirection: 'row', justifyContent: 'center'}}>
 												<View style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 10, marginVertical: 30}}>
 													<View style={{height: Dimensions.get('screen').width / 2, width: Dimensions.get('screen').width / 2, elevation: 10}}>
-														<Image source={{uri: this.state.listening?.item?.album?.images[1]?.url}} style={{...StyleSheet.absoluteFill, borderTopLeftRadius: 10, borderTopRightRadius: 10}}/>
+														<View style={{flex: 1, backgroundColor: 'black', elevation: 10, borderRadius: 10}}>
+															<Image source={{uri: this.state.listening?.item?.album?.images[1]?.url}} style={{...StyleSheet.absoluteFill, borderRadius: 10}}/>
+														</View>
 													</View>
-													<View style={{width: Dimensions.get('screen').width / 2, backgroundColor: 'red', padding: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10}}>
-														<Text style={{marginTop: 5}}>Partager</Text>
+													<View style={{width: Dimensions.get('screen').width / 2, backgroundColor: '#2f3640', padding: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10}}>
+														<Text style={{color: "white", fontSize: 14, textAlign: 'center'}}>{this.state.listening?.item?.name}</Text>
+														<FlatList
+															data={this.state.listening?.item?.artists}
+															renderItem={({item, key}) => (
+																<TouchableOpacity onPress={() => {
+																	rootNavigation.push('Artist', {
+																		artist_id: item.id
+																	});
+																	setTimeout(() => {
+																		this.state.big ? this._deploy_big_player() : null
+																		this.state.share_menu.big ? this._deploy_share_menu() : null
+ 																	}, 500)
+																}}>
+																	<Text style={{marginTop: 2,fontSize: 12, textAlign: 'center'}}>{item.name}</Text>
+																</TouchableOpacity>
+															)}
+															ItemSeparatorComponent={() => (
+																<Text>, </Text>
+															)}
+															horizontal={true}
+														/>
 													</View>
 												</View>
 											</View>
@@ -1040,13 +1070,20 @@ class PlayerAlt extends React.Component {
 											</View>
 											<View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 15, flexWrap: 'wrap'}}>
 												<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-													<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48, borderColor: "#3B579D", borderWidth: 4}}>
-														<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/facebook.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48, borderWidth: 3, borderColor: '#2f3640'}} />
+													<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48, borderColor: "#3B579D", borderWidth: 2}}>
+														<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/facebook.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48, borderWidth: 2, borderColor: '#2f3640'}} />
 													</TouchableOpacity>
 													<Text style={{marginTop: 5}}>Stories</Text>
 												</View>
 												<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-													<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
+													<TouchableOpacity onPress={() => Share.share({
+														title: `${this.state.listening?.item?.name} - ${this.state.listening?.item?.artists[0]?.name}`,
+														// message: `${this.state.listening?.item?.external_urls?.spotify}`,
+														message: 'Zik_mu://track/'+this.state.listening?.item?.id,
+														url: 'https://flexcorp-dev.fr'
+													}, {
+														dialogTitle: `${this.state.listening?.item?.name} - ${this.state.listening?.item?.artists[0]?.name}`
+													})} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
 														<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/twitter.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
 													</TouchableOpacity>
 													<Text style={{marginTop: 5}}>Twitter</Text>
