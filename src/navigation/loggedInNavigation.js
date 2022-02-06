@@ -15,10 +15,13 @@ import Album from './../screens/Album/AlbumScreen';
 import Artist from './../screens/Artist/ArtistScreen';
 import Track from './../screens/Track/TrackScreen';
 import Playlist from './../screens/Playlist/PlaylistScreen';
+import Genre from './../screens/Genres/GenreScreen';
 import SearchScreen from '../screens/Search/SearchScreen';
 
 import Library from '../screens/MyProfile/Library';
 import Tracks from '../screens/MyProfile/Library/Tracks';
+import PopularScreen from '../screens/Genres/Items/PopularScreen';
+import NewsScreen from '../screens/Genres/Items/NewsScreen';
 
 export const config = {
 	screens: {
@@ -132,6 +135,9 @@ function LoggedInNavigation(props) {
 				<Stack.Screen name="Artist" component={Artist}/>
 				<Stack.Screen name="Track" component={Track}/>
 				<Stack.Screen name="Playlist" component={Playlist}/>
+				<Stack.Screen name="Genre" component={Genre}/>
+				<Stack.Screen name={"Genre_Popular"} component={PopularScreen} />
+				<Stack.Screen name={"Genre_News"} component={NewsScreen} />
 			</Stack.Navigator>
 		);
 	}
