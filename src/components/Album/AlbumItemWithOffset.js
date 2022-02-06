@@ -12,6 +12,8 @@ class AlbumItemWithOffset extends React.Component{
             tracks: null,
             album: null,
             test: null,
+            playlist_index: 0,
+            playlist_uri: null
         }
     }
 
@@ -47,10 +49,12 @@ class AlbumItemWithOffset extends React.Component{
     }
 
     _sort_titles = (titles) => {
-        if(this.props.context.type == 'playlist'){
-            return titles.splice(titles.findIndex(title => title.track.id == this.props.listening.item.id) +1);
+        if(this.props.context.type === 'playlist'){
+            this.setState({playlist_index: titles.findIndex(title => title.track.id === this.props.listening.item.id) +1});
+            return titles.splice(titles.findIndex(title => title.track.id === this.props.listening.item.id) +1);
         }else{
-            return titles.splice(titles.findIndex(title => title.id == this.props.listening.item.id) +1);
+            this.setState({playlist_index: titles.findIndex(title => title.id === this.props.listening.item.id) +1})
+            return titles.splice(titles.findIndex(title => title.id === this.props.listening.item.id) +1);
         }
     }
 
@@ -79,11 +83,13 @@ class AlbumItemWithOffset extends React.Component{
             <View style={{flex: 1, elevation: -1}}>
                 <FlatList
                     data={this.state.tracks}
-                    renderItem={({item, key}) => (
+                    renderItem={({item, index}) => (
                         <TrackItem
-                            track={this.props.context.type == 'album' ? item : item.track}
-                            album={this.props.context.type == 'album' ? this.state.album : item.track.album}
-                            type={this.props.context.type == 'album' ? 'album' : this.props.context.type == 'playlist' ? 'playlist' : null}
+                            track={this.props.context.type === 'album' ? item : item.track}
+                            album={this.props.context.type === 'album' ? this.state.album : item.track.album}
+                            type={this.props.context.type === 'album' ? 'album' : this.props.context.type === 'playlist' ? 'playlist' : null}
+                            playlist_index={parseInt(index) + parseInt(this.state.playlist_index)}
+                            playlist_uri={this.props.context.uri}
                             disks={this.state.test}
                         />
                     )}
