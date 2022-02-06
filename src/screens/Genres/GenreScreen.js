@@ -113,7 +113,7 @@ class GenreScreen extends Component{
                             ListFooterComponent={() => (
                                 <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', padding: 10}}>
                                     <TouchableOpacity onPress={() => this.props.navigation.push('Genre_Popular', {
-                                        genre_id: this.props.route.params.genre_id
+                                        genre: this.state.genre
                                     })} style={{borderRadius: 10, borderWidth: 1, borderColor: '#353b48', backgroundColor: '#353b48', paddingHorizontal: 10, paddingVertical: 5, elevation: 3}}>
                                         <Text style={{textAlign: 'center'}}>Plus</Text>
                                     </TouchableOpacity>

@@ -136,8 +136,8 @@ function LoggedInNavigation(props) {
 				<Stack.Screen name="Track" component={Track}/>
 				<Stack.Screen name="Playlist" component={Playlist}/>
 				<Stack.Screen name="Genre" component={Genre}/>
-				<Stack.Screen name={"Genre_Popular"} component={PopularScreen} />
-				<Stack.Screen name={"Genre_News"} component={NewsScreen} />
+				<Stack.Screen name="Genre_Popular" component={PopularScreen} />
+				<Stack.Screen name="Genre_News" component={NewsScreen} />
 			</Stack.Navigator>
 		);
 	}
