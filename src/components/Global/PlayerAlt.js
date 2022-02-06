@@ -12,6 +12,8 @@ import {
 	View,
 	BackHandler, ScrollView, Image, Share,
 } from 'react-native';
+
+import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import LinearGradient from 'react-native-linear-gradient';
 import * as rootNavigation from '../../utils/RootNavigation';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
@@ -395,11 +397,11 @@ class PlayerAlt extends React.Component {
 			}).start();
 		}else{
 			Animated.spring(this.state.waiting_list.top, {
-				toValue: Dimensions.get('screen').height * 0.20,
+				toValue: Dimensions.get('screen').height * 0,
 				useNativeDriver: false,
 			}).start();
 			Animated.spring(this.state.waiting_list.height, {
-				toValue: Dimensions.get('screen').height * 0.80,
+				toValue: Dimensions.get('screen').height * 1,
 				useNativeDriver: false,
 			}).start();
 		}
@@ -457,11 +459,11 @@ class PlayerAlt extends React.Component {
 			}).start();
 		}else{
 			Animated.spring(this.state.track_infos.top, {
-				toValue: Dimensions.get('screen').height * 0.10,
+				toValue: Dimensions.get('screen').height * 0,
 				useNativeDriver: false,
 			}).start();
 			Animated.spring(this.state.track_infos.height, {
-				toValue: Dimensions.get('screen').height * 0.90,
+				toValue: Dimensions.get('screen').height * 1,
 				useNativeDriver: false,
 			}).start();
 		}
@@ -550,11 +552,11 @@ class PlayerAlt extends React.Component {
 								left: this.state.player.left,
 								right: this.state.player.right,
 								top: this.state.player.top,
-								backgroundColor: '#2c3e50',
+								backgroundColor: '#B00D72',
 								borderRadius: 10,
 								paddingTop: this.state.player.padding,
 							}}>
-								<LinearGradient colors={['#34495e', '#2c3e50']} style={{borderRadius: 10}}>
+								<LinearGradient colors={['#B00D72', '#5523BF']} style={{borderRadius: 10}}>
 								<TouchableOpacity onPress={() => this.state.big ? null : this._deploy_big_player()} disabled={this.state.big}>
 									<View style={{margin: 10}}>
 										{
@@ -716,10 +718,10 @@ class PlayerAlt extends React.Component {
 																<FontAwesome
 																	name={this._display_device_icon(this.state.listening?.device?.type)}
 																	size={16}
-																	style={{color: '#B00D70', fontWeight: 'bold'}}/>
+																	style={{color: 'white', fontWeight: 'bold'}}/>
 																<Text style={{
 																	marginLeft: 5,
-																	color: "#B00D70",
+																	color: "white",
 																	fontWeight: 'bold'
 																}}>{this.state.listening?.device?.name}</Text>
 															</View>
@@ -824,13 +826,13 @@ class PlayerAlt extends React.Component {
 																<FontAwesome
 																	name={this._display_device_icon(this.state.listening?.device?.type)}
 																	size={24} style={{
-																	color: '#B00D70',
+																	color: 'white',
 																	fontWeight: 'bold',
 																	marginLeft: 15
 																}}/>
 																<Text style={{
 																	marginLeft: 5,
-																	color: "#B00D70",
+																	color: "white",
 																	fontWeight: 'bold'
 																}}>{this.state.listening?.device?.name}</Text>
 															</TouchableOpacity>
@@ -937,7 +939,7 @@ class PlayerAlt extends React.Component {
 									</View>
 								</TouchableOpacity>
 								</LinearGradient>
-								<Animated.View style={{position: 'absolute', top: this.state.device_menu.top, left: this.state.device_menu.left, right: this.state.device_menu.right, bottom: this.state.device_menu.bottom, height: this.state.device_menu.height, backgroundColor: '#2f3640', paddingTop: 10, flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
+								<Animated.View style={{position: 'absolute', top: this.state.device_menu.top, left: this.state.device_menu.left, right: this.state.device_menu.right, bottom: this.state.device_menu.bottom, height: this.state.device_menu.height, backgroundColor: '#B00D72', paddingTop: 10, flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
 									<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row', paddingHorizontal: 30}}>
 										<TouchableOpacity onPress={() => this._deploy_devices_menu()}>
 											<FontAwesome name={"close"} size={24} color={"white"}/>
@@ -945,10 +947,10 @@ class PlayerAlt extends React.Component {
 									</View>
 									<View style={{flex: 1, padding: 30}}>
 										<View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-											<FontAwesome name={'music'} size={48} color={'purple'} />
+											<FontAwesome name={'music'} size={48} color={'white'} />
 											<View style={{marginLeft: 20}}>
 												<Text style={{color: 'white', fontSize: 22, fontWeight: 'bold'}}>Écoute en cours sur :</Text>
-												<Text style={{color: 'purple', fontSize: 18}}>{this.state.devices?.active?.name}</Text>
+												<Text style={{color: 'white', fontSize: 18}}>{this.state.devices?.active?.name}</Text>
 											</View>
 										</View>
 										<Text style={{fontSize: 16, color: 'white', marginVertical: 10}}>Séléctionnez un appareil</Text>
@@ -963,46 +965,48 @@ class PlayerAlt extends React.Component {
 										/>
 									</View>
 								</Animated.View>
-								<Animated.View style={{position: 'absolute', top: this.state.waiting_list.top, left: this.state.waiting_list.left, right: this.state.waiting_list.right, bottom: this.state.waiting_list.bottom, height: this.state.waiting_list.height, backgroundColor: '#2f3640', paddingTop: 10, flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
-									<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row', paddingHorizontal: 30}}>
-										<TouchableOpacity onPress={() => this._deploy_waiting_list()}>
-											<FontAwesome name={"close"} size={24} color={"white"}/>
-										</TouchableOpacity>
-									</View>
-									{
-										this.state.waiting_list.big
-										?
-											<View style={{elevation: 10, shadowColor: '#000'}}>
-												<Text style={{marginLeft: 10, fontSize: 16, color: 'white'}}>En cours de lecture :</Text>
-												<TrackItem track={this.state.listening?.item} album={this.state.listening?.item?.album} />
-												{this.state.listening?.context ? <Text style={{marginLeft: 10, marginBottom: 10, fontSize: 16, color: 'white'}}>Prochains titres {this.state.context?.type == 'album' ? "de " + this.state.listening?.item?.album?.name : null} : </Text> : null}
-											</View>
-										:
-											null
-									}
-									<ScrollView style={{height: Dimensions.get('screen').height * 2, elevation: -5}}>
+								<Animated.View style={{position: 'absolute', top: this.state.waiting_list.top, left: this.state.waiting_list.left, right: this.state.waiting_list.right, bottom: this.state.waiting_list.bottom, height: this.state.waiting_list.height, backgroundColor: '#B00D72', paddingTop: 0, flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
+									<LinearGradient colors={['#8e44ad', '#2f3640']} style={{paddingTop: StatusBar.currentHeight}} >
+										<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row', paddingHorizontal: 30}}>
+											<TouchableOpacity onPress={() => this._deploy_waiting_list()}>
+												<FontAwesome name={"close"} size={24} color={"white"}/>
+											</TouchableOpacity>
+										</View>
 										{
 											this.state.waiting_list.big
 											?
-												<View style={{flex: 1}}>
-													<View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-														{
-															this.state.listening.context
-																?
-																<View>
-																	<AlbumItemWithOffset context={this.state.listening?.context} listening={this.state.listening} />
-																</View>
-																:
-																null
-														}
-													</View>
+												<View style={{elevation: 10, shadowColor: '#000'}}>
+													<Text style={{marginLeft: 10, fontSize: 16, color: 'white'}}>En cours de lecture :</Text>
+													<TrackItem track={this.state.listening?.item} album={this.state.listening?.item?.album} />
+													{this.state.listening?.context ? <Text style={{marginLeft: 10, marginBottom: 10, fontSize: 16, color: 'white'}}>Prochains titres {this.state.context?.type == 'album' ? "de " + this.state.listening?.item?.album?.name : null} : </Text> : null}
 												</View>
 											:
 												null
 										}
-									</ScrollView>
+										<ScrollView style={{height: Dimensions.get('screen').height * 2, elevation: -5}}>
+											{
+												this.state.waiting_list.big
+												?
+													<View style={{flex: 1}}>
+														<View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+															{
+																this.state.listening.context
+																	?
+																	<View>
+																		<AlbumItemWithOffset context={this.state.listening?.context} listening={this.state.listening} />
+																	</View>
+																	:
+																	null
+															}
+														</View>
+													</View>
+												:
+													null
+											}
+										</ScrollView>
+									</LinearGradient>
 								</Animated.View>
-								<Animated.View style={{position: 'absolute', top: this.state.share_menu.top, left: this.state.share_menu.left, right: this.state.share_menu.right, bottom: this.state.share_menu.bottom, height: this.state.share_menu.height, backgroundColor: '#2f3640', flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
+								<Animated.View style={{position: 'absolute', top: this.state.share_menu.top, left: this.state.share_menu.left, right: this.state.share_menu.right, bottom: this.state.share_menu.bottom, height: this.state.share_menu.height, backgroundColor: '#B00D72', flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
 									<LinearGradient colors={['#8e44ad', '#2f3640']} style={{flex: 1, borderRadius: 10, paddingTop: StatusBar.currentHeight}}>
 										<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', paddingHorizontal: 30}}>
 											<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white'}}>Partager</Text>
@@ -1105,113 +1109,103 @@ class PlayerAlt extends React.Component {
 										</View>
 									</LinearGradient>
 								</Animated.View>
-								<Animated.View style={{position: 'absolute', top: this.state.track_infos.top, left: this.state.track_infos.left, right: this.state.track_infos.right, bottom: this.state.track_infos.bottom, height: this.state.track_infos.height, backgroundColor: '#2f3640', paddingTop: 10, flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
-									<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row', paddingHorizontal: 30}}>
-										<TouchableOpacity onPress={() => this._deploy_track_infos()}>
-											<FontAwesome name={"close"} size={24} color={"white"}/>
-										</TouchableOpacity>
-									</View>
-									<View style={{height: '100%', width: Dimensions.get('screen').width}}>
-										<View style={{flex: 1}}>
-											<View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 30, paddingVertical: 10, zIndex: 10, backgroundColor: '#2f3640'}}>
-												<View style={{flex: 1, flexDirection: 'row', justifyContent: "space-around"}}>
-													<TouchableOpacity onPress={() => alert('set_shuffle')} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-														<Icon name="random" size={36}
-															  style={{color: this.state.listening?.shuffle_state ? 'green' :'white', opacity: this.state.listening.actions.disallows.toggling_shuffle ? 0.2 : 1}}/>
-														<Text style={{marginTop: 5}}>Lecture aléatoire</Text>
-													</TouchableOpacity>
-													<TouchableOpacity onPress={() => alert('set_repeat')} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-														<Icon name="redo" size={36}
-															  style={{color: this.state.listening?.repeat_state == 'context' ? 'green' : this.state.listening?.repeat_state == 'track' ? '#B00D70' : 'white', opacity: this.state.listening.actions.disallows.toggling_repeat_track || this.state.listening.actions.disallows.toggling_repeat_context ? 0.2 : 1}}/>
-														<Text style={{marginTop: 5}}>Répéter</Text>
-													</TouchableOpacity>
-													<TouchableOpacity onPress={() => {
-														this._deploy_track_infos();
-														setTimeout(() => {
-															this._deploy_waiting_list();
-														}, 500);
-													}} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-														<FontAwesome name={'bars'} size={36} color={'white'}/>
-														<Text style={{marginTop: 5}}>File d'attente</Text>
-													</TouchableOpacity>
-												</View>
-											</View>
-											<ScrollView contentContainerStyle={{alignItems: 'flex-start', justifyContent: 'flex-start', width: Dimensions.get('screen').width}} style={{flex: 1}}>
-												<View style={{alignItems: 'center', justifyContent: 'center', width: Dimensions.get('screen').width, marginTop: 25}}>
-													<View style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 10}}>
-														<View style={{height: Dimensions.get('screen').width / 2, width: Dimensions.get('screen').width / 2, elevation: 10}}>
-															<Image source={{uri: this.state.listening?.item?.album?.images[1]?.url}} style={{...StyleSheet.absoluteFill, borderTopLeftRadius: 10, borderTopRightRadius: 10}}/>
-														</View>
-														<View style={{width: Dimensions.get('screen').width / 2, backgroundColor: 'red', padding: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10}}>
-															<Text>Partager</Text>
-														</View>
-													</View>
-													<View style={{marginTop: 5}}>
-														<Text style={{color: 'white', fontWeight: "bold", marginTop: 5}}>{this.state.listening?.item?.name}</Text>
-														<Text style={{color: 'lightgrey', marginTop: 5}}>{this.state.listening?.item?.artists[0].name}</Text>
-													</View>
-												</View>
-												<View style={{flex: 1, paddingHorizontal: 30}}>
-													<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-														<FontAwesome name={'home'} size={18} color={'white'} />
-														<Text style={{fontSize: 13, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>t</Text>
-													</View>
-													<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-														<FontAwesome name={'home'} size={18} color={'white'} />
-														<Text style={{fontSize: 13, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>t</Text>
-													</View>
-													<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-														<FontAwesome name={'home'} size={18} color={'white'} />
-														<Text style={{fontSize: 13, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>t</Text>
-													</View>
-													<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-														<FontAwesome name={'home'} size={18} color={'white'} />
-														<Text style={{fontSize: 13, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>t</Text>
-													</View>
-													<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-														<FontAwesome name={'home'} size={18} color={'white'} />
-														<Text style={{fontSize: 13, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>t</Text>
-													</View>
-													<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-														<FontAwesome name={'home'} size={18} color={'white'} />
-														<Text style={{fontSize: 13, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>t</Text>
-													</View>
-													<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-														<FontAwesome name={'home'} size={18} color={'white'} />
-														<Text style={{fontSize: 13, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>t</Text>
-													</View>
-													<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-														<FontAwesome name={'home'} size={18} color={'white'} />
-														<Text style={{fontSize: 13, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>t</Text>
-													</View>
-													<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-														<FontAwesome name={'home'} size={18} color={'white'} />
-														<Text style={{fontSize: 13, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>t</Text>
-													</View>
-													<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-														<FontAwesome name={'home'} size={18} color={'white'} />
-														<Text style={{fontSize: 13, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>t</Text>
-													</View>
-													<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-														<FontAwesome name={'home'} size={18} color={'white'} />
-														<Text style={{fontSize: 13, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>t</Text>
-													</View>
-													<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-														<FontAwesome name={'home'} size={18} color={'white'} />
-														<Text style={{fontSize: 13, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>t</Text>
-													</View>
-													<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-														<FontAwesome name={'home'} size={18} color={'white'} />
-														<Text style={{fontSize: 13, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>t</Text>
-													</View>
-													<View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-														<FontAwesome name={'home'} size={18} color={'white'} />
-														<Text style={{fontSize: 13, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>t</Text>
-													</View>
-												</View>
-											</ScrollView>
+								<Animated.View style={{position: 'absolute', top: this.state.track_infos.top, left: this.state.track_infos.left, right: this.state.track_infos.right, bottom: this.state.track_infos.bottom, height: this.state.track_infos.height, backgroundColor: '#B00D72', paddingTop: 0, flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
+									<LinearGradient colors={['#8e44ad', '#2f3640']} style={{paddingTop: StatusBar.currentHeight}} >
+										<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row', paddingHorizontal: 30}}>
+											<TouchableOpacity onPress={() => this._deploy_track_infos()}>
+												<FontAwesome name={"close"} size={24} color={"white"}/>
+											</TouchableOpacity>
 										</View>
-									</View>
+										<View style={{height: Dimensions.get('screen').height, width: Dimensions.get('screen').width}}>
+											<View style={{flex: 1}}>
+												<View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 30, paddingVertical: 10, zIndex: 10, backgroundColor: 'transparent'}}>
+													<View style={{flex: 1, flexDirection: 'row', justifyContent: "space-around"}}>
+														<TouchableOpacity onPress={() => this._shuffle()} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+															<Icon name="random" size={36}
+																  style={{color: this.state.listening?.shuffle_state ? 'green' :'white', opacity: this.state.listening.actions.disallows.toggling_shuffle ? 0.2 : 1}}/>
+															<Text style={{marginTop: 5}}>Lecture aléatoire</Text>
+														</TouchableOpacity>
+														<TouchableOpacity onPress={() => this._repeat()} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+															<Icon name="redo" size={36}
+																  style={{color: this.state.listening?.repeat_state == 'context' ? 'green' : this.state.listening?.repeat_state == 'track' ? '#B00D70' : 'white', opacity: this.state.listening.actions.disallows.toggling_repeat_track || this.state.listening.actions.disallows.toggling_repeat_context ? 0.2 : 1}}/>
+															<Text style={{marginTop: 5}}>Répéter</Text>
+														</TouchableOpacity>
+														<TouchableOpacity onPress={() => {
+															this._deploy_track_infos();
+															setTimeout(() => {
+																this._deploy_waiting_list();
+															}, 500);
+														}} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+															<FontAwesome name={'bars'} size={36} color={'white'}/>
+															<Text style={{marginTop: 5}}>File d'attente</Text>
+														</TouchableOpacity>
+													</View>
+												</View>
+												<ScrollView contentContainerStyle={{alignItems: 'flex-start', justifyContent: 'flex-start', width: Dimensions.get('screen').width}} scrollEnabled={true}>
+													<View style={{alignItems: 'center', justifyContent: 'center', width: Dimensions.get('screen').width, marginTop: 25, flex: 1}}>
+														<View style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 10}}>
+															<View style={{height: Dimensions.get('screen').width / 2, width: Dimensions.get('screen').width / 2, elevation: 10}}>
+																<Image source={{uri: this.state.listening?.item?.album?.images[1]?.url}} style={{...StyleSheet.absoluteFill, borderTopLeftRadius: 10, borderTopRightRadius: 10}}/>
+															</View>
+															<View style={{width: Dimensions.get('screen').width / 2, backgroundColor: 'red', padding: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10}}>
+																<Text>Partager</Text>
+															</View>
+														</View>
+														<View style={{marginTop: 5}}>
+															<Text style={{color: 'white', fontWeight: "bold", marginTop: 5}}>{this.state.listening?.item?.name}</Text>
+															<Text style={{color: 'lightgrey', marginTop: 5}}>{this.state.listening?.item?.artists[0].name}</Text>
+														</View>
+													</View>
+													<View style={{flex: 1, paddingHorizontal: 30}}>
+														<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+															<FontAwesome name={'heart'} size={24} color={'white'} />
+															<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>Liker</Text>
+														</TouchableOpacity>
+														<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+															<FontAwesome name={'ban'} size={24} color={'white'} />
+															<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>Masquer ce titre</Text>
+														</TouchableOpacity>
+														<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+															<FontAwesome name={'home'} size={24} color={'white'} />
+															<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>Ajouter à une playlist</Text>
+														</TouchableOpacity>
+														<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+															<FontAwesome name={'plus'} size={24} color={'white'} />
+															<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>Ajouter à la file d'attente</Text>
+														</TouchableOpacity>
+														<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+															<FontAwesome5Icon name="compact-disc" color={"white"} size={24}/>
+															<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>Voir l'album</Text>
+														</TouchableOpacity>
+														<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+															<FontAwesome5Icon name="user" color={"white"} size={24}/>
+															<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>Voir l'artiste</Text>
+														</TouchableOpacity>
+														<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+															<FontAwesome5Icon name="share" color={"white"} size={24}/>
+															<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>Partager</Text>
+														</TouchableOpacity>
+														<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+															<FontAwesome5Icon name="clock" solid={false} color={"white"} size={24}/>
+															<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>Minuteur de veille</Text>
+														</TouchableOpacity>
+														<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+															<FontAwesome5Icon name="microphone" color={"white"} size={24}/>
+															<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>Radio liée au titre</Text>
+														</TouchableOpacity>
+														<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+															<FontAwesome name={'home'} size={24} color={'white'} />
+															<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>Afficher les crédits</Text>
+														</TouchableOpacity>
+														<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+															<FontAwesome name={'home'} size={24} color={'white'} />
+															<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 10, marginLeft: 10}}>Signaler un abus</Text>
+														</TouchableOpacity>
+													</View>
+												</ScrollView>
+											</View>
+										</View>
+									</LinearGradient>
 								</Animated.View>
 							</Animated.View>
 
