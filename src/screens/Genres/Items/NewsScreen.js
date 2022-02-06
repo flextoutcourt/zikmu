@@ -1,9 +1,11 @@
 import React, {Component} from 'react';
-import {Text, View, StyleSheet, StatusBar} from 'react-native';
+import {Text, View, StyleSheet, StatusBar, FlatList} from 'react-native';
 import {connect} from 'react-redux';
 import Animated, {Extrapolate} from 'react-native-reanimated';
 import LinearGradient from 'react-native-linear-gradient';
 import Header from '../../../components/Genres/Header';
+import axios from 'axios';
+import PlaylistForGenre from '../../../components/Genres/Playlist';
 
 class NewsScreen extends Component{
 
@@ -15,9 +17,9 @@ class NewsScreen extends Component{
         }
     }
 
-    _get_playlists = (offset = 0) => {
+    _get_playlists = (offset = 0, limit = 50) => {
         const promise = axios.get(
-            `https://api.spotify.com/v1/browse/categories/${this.props.route.params.genre_id}/playlists?limit=4&offset=${offset}`,
+            `https://api.spotify.com/v1/browse/categories/${this.props.route.params.genre.id}/playlists?limit=${limit}&offset=${offset}`,
             {
                 headers: {
                     Accept: 'application/json',
@@ -31,7 +33,7 @@ class NewsScreen extends Component{
     }
 
     componentDidMount(){
-
+        this._get_playlists().then(json => this.setState({playlists: json.playlists?.items}));
     }
 
     render(){
@@ -46,7 +48,7 @@ class NewsScreen extends Component{
             >
                 <Header
                     y={this.state.scrollY}
-                    genre={this.state.genre}
+                    genre={this.props.route.params.genre}
                     {...this.props}
                 />
                 <Animated.ScrollView
@@ -56,6 +58,18 @@ class NewsScreen extends Component{
                     )}
                     style={{marginTop: -2.5 * StatusBar.currentHeight}}
                     scrollEventThrottle={16}>
+                    <View style={{marginTop: 2.5 * StatusBar.currentHeight, paddingBottom: 120}}>
+                        <FlatList
+                            numColumns={2}
+                            data={this.state.playlists}
+                            renderItem={({item, key}) => (
+                                <PlaylistForGenre playlist={item} />
+                            )}
+                            onEndReached={() => {
+                                this._get_playlists(this.state.playlists.length).then(json => this.setState({playlists: [...this.state.playlists, ...json.playlists.items]}))
+                            }}
+                        />
+                    </View>
                 </Animated.ScrollView>
             </LinearGradient>
         )
