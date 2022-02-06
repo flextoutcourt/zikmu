@@ -1,5 +1,7 @@
 import React from 'react';
 import {Dimensions, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import rootNavigation from './../../utils/RootNavigation';
+
 import {connect} from 'react-redux';
 
 class GenreItem extends React.Component {
@@ -13,7 +15,9 @@ class GenreItem extends React.Component {
 
 	render() {
 		return (
-			<TouchableOpacity onPress={() => alert(`open genre ${this.props.genre.item.name}`)} style={{marginHorizontal: 10}}>
+			<TouchableOpacity onPress={() => this.props.navigation.push('Genre', {
+				genre_id: this.props.genre.item.id
+			})} style={{marginHorizontal: 10}}>
 				<Image source={{uri: this.props.genre.item.icons[0].url}} style={styles.image}/>
 				<Text style={{textAlign: 'center'}}>{this.props.genre?.item?.name}</Text>
 			</TouchableOpacity>

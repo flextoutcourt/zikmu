@@ -97,7 +97,7 @@ class SearchScreen extends React.Component {
 					</LinearGradient>
 					{this.state.results === null
 						?
-						<GenreList/>
+						<GenreList {...this.props}/>
 						:
 						null
 					}
