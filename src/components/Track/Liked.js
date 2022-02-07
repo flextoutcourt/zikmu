@@ -14,25 +14,26 @@ class Liked extends React.Component {
 	}
 
 	_check_like = (track_id) => {
-		if(track_id){
-			axios.get(`https://api.spotify.com/v1/me/tracks/contains?ids=${track_id}`, {
-				headers: {
-					Accept: 'application/json',
-					Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
-					'Content-Type': 'application/json',
-				},
-				method: 'PUT',
-			})
-				.then(data => data.data)
-				.then(json => {
-					this.setState({
-						liked: json[0],
-					})
-				})
-				.catch(e => {
-					// alert(JSON.stringify(e));
-				});
-		}
+		// if(track_id){
+		// 	axios.get(`https://api.spotify.com/v1/me/tracks/contains?ids=${track_id}`, {
+		// 		headers: {
+		// 			Accept: 'application/json',
+		// 			Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
+		// 			'Content-Type': 'application/json',
+		// 		},
+		// 		method: 'PUT',
+		// 	})
+		// 		.then(data => data.data)
+		// 		.then(json => {
+		// 			this.setState({
+		// 				liked: json[0],
+		// 			})
+		// 		})
+		// 		.catch(e => {
+		// 			// alert(JSON.stringify(e));
+		// 		});
+		// }
+		return false;
 	}
 
 	_like = (track_id) => {
