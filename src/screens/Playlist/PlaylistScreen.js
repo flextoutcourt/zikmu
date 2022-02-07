@@ -74,6 +74,21 @@ class PlaylistScreen extends React.Component {
         return promise.then(data => alert(JSON.stringify(data)));
 	}
 
+	_get_user = (href) => {
+		const promise = axios.get(
+			`${href}`,
+			{
+				headers: {
+					Accept: 'application/json',
+					Authorization:
+						'Bearer ' + this.props.store.authentication.accessToken,
+					'Content-Type': 'application/json',
+				},
+			},
+		);
+		return promise.then(data => data.data);
+	}
+
 	componentDidMount() {
 		const opacity = this.state.scrollY.interpolate({
 			inputRange: [250, 325],
@@ -82,7 +97,32 @@ class PlaylistScreen extends React.Component {
 		});
 		this._get_playlist().then(json => {
 			this.setState({playlist: json});
+			if(json.collaborative){
+				let users = [];
+				json.tracks?.items?.map((item, key) => {
+					if(users.indexOf(item?.added_by?.href) === -1){
+						users.push(item?.added_by?.href);
+					}
+				})
+				let users_array = [];
+				users?.map((item, key) => {
+					this._get_user(item).then(json => {
+						users_array.push(json);
+					});
+
+				});
+				this.setState((prevState) => ({
+					...prevState,
+					playlist:{
+						...prevState.playlist,
+						collab_users: {
+							users_array,
+						}
+					}
+				}))
+			}
 		});
+
 	}
 
 	render() {
@@ -307,6 +347,9 @@ class PlaylistScreen extends React.Component {
 									<TrackItem
 										track={item?.track}
 										album={item?.track?.album}
+										playlist={this.state.playlist}
+										collab_users={this.state.playlist?.collab_users}
+										added_by={item.added_by}
 										type={'playlist'}
 										playlist_uri={this.state.playlist?.uri}
 										playlist_index={index}
