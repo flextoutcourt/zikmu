@@ -80,21 +80,20 @@ class AlbumItemWithOffset extends React.Component{
 
     render(){
         return(
-            <View style={{flex: 1, elevation: -1}}>
-                <FlatList
-                    data={this.state.tracks}
-                    renderItem={({item, index}) => (
-                        <TrackItem
-                            track={this.props.context.type === 'album' ? item : item.track}
-                            album={this.props.context.type === 'album' ? this.state.album : item.track.album}
-                            type={this.props.context.type === 'album' ? 'album' : this.props.context.type === 'playlist' ? 'playlist' : null}
-                            playlist_index={parseInt(index) + parseInt(this.state.playlist_index)}
-                            playlist_uri={this.props.context.uri}
-                            disks={this.state.test}
-                        />
-                    )}
-                />
-            </View>
+            <FlatList
+                data={this.state.tracks}
+                renderItem={({item, index}) => (
+                    <TrackItem
+                        track={this.props.context.type === 'album' ? item : item.track}
+                        album={this.props.context.type === 'album' ? this.state.album : item.track.album}
+                        type={this.props.context.type === 'album' ? 'album' : this.props.context.type === 'playlist' ? 'playlist' : null}
+                        playlist_index={parseInt(index) + parseInt(this.state.playlist_index)}
+                        playlist_uri={this.props.context.uri}
+                        disks={this.state.test}
+                    />
+                )}
+                style={{zIndex: 99, elevation: 99}}
+            />
         )
     }
 

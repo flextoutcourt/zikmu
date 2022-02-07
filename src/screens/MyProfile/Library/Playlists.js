@@ -60,7 +60,7 @@ class Playlists extends React.Component {
 					horizontal={false}
 					onEndReachedThreshold={0.1}
 					onEndReached={() => {
-						this._get_playlists(this.state.playlists.length - 1).then(data => {
+						this._get_playlists(this.state.playlists.length).then(data => {
 							this.setState({
 								playlists: [...this.state.playlists, ...data.items],
 							});

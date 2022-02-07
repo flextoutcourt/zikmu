@@ -69,6 +69,14 @@ class TrackItem extends React.Component {
 		});
 	};
 
+	_find_user = id => {
+		return this.props.collab_users?.users_array.find((item) => item?.id === id);
+	}
+
+	componentDidMount() {
+
+	}
+
 	render() {
 		return (
 			<View>
@@ -136,7 +144,7 @@ class TrackItem extends React.Component {
 							</View>
 							<View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
 								<Collab
-									isCollab={this.state.track?.name === '696' || this.state.track?.name === "2014"}/>
+									collab={this._find_user(this.props.added_by?.id)}/>
 								<Liked track={this.state.track}/>
 							</View>
 						</View>
