@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import RecentComponent from '../../components/Home/Recents/RecentComponent';
 import GenreComponent from '../../components/Home/Genres/GenreComponent';
 import ReleaseComponent from '../../components/Home/Release/ReleaseComponent';
+import FollowComponent from '../../components/Home/Follows/FollowComponent';
 
 class HomeScreen extends Component {
 	constructor(props) {
@@ -56,6 +57,7 @@ class HomeScreen extends Component {
 					<ReleaseComponent {...this.props} />
                     <GenreComponent {...this.props} />
 					<RecentComponent {...this.props} isTop={false} />
+					<FollowComponent {...this.props} />
                 </ScrollView>
 			</LinearGradient>
 		);
