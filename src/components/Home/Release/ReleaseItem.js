@@ -49,7 +49,7 @@ class ReleaseItem extends Component{
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => this.props.navigation.push('Album', {
                     album_id: this.props.release?.id
-                })} style={{width: Dimensions.get('screen').width - 50, backgroundColor: 'red', marginBottom: 10, borderRadius: 10, elevation: 10, flexDirection: 'row', justifyContent: 'flex-start'}}>
+                })} style={{width: Dimensions.get('screen').width - 50, backgroundColor: '#2f3640', marginBottom: 10, borderRadius: 10, elevation: 10, flexDirection: 'row', justifyContent: 'flex-start'}}>
                     <View style={{height: 150, width: 150}}>
                         <Image source={{uri: this.props.release?.images[0].url}} style={{...StyleSheet.absoluteFill, borderTopLeftRadius: 10, borderBottomLeftRadius: 10}} />
                     </View>
