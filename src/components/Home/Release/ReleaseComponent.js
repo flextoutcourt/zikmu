@@ -41,7 +41,7 @@ class ReleaseComponent extends Component{
                     horizontal={true}
                     snapToAlignment={"start"}
                     snapToInterval={Dimensions.get('screen').width - 30}
-                    decelerationRate={"fast"}
+                    decelerationRate={'normal'}
                     renderItem={({item, key}) => (
                         <ReleaseItem release={item} {...this.props} />
                     )}

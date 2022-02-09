@@ -42,7 +42,7 @@ class GenreComponent extends Component {
 					scrollEnabled={true}
 					horizontal={true}
 					snapToInterval={Dimensions.get('screen').width / 2 - 20}
-					decelerationRate={'fast'}
+					decelerationRate={'normal'}
 					renderItem={({item, key}) => <GenreItem genre={item} {...this.props} />}
 				/>
 			</View>
