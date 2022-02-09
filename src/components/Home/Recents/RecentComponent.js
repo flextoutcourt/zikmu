@@ -1,7 +1,7 @@
 // import React, {useState, useEffect, useContext, Suspense} from 'react'
 import axios from 'axios';
 import React, {Component} from 'react';
-import {FlatList, View} from 'react-native';
+import {FlatList, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import Recentitem from './RecentItem';
 
@@ -14,7 +14,8 @@ class RecentComponent extends Component {
 	}
 
 	_get_recent = async (after = null) => {
-		let url = 'https://api.spotify.com/v1/me/player/recently-played';
+		let limit = this.props.isTop ? 8 : 50;
+		let url = `https://api.spotify.com/v1/me/player/recently-played?limit=${limit}`;
 		after ? (url += `?after=${after}`) : url;
 		const promise = axios.get(url, {
 			headers: {
@@ -33,21 +34,38 @@ class RecentComponent extends Component {
 	render() {
 		return (
 			<View style={{flex: 1}}>
-				<FlatList
-					data={this.state.recent?.items}
-					scrollEnabled={true}
-					horizontal={true}
-					onEndReachedThreshold={0.5}
-					onEndReached={() => {
-						this._get_recent(
-							this.state.recent[this.state.recent.items.length]?.item?.track
-								?.id ?? null,
-						).then(json =>
-							this.setState(this.state.recent?.items.concat(json.items)),
-						);
-					}}
-					renderItem={({item, key}) => <Recentitem recent={item}/>}
-				/>
+				{
+					this.props.isTop
+					?
+						<FlatList
+							data={this.state.recent?.items}
+							scrollEnabled={true}
+							numColumns={2}
+							onEndReachedThreshold={0.5}
+							style={{paddingBottom: 20}}
+							renderItem={({item, index}) => <Recentitem recent={item} iterator={index} {...this.props}/>}
+						/>
+					:
+						<>
+							<Text style={{color: 'white', fontSize: 16, marginTop: 5, marginLeft: 10}}>Écouté recemment</Text>
+							<FlatList
+								data={this.state.recent?.items.splice(8)}
+								scrollEnabled={true}
+								horizontal={true}
+								onEndReachedThreshold={0.5}
+								style={{paddingBottom: 20}}
+								onEndReached={() => {
+									this._get_recent(
+										this.state.recent[this.state.recent.items.length]?.item?.track
+											?.id ?? null,
+									).then(json =>
+										this.setState(this.state.recent?.items.concat(json.items)),
+									);
+								}}
+								renderItem={({item, index}) => <Recentitem recent={item} iterator={index} {...this.props}/>}
+							/>
+						</>
+				}
 			</View>
 		);
 	}
