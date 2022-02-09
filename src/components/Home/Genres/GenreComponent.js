@@ -1,7 +1,8 @@
 import axios from 'axios';
 import React, {Component} from 'react';
-import {FlatList, Text, View} from 'react-native';
+import {Dimensions, FlatList, Text, View} from 'react-native';
 import {connect} from 'react-redux';
+import GenreItem from '../../Home/Genres/GenreItem';
 
 class GenreComponent extends Component {
 	constructor(props) {
@@ -12,7 +13,6 @@ class GenreComponent extends Component {
 	}
 
 	_get_genres = (offset = 0) => {
-		console.log('genres');
 		const promise = axios.get(
 			`https://api.spotify.com/v1/browse/categories?offset=${offset}`,
 			{
@@ -29,7 +29,6 @@ class GenreComponent extends Component {
 
 	componentDidMount() {
 		this._get_genres().then(data => {
-			console.log(data);
 			this.setState({genres: data});
 		});
 	}
@@ -37,15 +36,14 @@ class GenreComponent extends Component {
 	render() {
 		return (
 			<View style={{flex: 1}}>
+				<Text style={{color: 'white', fontSize: 16, marginTop: 5, marginLeft: 10}}>Succeptible de vous plaire</Text>
 				<FlatList
 					data={this.state.genres?.categories?.items}
 					scrollEnabled={true}
 					horizontal={true}
-					// onEndReachedThreshold={0.5}
-					// onEndReached={() => {
-					//     _get_genres(this.state.genres.categories.items.length - 1).then(json => setGenres(genres => genres.concat(json.categories.items)))
-					// }}
-					renderItem={({item, key}) => <Text>{item?.id}</Text>}
+					snapToInterval={Dimensions.get('screen').width / 2 - 20}
+					decelerationRate={'fast'}
+					renderItem={({item, key}) => <GenreItem genre={item} {...this.props} />}
 				/>
 			</View>
 		);
