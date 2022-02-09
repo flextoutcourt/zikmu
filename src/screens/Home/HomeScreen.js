@@ -45,17 +45,17 @@ class HomeScreen extends Component {
 			<LinearGradient
 				colors={['#B00D72', '#5523BF']}
 				style={{
-					marginTop: -StatusBar.currentHeight,
+					marginTop: 0,
 					...styles.container,
-					paddingTop: StatusBar.currentHeight,
 				}}>
-				<ScrollView style={{flex: 1, marginTop: StatusBar.currentHeight}}>
+				<ScrollView style={{flex: 1, paddingTop: StatusBar.currentHeight, paddingBottom: 155}}>
 					<View style={{flex: 1, padding: 10}}>
 						<Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>{this._display_message()}</Text>
 					</View>
-					<RecentComponent {...this.props} />
+					<RecentComponent {...this.props} isTop={true}/>
 					<ReleaseComponent {...this.props} />
                     <GenreComponent {...this.props} />
+					<RecentComponent {...this.props} isTop={false} />
                 </ScrollView>
 			</LinearGradient>
 		);
