@@ -22,6 +22,8 @@ import Library from '../screens/MyProfile/Library';
 import Tracks from '../screens/MyProfile/Library/Tracks';
 import PopularScreen from '../screens/Genres/Items/PopularScreen';
 import NewsScreen from '../screens/Genres/Items/NewsScreen';
+import SelfScreen from '../screens/User/SelfScreen';
+import UserScreen from '../screens/User/UserScreen';
 
 export const config = {
 	screens: {
@@ -111,6 +113,8 @@ function LoggedInNavigation(props) {
 				<Stack.Screen name="Genre" component={Genre}/>
 				<Stack.Screen name="Genre_Popular" component={PopularScreen} />
 				<Stack.Screen name="Genre_News" component={NewsScreen} />
+				<Stack.Screen name="Self" component={SelfScreen} />
+				<Stack.Screen name="User" component={UserScreen} />
 			</Stack.Navigator>
 		);
 	}
