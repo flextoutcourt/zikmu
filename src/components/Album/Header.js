@@ -3,7 +3,7 @@ import {Dimensions, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View,}
 import Animated, {Extrapolate} from 'react-native-reanimated';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 
-class Header extends Component {
+class Header extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		console.log(props);

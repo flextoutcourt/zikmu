@@ -4,7 +4,7 @@ import React from "react";
 import {connect} from "react-redux";
 import axios from "axios";
 
-class Liked extends React.Component {
+class Liked extends React.PureComponent {
 
 	constructor(props) {
 		super(props);

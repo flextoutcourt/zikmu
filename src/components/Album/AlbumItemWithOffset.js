@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import axios from 'axios';
 import TrackItem from '../Track/TrackItem';
 
-class AlbumItemWithOffset extends React.Component{
+class AlbumItemWithOffset extends React.PureComponent{
 
     constructor(props){
         super(props);

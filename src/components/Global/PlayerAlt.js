@@ -34,7 +34,7 @@ import {
 } from '../../redux/features/authentication/authenticationSlice';
 import {getListening} from '../../redux/features/listening/listeningSlice';
 
-class PlayerAlt extends React.Component {
+class PlayerAlt extends React.PureComponent {
 
 	constructor(props) {
 		super(props);
@@ -228,9 +228,9 @@ class PlayerAlt extends React.Component {
 	}
 
 	componentDidMount() {
-		// setInterval(() => {
+		setInterval(() => {
 			this._get_listening();
-		// }, 1000)
+		}, 1000)
 		// BackHandler.addEventListener('hardwareBackPress', () => {
 		// 	this.handleBackButton();
 		// })
@@ -245,7 +245,7 @@ class PlayerAlt extends React.Component {
 	_get_listening = async () => {
 		const listeningObject = await listeningHandler.get_listening_state(this.props.store.authentication.accessToken);
 		this.props.getListening({listening: listeningObject.data})
-		this.setState({listening: this.props.store.listening.listening})
+		this.setState({listening: this.props.store.listening.listening});
 		// this.setState({listening: this.props.store.listening.listening});
 		// const promise = axios.get('https://api.spotify.com/v1/me/player', {
 		// 	headers: {

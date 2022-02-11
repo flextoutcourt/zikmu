@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Image, StatusBar, ScrollView, Dimensions} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
@@ -8,7 +8,7 @@ import SelfHeader from '../../components/User/SelfHeader';
 import axios from 'axios';
 import PlayerAlt from '../../components/Global/PlayerAlt';
 
-class SelfScreen extends Component{
+class SelfScreen extends PureComponent{
 
     constructor(props) {
         super(props);
@@ -59,7 +59,6 @@ class SelfScreen extends Component{
                 {/*    Profil utilisateur*/}
                 {/*    Differents settings */}
                 </ScrollView>
-                <PlayerAlt/>
             </LinearGradient>
         )
     }

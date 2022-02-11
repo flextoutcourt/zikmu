@@ -5,7 +5,7 @@ import axios from 'axios';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Liked from '../../Track/Liked';
 
-class ReleaseItem extends Component{
+class ReleaseItem extends React.PureComponent{
 
     constructor(props) {
         super(props);

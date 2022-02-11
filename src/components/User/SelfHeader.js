@@ -6,7 +6,7 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
 import axios from 'axios';
 
-class SelfHeader extends Component{
+class SelfHeader extends React.PureComponent{
 
     constructor(props) {
         super(props);

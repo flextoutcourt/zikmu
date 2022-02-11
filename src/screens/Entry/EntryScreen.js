@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {StatusBar,} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 
@@ -21,7 +21,7 @@ import {
 import LoggedinNavigation from '../../navigation/loggedInNavigation';
 import GuestNavigation from '../../navigation/guestNavigation';
 
-class EntryScreen extends Component {
+class EntryScreen extends PureComponent {
 	state = {refreshToken: ''};
 
 	componentDidUpdate(prevProps) {
@@ -52,6 +52,10 @@ class EntryScreen extends Component {
 		this.props.setLoadingFalse();
 	};
 
+	shouldComponentUpdate(nextProp, nextState){
+		return true;
+	}
+
 	render() {
 		const {accessToken, loading} = this.props.authentication;
 
@@ -72,6 +76,7 @@ class EntryScreen extends Component {
 							translucent={true}
 						/>
 						<LoggedinNavigation/>
+						<PlayerAlt/>
 					</SafeAreaView>
 				</SafeAreaProvider>
 			);
@@ -93,7 +98,6 @@ const mapStateToProps = state => {
 		authentication: state.authentication,
 		accessToken: state.authentication.accessToken,
 		refreshToken: state.authentication.refreshToken,
-		listening: state.listening.listening
 	};
 };
 

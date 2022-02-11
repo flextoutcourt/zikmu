@@ -10,7 +10,7 @@ import ArtistAlt from '../../components/Artist/ArtistAlt';
 
 /** components */
 
-class SearchScreen extends React.Component {
+class SearchScreen extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {

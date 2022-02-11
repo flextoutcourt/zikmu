@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import TrackItem from '../../Track/TrackItem';
 
-class Recentitem extends Component {
+class Recentitem extends React.PureComponent {
 	constructor(props) {
 		super(props);
 	}

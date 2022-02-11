@@ -13,7 +13,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from 'axios';
 import Button from '../../components/Home/Guest/Button';
 
-class RegisterScreen extends Component {
+class RegisterScreen extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {

@@ -4,7 +4,7 @@ import {FlatList} from 'react-native';
 import {connect} from 'react-redux';
 import GenreItem from '../../components/Genres/GenreItem';
 
-class GenreList extends React.Component {
+class GenreList extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {

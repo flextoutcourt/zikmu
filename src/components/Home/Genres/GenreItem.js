@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {View, Text, Image, StyleSheet, TouchableOpacity, Dimensions} from 'react-native';
 
-class GenreItem extends Component{
+class GenreItem extends React.PureComponent{
 
     constructor(props){
         super(props);

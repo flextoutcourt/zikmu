@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import ReleaseItem from './ReleaseItem';
 import axios from 'axios';
 
-class ReleaseComponent extends Component{
+class ReleaseComponent extends React.PureComponent{
 
     constructor(props) {
         super(props);

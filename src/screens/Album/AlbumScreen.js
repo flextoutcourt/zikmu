@@ -10,7 +10,7 @@ import Header from '../../components/Album/Header';
 import moment from 'moment';
 import ArtistItem from '../../components/Artist/ArtistItem';
 
-class AlbumScreen extends React.Component {
+class AlbumScreen extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {

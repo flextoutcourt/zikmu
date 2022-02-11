@@ -7,7 +7,7 @@ import Header from '../../../components/Genres/Header';
 import axios from 'axios';
 import PlaylistForGenre from '../../../components/Genres/Playlist';
 
-class NewsScreen extends Component{
+class NewsScreen extends React.PureComponent{
 
     constructor(props){
         super(props);

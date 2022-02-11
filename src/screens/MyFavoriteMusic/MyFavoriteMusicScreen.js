@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Dimensions, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 
-class MyFavoriteMusicScreen extends Component {
+class MyFavoriteMusicScreen extends React.PureComponent {
 	state = {};
 
 	render() {

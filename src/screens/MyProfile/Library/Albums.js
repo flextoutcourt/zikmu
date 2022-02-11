@@ -7,7 +7,7 @@ import {connect} from 'react-redux';
 import AlbumItem from '../../../components/Album/AlbumItem';
 
 // create a component
-class Albums extends React.Component {
+class Albums extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {

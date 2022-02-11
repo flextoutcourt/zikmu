@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
-class Artistitem extends Component {
+class Artistitem extends React.PureComponent {
 
 	constructor(props) {
 		super(props);

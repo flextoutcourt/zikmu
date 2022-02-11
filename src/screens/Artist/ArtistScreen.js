@@ -12,7 +12,7 @@ import TopTracks from '../../components/Artist/TopTracks';
 import SubHeader from '../../components/Artist/SubHeader';
 import YourLikes from '../../components/Artist/YourLikes';
 
-class ArtistScreen extends React.Component {
+class ArtistScreen extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {

@@ -56,38 +56,10 @@ export const config = {
 
 const Tab = createBottomTabNavigator();
 
-function LoggedInNavigation(props) {
-	const {store} = useContext(ReactReduxContext);
+const Stack = createNativeStackNavigator();
 
-	function SettingsScreen({navigation}) {
-		return (
-			<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-				<Text>Settings!</Text>
-				<Button
-					title="Go to Home"
-					onPress={() => navigation.navigate('Home')}
-				/>
-			</View>
-		);
-	}
-
-	function TestScreen({navigation}) {
-		return (
-			<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-				<Text>Test !</Text>
-				<Button
-					title="Go to Home"
-					onPress={() => navigation.navigate('Home')}
-				/>
-			</View>
-		);
-	}
-
-	const Tab = createBottomTabNavigator();
-
-	const Stack = createNativeStackNavigator();
-
-	function HomeNavigationStack() {
+class HomeNavigationStack extends React.PureComponent{
+	render(){
 		return (
 			<Stack.Navigator
 				screenOptions={{
@@ -104,7 +76,6 @@ function LoggedInNavigation(props) {
 					name="Home"
 					component={HomeScreen}
 				/>
-				<Stack.Screen name="Settings" component={SettingsScreen}/>
 				<Stack.Screen name="Category" component={Category}/>
 				<Stack.Screen name="Album" component={Album}/>
 				<Stack.Screen name="Artist" component={Artist}/>
@@ -118,8 +89,10 @@ function LoggedInNavigation(props) {
 			</Stack.Navigator>
 		);
 	}
+}
 
-	function SearchNavigationStack() {
+class SearchNavigationStack extends React.PureComponent {
+	render(){
 		return (
 			<Stack.Navigator
 				screenOptions={{
@@ -136,7 +109,6 @@ function LoggedInNavigation(props) {
 					name="Search"
 					component={SearchScreen}
 				/>
-				<Stack.Screen name="Settings" component={SettingsScreen}/>
 				<Stack.Screen name="Category" component={Category}/>
 				<Stack.Screen name="Album" component={Album}/>
 				<Stack.Screen name="Artist" component={Artist}/>
@@ -148,8 +120,10 @@ function LoggedInNavigation(props) {
 			</Stack.Navigator>
 		);
 	}
+}
 
-	function libraryNavigationStack() {
+class libraryNavigationStack extends React.PureComponent {
+	render(){
 		return (
 			<View style={{flex: 1}}>
 				<Stack.Navigator
@@ -170,7 +144,6 @@ function LoggedInNavigation(props) {
 						name="Test"
 						component={Library}
 					/>
-					<Stack.Screen name="Settings" component={SettingsScreen}/>
 					<Stack.Screen name="Category" component={Category}/>
 					<Stack.Screen
 						name="Album"
@@ -210,44 +183,69 @@ function LoggedInNavigation(props) {
 			</View>
 		);
 	}
+}
 
-	return (
-		<NavigationContainer ref={navigationRef}>
-			<Tab.Navigator
-				screenOptions={({route}) => ({
-					tabBarIcon: ({focused, color, size}) => {
-						let iconName = 'home';
-						if (route.name === 'Accueil') {
-							iconName = focused ? 'home' : 'home';
-							color = focused ? '#B00D70' : 'white';
-						} else if (route.name === 'Rechercher') {
-							iconName = focused ? 'search' : 'search';
-							color = focused ? '#B00D70' : 'white';
-						} else if (route.name === 'Librarie') {
-							iconName = focused ? 'book' : 'book';
-							color = focused ? '#B00D70' : 'white';
-						}
-						return <Icon name={iconName} size={24} color={color}/>;
-					},
-					tabBarActiveTintColor: '#B00D70',
-					tabBarInactiveTintColor: 'white',
-					tabBarStyle: {
-						position: 'absolute',
-						bottom: 0,
-						borderTopWidth: 0,
-						elevation: 0
-					},
-					tabBarBackground: () => (
-						<BlurView tint="dark" intensity={85} style={StyleSheet.absoluteFill}/>
-					),
-					headerShown: false,
-				})}>
-				<Tab.Screen name="Accueil" component={HomeNavigationStack}/>
-				<Tab.Screen name="Rechercher" component={SearchNavigationStack}/>
-				<Tab.Screen name="Librarie" component={libraryNavigationStack}/>
-			</Tab.Navigator>
-		</NavigationContainer>
-	);
+
+class LoggedInNavigation extends React.PureComponent{
+
+	constructor(props) {
+		super(props);
+	}
+
+	TestScreen({navigation}) {
+		return (
+			<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+				<Text>Test !</Text>
+				<Button
+					title="Go to Home"
+					onPress={() => navigation.navigate('Home')}
+				/>
+			</View>
+		);
+	}
+
+
+
+
+	render(){
+		return (
+			<NavigationContainer ref={navigationRef}>
+				<Tab.Navigator
+					screenOptions={({route}) => ({
+						tabBarIcon: ({focused, color, size}) => {
+							let iconName = 'home';
+							if (route.name === 'Accueil') {
+								iconName = focused ? 'home' : 'home';
+								color = focused ? '#B00D70' : 'white';
+							} else if (route.name === 'Rechercher') {
+								iconName = focused ? 'search' : 'search';
+								color = focused ? '#B00D70' : 'white';
+							} else if (route.name === 'Librarie') {
+								iconName = focused ? 'book' : 'book';
+								color = focused ? '#B00D70' : 'white';
+							}
+							return <Icon name={iconName} size={24} color={color}/>;
+						},
+						tabBarActiveTintColor: '#B00D70',
+						tabBarInactiveTintColor: 'white',
+						tabBarStyle: {
+							position: 'absolute',
+							bottom: 0,
+							borderTopWidth: 0,
+							elevation: 0
+						},
+						tabBarBackground: () => (
+							<BlurView tint="dark" intensity={85} style={StyleSheet.absoluteFill}/>
+						),
+						headerShown: false,
+					})}>
+					<Tab.Screen name="Accueil" component={HomeNavigationStack}/>
+					<Tab.Screen name="Rechercher" component={SearchNavigationStack}/>
+					<Tab.Screen name="Librarie" component={libraryNavigationStack}/>
+				</Tab.Navigator>
+			</NavigationContainer>
+		);
+	}
 }
 
 const mapStateToProps = store => {
