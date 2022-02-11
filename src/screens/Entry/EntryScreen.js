@@ -4,6 +4,7 @@ import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 
 //Authentication handler
 import authHandler from '../../utils/authenticationHandler';
+import listeningHandler from '../../utils/listeningHandler';
 
 import PlayerAlt from '../../components/Global/PlayerAlt';
 
@@ -71,7 +72,6 @@ class EntryScreen extends Component {
 							translucent={true}
 						/>
 						<LoggedinNavigation/>
-						<PlayerAlt/>
 					</SafeAreaView>
 				</SafeAreaProvider>
 			);
@@ -93,6 +93,7 @@ const mapStateToProps = state => {
 		authentication: state.authentication,
 		accessToken: state.authentication.accessToken,
 		refreshToken: state.authentication.refreshToken,
+		listening: state.listening.listening
 	};
 };
 

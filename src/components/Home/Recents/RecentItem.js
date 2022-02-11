@@ -63,7 +63,7 @@ class Recentitem extends Component {
 					<TouchableOpacity onPress={() => this._play(this.props.recent?.track?.uri)} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
 						<View style={{marginLeft: 0, backgroundColor: '#2c3e50', padding: 5, borderBottomRightRadius: 10, borderBottomLeftRadius: 10, flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
 							<FontAwesome5Icon name={'play-circle'} size={12} color='white' style={{marginRight: 10}}/>
-							<Text>{this.props.recent?.track?.name}</Text>
+							<Text numberOfLines={1} style={{maxWidth: "90%"}}>{this.props.recent?.track?.name}</Text>
 						</View>
 					</TouchableOpacity>
 				</View>
