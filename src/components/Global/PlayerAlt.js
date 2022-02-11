@@ -405,6 +405,7 @@ class PlayerAlt extends React.Component {
 				useNativeDriver: false,
 			}).start();
 		}
+
 		this.setState((prevState) => ({
 			...prevState,
 			waiting_list: {
