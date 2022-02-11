@@ -25,8 +25,16 @@ import {BottomTabBarHeightContext} from '@react-navigation/bottom-tabs';
 import SeekBar from './Player/Seek';
 import TrackItem from '../Track/TrackItem';
 import AlbumItemWithOffset from '../Album/AlbumItemWithOffset';
+import listeningHandler from '../../utils/listeningHandler';
+import {
+	setAccessToken,
+	setLoadingFalse,
+	setLoadingTrue,
+	setRefreshToken,
+} from '../../redux/features/authentication/authenticationSlice';
+import {getListening} from '../../redux/features/listening/listeningSlice';
 
-class PlayerAlt extends React.Component {
+class PlayerAlt extends React.PureComponent {
 
 	constructor(props) {
 		super(props);
@@ -221,10 +229,8 @@ class PlayerAlt extends React.Component {
 
 	componentDidMount() {
 		setInterval(() => {
-			this._get_listening().then(json => {
-				this.setState({listening: json})
-			});
-		}, 1000);
+			this._get_listening();
+		}, 1000)
 		// BackHandler.addEventListener('hardwareBackPress', () => {
 		// 	this.handleBackButton();
 		// })
@@ -236,15 +242,19 @@ class PlayerAlt extends React.Component {
 		// })
 	}
 
-	_get_listening = () => {
-		const promise = axios.get('https://api.spotify.com/v1/me/player', {
-			headers: {
-				Accept: "application/json",
-				Authorization: "Bearer " + this.props.store.authentication.accessToken,
-				"Content-Type": "application/json"
-			},
-		});
-		return promise.then(data => data.data);
+	_get_listening = async () => {
+		const listeningObject = await listeningHandler.get_listening_state(this.props.store.authentication.accessToken);
+		this.props.getListening({listening: listeningObject.data})
+		this.setState({listening: this.props.store.listening.listening});
+		// this.setState({listening: this.props.store.listening.listening});
+		// const promise = axios.get('https://api.spotify.com/v1/me/player', {
+		// 	headers: {
+		// 		Accept: "application/json",
+		// 		Authorization: "Bearer " + this.props.store.authentication.accessToken,
+		// 		"Content-Type": "application/json"
+		// 	},
+		// });
+		// return promise.then(data => data.data);
 	}
 
 	_pause = () => {
@@ -405,6 +415,7 @@ class PlayerAlt extends React.Component {
 				useNativeDriver: false,
 			}).start();
 		}
+
 		this.setState((prevState) => ({
 			...prevState,
 			waiting_list: {
@@ -1226,5 +1237,8 @@ const mapStateToProps = store => {
 		store: store
 	}
 }
+const mapDispatchToProps = {
+	getListening,
+};
 
-export default connect(mapStateToProps)(PlayerAlt)
+export default connect(mapStateToProps, mapDispatchToProps)(PlayerAlt)

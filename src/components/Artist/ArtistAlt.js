@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Dimensions, Image, StyleSheet, Text, TouchableOpacity} from 'react-native';
 
-class ArtistAlt extends Component {
+class ArtistAlt extends React.PureComponent {
 
 	constructor(props) {
 		super(props);

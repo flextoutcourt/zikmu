@@ -5,7 +5,7 @@ import {FlatList, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import FollowItem from './FollowItem';
 
-class RecentComponent extends Component {
+class RecentComponent extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {

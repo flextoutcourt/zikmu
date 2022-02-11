@@ -3,7 +3,7 @@ import {Dimensions, Text} from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {connect} from 'react-redux';
 
-class WaitingList extends React.Component {
+class WaitingList extends React.PureComponent {
 	render() {
 		return (
 			<SafeAreaView

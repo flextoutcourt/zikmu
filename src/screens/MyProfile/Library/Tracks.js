@@ -7,7 +7,7 @@ import LinearGradient from 'react-native-linear-gradient';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 
-class Tracks extends React.Component {
+class Tracks extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {

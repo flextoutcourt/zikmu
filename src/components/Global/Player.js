@@ -21,7 +21,7 @@ import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import Liked from '../Track/Liked';
 
 
-class Player extends React.Component {
+class Player extends React.PureComponent {
 
 	constructor(props) {
 		super(props);

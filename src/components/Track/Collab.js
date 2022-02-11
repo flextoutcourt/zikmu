@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from 'react-redux';
 import {Image, Text, View} from 'react-native';
 
-class Collab extends Component {
+class Collab extends React.PureComponent {
 
 	constructor(props) {
 		super(props);

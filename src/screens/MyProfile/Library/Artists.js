@@ -7,7 +7,7 @@ import {connect} from 'react-redux';
 import ArtistAlt from '../../../components/Artist/ArtistAlt';
 
 // create a component
-class Artist extends React.Component {
+class Artist extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {

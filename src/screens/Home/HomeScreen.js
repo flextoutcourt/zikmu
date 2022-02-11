@@ -8,7 +8,7 @@ import GenreComponent from '../../components/Home/Genres/GenreComponent';
 import ReleaseComponent from '../../components/Home/Release/ReleaseComponent';
 import FollowComponent from '../../components/Home/Follows/FollowComponent';
 
-class HomeScreen extends Component {
+class HomeScreen extends React.PureComponent {
 	constructor(props) {
 		super(props);
 	}

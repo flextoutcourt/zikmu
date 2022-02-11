@@ -4,7 +4,7 @@ import rootNavigation from './../../utils/RootNavigation';
 
 import {connect} from 'react-redux';
 
-class GenreItem extends React.Component {
+class GenreItem extends React.PureComponent {
 	constructor(props) {
 		super(props);
 	}

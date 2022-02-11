@@ -4,7 +4,7 @@ import axios from 'axios';
 import {Icon} from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
 
-class Bigplayer extends Component {
+class Bigplayer extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {

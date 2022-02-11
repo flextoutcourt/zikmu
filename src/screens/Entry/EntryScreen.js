@@ -1,9 +1,10 @@
-import React, {Component} from 'react';
+import React, {PureComponent} from 'react';
 import {StatusBar,} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 
 //Authentication handler
 import authHandler from '../../utils/authenticationHandler';
+import listeningHandler from '../../utils/listeningHandler';
 
 import PlayerAlt from '../../components/Global/PlayerAlt';
 
@@ -20,7 +21,7 @@ import {
 import LoggedinNavigation from '../../navigation/loggedInNavigation';
 import GuestNavigation from '../../navigation/guestNavigation';
 
-class EntryScreen extends Component {
+class EntryScreen extends PureComponent {
 	state = {refreshToken: ''};
 
 	componentDidUpdate(prevProps) {
@@ -50,6 +51,10 @@ class EntryScreen extends Component {
 
 		this.props.setLoadingFalse();
 	};
+
+	shouldComponentUpdate(nextProp, nextState){
+		return true;
+	}
 
 	render() {
 		const {accessToken, loading} = this.props.authentication;

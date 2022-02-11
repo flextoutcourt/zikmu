@@ -12,7 +12,7 @@ import {SafeAreaView} from 'react-native-safe-area-context';
 import axios from 'axios';
 import Button from '../../components/Home/Guest/Button';
 
-class LoginScreen extends Component {
+class LoginScreen extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {

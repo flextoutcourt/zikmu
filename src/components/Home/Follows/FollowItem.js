@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Dimensions, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {connect} from 'react-redux';
 
-class Recentitem extends Component {
+class Recentitem extends React.PureComponent {
     constructor(props) {
         super(props);
     }

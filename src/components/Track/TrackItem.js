@@ -4,7 +4,7 @@ import {connect} from 'react-redux';
 import Liked from "./Liked";
 import Collab from "./Collab";
 
-class TrackItem extends React.Component {
+class TrackItem extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {

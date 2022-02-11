@@ -3,7 +3,7 @@ import {Dimensions, Image, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import FontAwesome from "react-native-vector-icons/FontAwesome";
 
-class YourLikes extends React.Component {
+class YourLikes extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {

@@ -4,7 +4,7 @@ import {Dimensions, FlatList, Image, Text, TouchableOpacity, View} from 'react-n
 import {SafeAreaView} from 'react-native-safe-area-context';
 import {connect} from 'react-redux';
 
-class CategoryScreen extends React.Component {
+class CategoryScreen extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {

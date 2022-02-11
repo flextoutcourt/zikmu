@@ -8,7 +8,7 @@ import {connect} from 'react-redux';
 import TrackItem from '../../components/Track/TrackItem';
 import Header from '../../components/Playlist/Header';
 
-class PlaylistScreen extends React.Component {
+class PlaylistScreen extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {

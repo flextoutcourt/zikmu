@@ -9,7 +9,7 @@ import SelfHeader from '../../components/User/SelfHeader';
 import Header from '../../components/User/Header';
 import axios from 'axios';
 
-class UserScreen extends Component{
+class UserScreen extends React.PureComponent{
 
     constructor(props) {
         super(props);

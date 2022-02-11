@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 import axios from 'axios';
 import {connect} from 'react-redux';
 
-class Miniplayer extends Component {
+class Miniplayer extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {

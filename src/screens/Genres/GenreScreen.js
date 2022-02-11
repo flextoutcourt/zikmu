@@ -22,7 +22,7 @@ import Playlist from '../../components/Genres/Playlist';
 import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import Header from '../../components/Genres/Header';
 
-class GenreScreen extends Component{
+class GenreScreen extends React.PureComponent{
 
     constructor(props){
         super(props);

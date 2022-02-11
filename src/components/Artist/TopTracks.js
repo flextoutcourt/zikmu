@@ -4,7 +4,7 @@ import {FlatList, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import TrackItem from '../Track/TrackItem';
 
-class TopTracks extends React.Component {
+class TopTracks extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {

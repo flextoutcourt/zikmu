@@ -10,7 +10,7 @@ import Header from '../../components/Album/Header';
 import moment from 'moment';
 import ArtistItem from '../../components/Artist/ArtistItem';
 
-class AlbumScreen extends React.Component {
+class AlbumScreen extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -145,23 +145,29 @@ class AlbumScreen extends React.Component {
 			extrapolate: Extrapolate.CLAMP,
 		});
 
-		const br = this.state.scrollY.interpolate({
-			inputRange: [0, 10],
-			outputRange: [0, 10],
-			extrapolate: Extrapolate.CLAMP,
-		});
-
 		const height = this.state.scrollY.interpolate({
 			inputRange: [0, 125],
-			outputRange: [Dimensions.get('screen').width, Dimensions.get('screen').width],
+			outputRange: [Dimensions.get('screen').width - (StatusBar.currentHeight * 2), Dimensions.get('screen').width],
 			extrapolate: Extrapolate.CLAMP
 		});
 
 		const mt = this.state.scrollY.interpolate({
 			inputRange: [0, 125],
-			outputRange: [0, 125],
+			outputRange: [StatusBar.currentHeight + 10, StatusBar.currentHeight + 30],
 			extrapolate: Extrapolate.CLAMP
 		});
+
+		const ml = this.state.scrollY.interpolate({
+			inputRange: [0, 125],
+			outputRange: [StatusBar.currentHeight, 0],
+			extrapolate: Extrapolate.CLAMP
+		});
+
+		const br = this.state.scrollY.interpolate({
+			inputRange: [0, 125],
+			outputRange: [10, 25],
+			extrapolate: Extrapolate.CLAMP
+		})
 
 		const transform = [{scale}];
 		return (
@@ -189,18 +195,19 @@ class AlbumScreen extends React.Component {
 							margin: 0,
 							marginBottom: mb,
 							marginTop: mt,
+							marginLeft: ml,
 							transform: transform,
 							width: height,
 							height: height,
 							opacity: opacity,
 						}}>
-						<Image
+						<Animated.Image
 							source={{uri: this.state.album?.images[0]?.url}}
 							style={{
 								width: '100%',
 								height: '100%',
 								marginBottom: 15,
-								borderRadius: 0,
+								borderRadius: br,
 								elevation: 10,
 							}}
 						/>

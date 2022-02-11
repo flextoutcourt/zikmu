@@ -9,7 +9,7 @@ import * as rootNavigation from './../../../utils/RootNavigation';
 
 
 // create a component
-class Playlists extends React.Component {
+class Playlists extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
