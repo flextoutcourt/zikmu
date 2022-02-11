@@ -6,6 +6,7 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import {connect} from 'react-redux';
 import SelfHeader from '../../components/User/SelfHeader';
 import axios from 'axios';
+import PlayerAlt from '../../components/Global/PlayerAlt';
 
 class SelfScreen extends Component{
 
@@ -58,6 +59,7 @@ class SelfScreen extends Component{
                 {/*    Profil utilisateur*/}
                 {/*    Differents settings */}
                 </ScrollView>
+                <PlayerAlt/>
             </LinearGradient>
         )
     }
