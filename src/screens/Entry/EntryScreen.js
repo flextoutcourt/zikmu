@@ -52,20 +52,16 @@ class EntryScreen extends PureComponent {
 		this.props.setLoadingFalse();
 	};
 
-	shouldComponentUpdate(nextProp, nextState){
-		return true;
-	}
-
 	render() {
 		const {accessToken, loading} = this.props.authentication;
 
-		// if (loading) {
-		//   return (
-		//     <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-		//       <Text>Chargement de l'application en cours</Text>
-		//     </View>
-		//   )
-		// }
+		if (loading) {
+		  return (
+		    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+		      <Text>Chargement de l'application en cours</Text>
+		    </View>
+		  )
+		}
 
 		if (accessToken) {
 			return (

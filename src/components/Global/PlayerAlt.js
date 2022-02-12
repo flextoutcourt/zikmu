@@ -232,12 +232,14 @@ class PlayerAlt extends React.Component {
 		this._get_listening();
 	}
 
-	componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
-
+	_start_interval = () => {
+		// this.interval = setInterval(() => {
+			this._get_listening();
+		// }, 2000)
 	}
 
-	shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
-		return true;
+	_stop_auto_refresh = () => {
+		// clearInterval(this.interval);
 	}
 
 	_get_listening = async () => {
@@ -393,7 +395,7 @@ class PlayerAlt extends React.Component {
 	}
 
 	_deploy_waiting_list = () => {
-
+		this._stop_auto_refresh();
 		if(this.state.waiting_list.big){
 			Animated.spring(this.state.waiting_list.top, {
 				toValue: Dimensions.get('screen').height,
@@ -421,11 +423,12 @@ class PlayerAlt extends React.Component {
 				big: !this.state.waiting_list.big,
 			}
 		}))
+		this._start_interval();
 
 	}
 
 	_deploy_share_menu = () => {
-
+		this._stop_auto_refresh();
 		if(this.state.share_menu.big){
 			Animated.spring(this.state.share_menu.top, {
 				toValue: Dimensions.get('screen').height,
@@ -452,11 +455,12 @@ class PlayerAlt extends React.Component {
 				big: !this.state.share_menu.big,
 			}
 		}))
+		this._start_interval();
 
 	}
 
 	_deploy_track_infos = () => {
-
+		this._stop_auto_refresh();
 		if(this.state.track_infos.big){
 			Animated.spring(this.state.track_infos.top, {
 				toValue: Dimensions.get('screen').height,
@@ -483,7 +487,7 @@ class PlayerAlt extends React.Component {
 				big: !this.state.track_infos.big,
 			}
 		}))
-
+		this._start_interval();
 	}
 
 	_get_available_devices = () => {
