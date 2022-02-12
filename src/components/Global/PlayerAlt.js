@@ -229,7 +229,7 @@ class PlayerAlt extends React.Component {
 	}
 
 	componentDidMount() {
-		this._get_listening();
+		this._start_interval();
 	}
 
 	_start_interval = () => {

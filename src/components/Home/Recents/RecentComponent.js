@@ -5,7 +5,7 @@ import {FlatList, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import Recentitem from './RecentItem';
 
-class RecentComponent extends React.PureComponent {
+class RecentComponent extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -41,6 +41,10 @@ class RecentComponent extends React.PureComponent {
 
 		return json.items;
 	}
+
+	// shouldComponentUpdate(nextProps, nextState, nextContext) {
+	// 	return false;
+	// }
 
 	componentDidMount = () => {
 		this._get_recent().then(json => this.setState({recent: json.items}));
