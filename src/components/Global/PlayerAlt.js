@@ -17,7 +17,8 @@ import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import LinearGradient from 'react-native-linear-gradient';
 import * as rootNavigation from '../../utils/RootNavigation';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+// import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/Feather';
 import Liked from '../Track/Liked';
 import axios from 'axios';
 import {connect} from 'react-redux';
@@ -245,7 +246,7 @@ class PlayerAlt extends React.PureComponent {
 	_get_listening = async () => {
 		const listeningObject = await listeningHandler.get_listening_state(this.props.store.authentication.accessToken);
 		this.props.getListening({listening: listeningObject.data})
-		this.setState({listening: this.props.store.listening.listening});
+		// this.setState({listening: this.props.store.listening.listening});
 		// this.setState({listening: this.props.store.listening.listening});
 		// const promise = axios.get('https://api.spotify.com/v1/me/player', {
 		// 	headers: {
@@ -291,7 +292,7 @@ class PlayerAlt extends React.PureComponent {
 	}
 
 	_prev = () => {
-		if (this.state.listening?.progress_ms > 10000) {
+		if (this.props.store.listening.listening?.progress_ms > 10000) {
 			this._seek(0);
 		} else {
 			fetch('https://api.spotify.com/v1/me/player/previous', {
@@ -320,7 +321,7 @@ class PlayerAlt extends React.PureComponent {
 	}
 
 	_shuffle = () => {
-		fetch(`https://api.spotify.com/v1/me/player/shuffle?state=${!this.state.listening?.shuffle_state}`, {
+		fetch(`https://api.spotify.com/v1/me/player/shuffle?state=${!this.props.store.listening.listening?.shuffle_state}`, {
 			headers: {
 				Accept: "application/json",
 				Authorization: "Bearer " + this.props.store.authentication.accessToken,
@@ -332,9 +333,9 @@ class PlayerAlt extends React.PureComponent {
 
 	_repeat = () => {
 		let state;
-		if (this.state.listening?.repeat_state == 'context') {
+		if (this.props.store.listening.listening?.repeat_state == 'context') {
 			state = 'track';
-		} else if (this.state.listening?.repeat_state == 'track') {
+		} else if (this.props.store.listening.listening?.repeat_state == 'track') {
 			state = 'off';
 		} else {
 			state = 'context';
@@ -352,13 +353,13 @@ class PlayerAlt extends React.PureComponent {
 	_display_device_icon = (device_type) => {
 		// alert(device_type);
         if (device_type === 'Smartphone') {
-            return 'mobile';
+            return 'smartphone';
         } else if (device_type === 'Speaker') {
-            return 'volume-up';
+            return 'speaker';
         } else if (device_type === 'Computer') {
-            return 'laptop';
+            return 'hard-drive';
         } else {
-            return 'mobile';
+            return 'smartphone';
         }
     }
 
@@ -551,7 +552,7 @@ class PlayerAlt extends React.PureComponent {
 
 	render() {
 		return (
-			this.state.listening
+			this.props.store.listening.listening
 				?
 				<BottomTabBarHeightContext.Consumer>
 					{tabBarHeight => {
@@ -575,10 +576,10 @@ class PlayerAlt extends React.PureComponent {
 												?
 												<View style={{flex: 1, width: Dimensions.get('screen').width -20, minHeight: 50, alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', paddingHorizontal: 10}}>
 													<TouchableOpacity onPress={() => this._deploy_big_player()}>
-														<FontAwesome name={"angle-down"} size={24} color={"white"}/>
+														<Icon name={"chevron-down"} size={24} color={"white"}/>
 													</TouchableOpacity>
 													<TouchableOpacity onPress={() => this._deploy_track_infos()}>
-														<FontAwesome name={"bars"} size={24} color={"white"}/>
+														<Icon name={"menu"} size={24} color={"white"}/>
 													</TouchableOpacity>
 												</View>
 												:
@@ -609,7 +610,7 @@ class PlayerAlt extends React.PureComponent {
 													overflow: 'visible'
 												}}>
 													<Animated.Image
-														source={{uri: this.state.listening?.item?.album?.images[0]?.url}}
+														source={{uri: this.props.store.listening.listening?.item?.album?.images[0]?.url}}
 														style={{
 															minWidth: this.state.player.track_image.width ?? 40,
 															minHeight: this.state.player.track_image.height ?? 40,
@@ -648,19 +649,19 @@ class PlayerAlt extends React.PureComponent {
 																maxWidth: this.state.big ? '90%' : '100%'
 															}}
 														  		numberOfLines={1}>
-																{this.state.listening?.item?.name}
+																{this.props.store.listening.listening?.item?.name}
 															</Text>
-															{!this.state.big ? <FontAwesome name={"circle"} size={5}
+															{!this.state.big ? <Icon name={"circle"} size={5}
 															                                style={{marginHorizontal: 5}}/> : null}
 															{
 																this.state.big
 																?
 																	<FlatList
-																		data={this.state.listening?.item?.artists}
+																		data={this.props.store.listening.listening?.item?.artists}
 																		horizontal={true}
 																		contentContainerStyle={{maxWidth: '90%'}}
 																		ItemSeparatorComponent={() => (
-																			<FontAwesome name={"circle"} size={5}
+																			<Icon name={"circle"} size={5}
 																						 style={{marginHorizontal: 5, alignSelf: 'center'}}/>
 																		)}
 																		renderItem={({item, key}) => (
@@ -687,7 +688,7 @@ class PlayerAlt extends React.PureComponent {
 																:
 																	<TouchableOpacity onPress={() => {
 																		rootNavigation.navigate('Artist', {
-																			artist_id: this.state.listening?.item?.artists[0].id
+																			artist_id: this.props.store.listening.listening?.item?.artists[0].id
 																		});
 																		setTimeout(() => {
 																			this.state.big ? this._deploy_big_player() : null
@@ -697,7 +698,7 @@ class PlayerAlt extends React.PureComponent {
 																		<Text style={{
 																			color: 'white',
 																			fontSize: this.state.player.track_infos.fontSize - (this.state.big ? 4 : 0)
-																		}} numberOfLines={1}>{this.state.listening?.item?.artists[0]?.name}</Text>
+																		}} numberOfLines={1}>{this.props.store.listening.listening?.item?.artists[0]?.name}</Text>
 																	</TouchableOpacity>
 															}
 
@@ -706,10 +707,10 @@ class PlayerAlt extends React.PureComponent {
 															<View style={{flexDirection: 'row'}}>
 																<Liked track={this.state?.listening?.item} iconSize={this.state.big ? 24 : 24}/>
 																{
-																	this.state.listening?.actions?.disallows?.toggling_repeat_context && this.state.listening?.actions?.disallows?.toggling_repeat_track && this.state.listening?.actions?.disallows?.toggling_shuffle
+																	this.props.store.listening.listening?.actions?.disallows?.toggling_repeat_context && this.props.store.listening.listening?.actions?.disallows?.toggling_repeat_track && this.props.store.listening.listening?.actions?.disallows?.toggling_shuffle
 																	?
 																		<TouchableOpacity onPress={() => alert('not liked')} style={{marginLeft: 10}}>
-																			<FontAwesome name={'ban'} size={24} color={'white'}/>
+																			<Icon name={'slash'} size={24} color={'white'}/>
 																		</TouchableOpacity>
 																	:
 																		null
@@ -726,15 +727,15 @@ class PlayerAlt extends React.PureComponent {
 																alignItems: 'center'
 															}}>
 
-																<FontAwesome
-																	name={this._display_device_icon(this.state.listening?.device?.type)}
+																<Icon
+																	name={this._display_device_icon(this.props.store.listening.listening?.device?.type)}
 																	size={16}
 																	style={{color: 'white', fontWeight: 'bold'}}/>
 																<Text style={{
 																	marginLeft: 5,
 																	color: "white",
 																	fontWeight: 'bold'
-																}}>{this.state.listening?.device?.name}</Text>
+																}}>{this.props.store.listening.listening?.device?.name}</Text>
 															</View>
 															:
 															null
@@ -756,8 +757,8 @@ class PlayerAlt extends React.PureComponent {
 															width: Dimensions.get('screen').width - 20
 														}}>
 															<SeekBar
-																trackLength={!isNaN(this.state.listening?.item?.duration_ms / 1000) ? this.state.listening?.item?.duration_ms / 1000 : 10}
-																currentPosition={!isNaN(this.state.listening?.progress_ms / 1000) ? this.state.listening?.progress_ms / 1000 : 0}
+																trackLength={!isNaN(this.props.store.listening.listening?.item?.duration_ms / 1000) ? this.props.store.listening.listening?.item?.duration_ms / 1000 : 10}
+																currentPosition={!isNaN(this.props.store.listening.listening?.progress_ms / 1000) ? this.props.store.listening.listening?.progress_ms / 1000 : 0}
 																onSeek={this._seek}/>
 														</View>
 														<View style={{
@@ -767,12 +768,12 @@ class PlayerAlt extends React.PureComponent {
 															alignItems: 'center',
 															flex: 1
 														}}>
-															<TouchableOpacity onPress={() => this._shuffle()} disabled={this.state.listening.actions.disallows.toggling_shuffle}>
-																<Icon name="random" size={24}
-																      style={{color: this.state.listening?.shuffle_state ? 'green' :'white', opacity: this.state.listening.actions.disallows.toggling_shuffle ? 0.2 : 1}}/>
+															<TouchableOpacity onPress={() => this._shuffle()} disabled={this.props.store.listening.listening.actions.disallows.toggling_shuffle}>
+																<Icon name="shuffle" size={24}
+																      style={{color: this.props.store.listening.listening?.shuffle_state ? 'green' :'white', opacity: this.props.store.listening.listening.actions.disallows.toggling_shuffle ? 0.2 : 1}}/>
 															</TouchableOpacity>
 															<TouchableOpacity onPress={() => this._prev()}>
-																<Icon name="step-backward"
+																<Icon name="skip-back"
 																      size={this.state.big ? 36 : 24} style={{
 																	marginLeft: 10,
 																	marginRight: 10,
@@ -780,7 +781,7 @@ class PlayerAlt extends React.PureComponent {
 																}}/>
 															</TouchableOpacity>
 															{
-																this.state.listening.is_playing
+																this.props.store.listening.listening.is_playing
 																	?
 																	<TouchableOpacity
 																		onPress={() => {
@@ -809,16 +810,16 @@ class PlayerAlt extends React.PureComponent {
 																	</TouchableOpacity>
 															}
 															<TouchableOpacity onPress={() => this._next()}>
-																<Icon name="step-forward"
+																<Icon name="skip-forward"
 																      size={this.state.big ? 36 : 24} style={{
 																	marginLeft: 10,
 																	marginRight: 10,
 																	color: 'white'
 																}}/>
 															</TouchableOpacity>
-															<TouchableOpacity onPress={() => this._repeat()} disabled={this.state.listening.actions.disallows.toggling_repeat_track || this.state.listening.actions.disallows.toggling_repeat_context}>
-																<Icon name="redo" size={24}
-																      style={{color: this.state.listening?.repeat_state == 'context' ? 'green' : this.state.listening?.repeat_state == 'track' ? '#B00D70' : 'white', opacity: this.state.listening.actions.disallows.toggling_repeat_track || this.state.listening.actions.disallows.toggling_repeat_context ? 0.2 : 1}}/>
+															<TouchableOpacity onPress={() => this._repeat()} disabled={this.props.store.listening.listening.actions.disallows.toggling_repeat_track || this.props.store.listening.listening.actions.disallows.toggling_repeat_context}>
+																<Icon name="repeat" size={24}
+																      style={{color: this.props.store.listening.listening?.repeat_state == 'context' ? 'green' : this.props.store.listening.listening?.repeat_state == 'track' ? '#B00D70' : 'white', opacity: this.props.store.listening.listening.actions.disallows.toggling_repeat_track || this.props.store.listening.listening.actions.disallows.toggling_repeat_context ? 0.2 : 1}}/>
 															</TouchableOpacity>
 														</View>
 														<View style={{
@@ -834,8 +835,8 @@ class PlayerAlt extends React.PureComponent {
 																alignItems: 'center',
 																flex: 2
 															}}>
-																<FontAwesome
-																	name={this._display_device_icon(this.state.listening?.device?.type)}
+																<Icon
+																	name={this._display_device_icon(this.props.store.listening.listening?.device?.type)}
 																	size={24} style={{
 																	color: 'white',
 																	fontWeight: 'bold',
@@ -845,7 +846,7 @@ class PlayerAlt extends React.PureComponent {
 																	marginLeft: 5,
 																	color: "white",
 																	fontWeight: 'bold'
-																}}>{this.state.listening?.device?.name}</Text>
+																}}>{this.props.store.listening.listening?.device?.name}</Text>
 															</TouchableOpacity>
 															<View style={{
 																flex: 2,
@@ -865,7 +866,7 @@ class PlayerAlt extends React.PureComponent {
 																</TouchableOpacity>
 																<TouchableOpacity
 																	onPress={() => this._deploy_waiting_list()}>
-																	<Icon name="stream" size={24}
+																	<Icon name="list" size={24}
 																	      style={{color: 'white'}}/>
 																</TouchableOpacity>
 															</View>
@@ -879,12 +880,12 @@ class PlayerAlt extends React.PureComponent {
 														justifyContent: this.state.big ? 'space-between' : 'flex-end',
 														minWidth: this.state.big ? Dimensions.get('screen').width - 20 : 'auto'
 													}}>
-														<Icon name="bluetooth-b" size={this.state.big ? 48 : 24}
+														<Icon name="speaker" size={this.state.big ? 48 : 24}
 														      style={{marginLeft: 10, marginRight: 10}}/>
 														<Liked track={this.state?.listening?.item}
 														       iconSize={this.state.big ? 48 : 24}/>
 														{
-															this.state.listening.is_playing
+															this.props.store.listening.listening.is_playing
 																?
 																<TouchableOpacity
 																	onPress={() => {
@@ -939,7 +940,7 @@ class PlayerAlt extends React.PureComponent {
 														<View style={{
 															height: 2,
 															backgroundColor: 'white',
-															width: (this.state.listening?.progress_ms) / (this.state.listening?.item?.duration_ms) * 100 + "%",
+															width: (this.props.store.listening.listening?.progress_ms) / (this.props.store.listening.listening?.item?.duration_ms) * 100 + "%",
 															borderRadius: 5
 														}}/>
 													</View>
@@ -953,12 +954,12 @@ class PlayerAlt extends React.PureComponent {
 								<Animated.View style={{position: 'absolute', top: this.state.device_menu.top, left: this.state.device_menu.left, right: this.state.device_menu.right, bottom: this.state.device_menu.bottom, height: this.state.device_menu.height, backgroundColor: '#8e44ad', paddingTop: 10, flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
 									<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row', paddingHorizontal: 30}}>
 										<TouchableOpacity onPress={() => this._deploy_devices_menu()}>
-											<FontAwesome name={"close"} size={24} color={"white"}/>
+											<Icon name={"x"} size={24} color={"white"}/>
 										</TouchableOpacity>
 									</View>
 									<View style={{flex: 1, padding: 30}}>
 										<View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-											<FontAwesome name={'music'} size={48} color={'white'} />
+											<Icon name={'music'} size={48} color={'white'} />
 											<View style={{marginLeft: 20}}>
 												<Text style={{color: 'white', fontSize: 22, fontWeight: 'bold'}}>Écoute en cours sur :</Text>
 												<Text style={{color: 'white', fontSize: 18}}>{this.state.devices?.active?.name}</Text>
@@ -969,7 +970,7 @@ class PlayerAlt extends React.PureComponent {
 											data={this.state.devices?.list}
 											renderItem={({item, key}) => (
 												<TouchableOpacity onPress={() => this._transfer_playback(item.id)} style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-													<FontAwesome name={this._display_device_icon(item.type)} size={48} color={'white'} />
+													<Icon name={this._display_device_icon(item.type)} size={48} color={'white'} />
 													<Text style={{fontSize: 16, marginLeft: 25}}>{item.name}</Text>
 												</TouchableOpacity>
 											)}
@@ -980,7 +981,7 @@ class PlayerAlt extends React.PureComponent {
 									<LinearGradient colors={['#8e44ad', '#2f3640']} style={{paddingTop: StatusBar.currentHeight, flex: 1}} >
 										<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row', paddingHorizontal: 30}}>
 											<TouchableOpacity onPress={() => this._deploy_waiting_list()}>
-												<FontAwesome name={"close"} size={24} color={"white"}/>
+												<Icon name={"x"} size={24} color={"white"}/>
 											</TouchableOpacity>
 										</View>
 										{
@@ -988,8 +989,8 @@ class PlayerAlt extends React.PureComponent {
 											?
 												<View style={{elevation: 10, shadowColor: '#000'}}>
 													<Text style={{marginLeft: 10, fontSize: 16, color: 'white'}}>En cours de lecture :</Text>
-													<TrackItem track={this.state.listening?.item} album={this.state.listening?.item?.album} />
-													{this.state.listening?.context ? <Text style={{marginLeft: 10, marginBottom: 10, fontSize: 16, color: 'white'}}>Prochains titres {this.state.context?.type == 'album' ? "de " + this.state.listening?.item?.album?.name : null} : </Text> : null}
+													<TrackItem track={this.props.store.listening.listening?.item} album={this.props.store.listening.listening?.item?.album} />
+													{this.props.store.listening.listening?.context ? <Text style={{marginLeft: 10, marginBottom: 10, fontSize: 16, color: 'white'}}>Prochains titres {this.state.context?.type == 'album' ? "de " + this.props.store.listening.listening?.item?.album?.name : null} : </Text> : null}
 												</View>
 											:
 												null
@@ -1000,9 +1001,9 @@ class PlayerAlt extends React.PureComponent {
 												?
 													<View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
 														{
-															this.state.listening.context
+															this.props.store.listening.listening.context
 																?
-																	<AlbumItemWithOffset context={this.state.listening?.context} listening={this.state.listening} />
+																	<AlbumItemWithOffset context={this.props.store.listening.listening?.context} listening={this.props.store.listening.listening} />
 																:
 																null
 														}
@@ -1018,7 +1019,7 @@ class PlayerAlt extends React.PureComponent {
 										<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', paddingHorizontal: 30}}>
 											<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white'}}>Partager</Text>
 											<TouchableOpacity onPress={() => this._deploy_share_menu()}>
-												<FontAwesome name={"close"} size={24} color={"white"}/>
+												<Icon name={"x"} size={24} color={"white"}/>
 											</TouchableOpacity>
 										</View>
 										<View style={{flex: 1, padding: 30}}>
@@ -1026,13 +1027,13 @@ class PlayerAlt extends React.PureComponent {
 												<View style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 10, marginVertical: 30}}>
 													<View style={{height: Dimensions.get('screen').width / 2, width: Dimensions.get('screen').width / 2, elevation: 10}}>
 														<View style={{flex: 1, backgroundColor: 'black', elevation: 10, borderRadius: 10}}>
-															<Image source={{uri: this.state.listening?.item?.album?.images[1]?.url}} style={{...StyleSheet.absoluteFill, borderRadius: 10}}/>
+															<Image source={{uri: this.props.store.listening.listening?.item?.album?.images[1]?.url}} style={{...StyleSheet.absoluteFill, borderRadius: 10}}/>
 														</View>
 													</View>
 													<View style={{width: Dimensions.get('screen').width / 2, backgroundColor: '#2f3640', padding: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10}}>
-														<Text style={{color: "white", fontSize: 14, textAlign: 'center'}}>{this.state.listening?.item?.name}</Text>
+														<Text style={{color: "white", fontSize: 14, textAlign: 'center'}}>{this.props.store.listening.listening?.item?.name}</Text>
 														<FlatList
-															data={this.state.listening?.item?.artists}
+															data={this.props.store.listening.listening?.item?.artists}
 															renderItem={({item, key}) => (
 																<TouchableOpacity onPress={() => {
 																	rootNavigation.push('Artist', {
@@ -1089,12 +1090,12 @@ class PlayerAlt extends React.PureComponent {
 												</View>
 												<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
 													<TouchableOpacity onPress={() => Share.share({
-														title: `${this.state.listening?.item?.name} - ${this.state.listening?.item?.artists[0]?.name}`,
-														// message: `${this.state.listening?.item?.external_urls?.spotify}`,
-														message: 'Zik_mu://track/'+this.state.listening?.item?.id,
+														title: `${this.props.store.listening.listening?.item?.name} - ${this.props.store.listening.listening?.item?.artists[0]?.name}`,
+														// message: `${this.props.store.listening.listening?.item?.external_urls?.spotify}`,
+														message: 'Zik_mu://track/'+this.props.store.listening.listening?.item?.id,
 														url: 'https://flexcorp-dev.fr'
 													}, {
-														dialogTitle: `${this.state.listening?.item?.name} - ${this.state.listening?.item?.artists[0]?.name}`
+														dialogTitle: `${this.props.store.listening.listening?.item?.name} - ${this.props.store.listening.listening?.item?.artists[0]?.name}`
 													})} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
 														<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/twitter.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
 													</TouchableOpacity>
@@ -1121,19 +1122,19 @@ class PlayerAlt extends React.PureComponent {
 										<View>
 											<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row', paddingHorizontal: 30}}>
 												<TouchableOpacity onPress={() => this._deploy_track_infos()}>
-													<FontAwesome name={"close"} size={24} color={"white"}/>
+													<Icon name={"x"} size={24} color={"white"}/>
 												</TouchableOpacity>
 											</View>
 											<View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 30, paddingVertical: 10, zIndex: 10, backgroundColor: 'transparent'}}>
 												<View style={{flex: 1, flexDirection: 'row', justifyContent: "space-around"}}>
 													<TouchableOpacity onPress={() => this._shuffle()} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-														<Icon name="random" size={36}
-															  style={{color: this.state.listening?.shuffle_state ? 'green' :'white', opacity: this.state.listening.actions.disallows.toggling_shuffle ? 0.2 : 1}}/>
+														<Icon name="shuffle" size={36}
+															  style={{color: this.props.store.listening.listening?.shuffle_state ? 'green' :'white', opacity: this.props.store.listening.listening.actions.disallows.toggling_shuffle ? 0.2 : 1}}/>
 														<Text style={{marginTop: 5}}>Lecture aléatoire</Text>
 													</TouchableOpacity>
 													<TouchableOpacity onPress={() => this._repeat()} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-														<Icon name="redo" size={36}
-															  style={{color: this.state.listening?.repeat_state == 'context' ? 'green' : this.state.listening?.repeat_state == 'track' ? '#B00D70' : 'white', opacity: this.state.listening.actions.disallows.toggling_repeat_track || this.state.listening.actions.disallows.toggling_repeat_context ? 0.2 : 1}}/>
+														<Icon name="repeat" size={36}
+															  style={{color: this.props.store.listening.listening?.repeat_state == 'context' ? 'green' : this.props.store.listening.listening?.repeat_state == 'track' ? '#B00D70' : 'white', opacity: this.props.store.listening.listening.actions.disallows.toggling_repeat_track || this.props.store.listening.listening.actions.disallows.toggling_repeat_context ? 0.2 : 1}}/>
 														<Text style={{marginTop: 5}}>Répéter</Text>
 													</TouchableOpacity>
 													<TouchableOpacity onPress={() => {
@@ -1142,7 +1143,7 @@ class PlayerAlt extends React.PureComponent {
 															this._deploy_waiting_list();
 														}, 500);
 													}} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-														<FontAwesome name={'bars'} size={36} color={'white'}/>
+														<Icon name={'list'} size={36} color={'white'}/>
 														<Text style={{marginTop: 5}}>File d'attente</Text>
 													</TouchableOpacity>
 												</View>
@@ -1152,16 +1153,16 @@ class PlayerAlt extends React.PureComponent {
 											<View style={{alignItems: 'center', justifyContent: 'center', width: Dimensions.get('screen').width, marginTop: 25, flex: 1}}>
 												<View style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 10, flex: 1}}>
 													<View style={{height: Dimensions.get('screen').width / 2, width: Dimensions.get('screen').width / 2, elevation: 10}}>
-														<Image source={{uri: this.state.listening?.item?.album?.images[1]?.url}} style={{...StyleSheet.absoluteFill, borderTopLeftRadius: 10, borderTopRightRadius: 10}}/>
+														<Image source={{uri: this.props.store.listening.listening?.item?.album?.images[1]?.url}} style={{...StyleSheet.absoluteFill, borderTopLeftRadius: 10, borderTopRightRadius: 10}}/>
 													</View>
 													<View style={{width: Dimensions.get('screen').width / 2, backgroundColor: 'red', padding: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10}}>
 														<Text>Partager</Text>
 													</View>
 												</View>
 												<View style={{marginTop: 5, flex: 1}}>
-													<Text style={{color: 'white', fontWeight: "bold", marginTop: 5, textAlign: 'center'}}>{this.state.listening?.item?.name}</Text>
+													<Text style={{color: 'white', fontWeight: "bold", marginTop: 5, textAlign: 'center'}}>{this.props.store.listening.listening?.item?.name}</Text>
 													<FlatList
-														data={this.state.listening?.item?.artists}
+														data={this.props.store.listening.listening?.item?.artists}
 														horizontal={true}
 														style={{textAlign: 'center'}}
 														renderItem={({item, key}) => (
@@ -1172,47 +1173,47 @@ class PlayerAlt extends React.PureComponent {
 												</View>
 											</View>
 											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<FontAwesome name={'heart'} size={24} color={'white'} />
+												<Icon name={'heart'} size={24} color={'white'} />
 												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Liker</Text>
 											</TouchableOpacity>
 											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<FontAwesome name={'ban'} size={24} color={'white'} />
+												<Icon name={'slash'} size={24} color={'white'} />
 												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Masquer ce titre</Text>
 											</TouchableOpacity>
 											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<FontAwesome name={'home'} size={24} color={'white'} />
+												<Icon name={'home'} size={24} color={'white'} />
 												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Ajouter à une playlist</Text>
 											</TouchableOpacity>
 											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<FontAwesome name={'plus'} size={24} color={'white'} />
+												<Icon name={'plus'} size={24} color={'white'} />
 												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Ajouter à la file d'attente</Text>
 											</TouchableOpacity>
 											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<FontAwesome5Icon name="compact-disc" color={"white"} size={24}/>
+												<Icon name="disc" color={"white"} size={24}/>
 												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Voir l'album</Text>
 											</TouchableOpacity>
 											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<FontAwesome5Icon name="user" color={"white"} size={24}/>
+												<Icon name="user" color={"white"} size={24}/>
 												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Voir l'artiste</Text>
 											</TouchableOpacity>
 											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<FontAwesome5Icon name="share" color={"white"} size={24}/>
+												<Icon name="share" color={"white"} size={24}/>
 												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Partager</Text>
 											</TouchableOpacity>
 											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<FontAwesome5Icon name="clock" solid={false} color={"white"} size={24}/>
+												<Icon name="clock" solid={false} color={"white"} size={24}/>
 												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Minuteur de veille</Text>
 											</TouchableOpacity>
 											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<FontAwesome5Icon name="microphone" color={"white"} size={24}/>
+												<Icon name="mic" color={"white"} size={24}/>
 												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Radio liée au titre</Text>
 											</TouchableOpacity>
 											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<FontAwesome name={'info-circle'} size={24} color={'white'} />
+												<Icon name={'info'} size={24} color={'white'} />
 												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Afficher les crédits</Text>
 											</TouchableOpacity>
 											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<FontAwesome name={'exclamation-triangle'} size={24} color={'white'} />
+												<Icon name={'alert-triangle'} size={24} color={'white'} />
 												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Signaler un abus</Text>
 											</TouchableOpacity>
 										</ScrollView>
