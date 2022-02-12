@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Image, StatusBar, ScrollView, Dimensions} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/Feather';
 
 import {connect} from 'react-redux';
 import Animated, {Extrapolate} from 'react-native-reanimated';

@@ -19,7 +19,7 @@ import axios from 'axios';
 import {connect} from 'react-redux';
 import Playlist from '../../components/Genres/Playlist';
 
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/Feather';
 import Header from '../../components/Genres/Header';
 
 class GenreScreen extends React.PureComponent{

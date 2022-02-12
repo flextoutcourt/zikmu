@@ -3,7 +3,7 @@ import {Button, StyleSheet, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/Feather';
 import {navigationRef} from '../utils/RootNavigation';
 import {BlurView} from 'expo-blur';
 
@@ -24,6 +24,7 @@ import PopularScreen from '../screens/Genres/Items/PopularScreen';
 import NewsScreen from '../screens/Genres/Items/NewsScreen';
 import SelfScreen from '../screens/User/SelfScreen';
 import UserScreen from '../screens/User/UserScreen';
+import PlayerAlt from '../components/Global/PlayerAlt';
 
 export const config = {
 	screens: {

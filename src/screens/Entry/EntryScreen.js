@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {StatusBar,} from 'react-native';
+import {StatusBar, Text, View} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 
 //Authentication handler
@@ -51,10 +51,6 @@ class EntryScreen extends PureComponent {
 
 		this.props.setLoadingFalse();
 	};
-
-	shouldComponentUpdate(nextProp, nextState){
-		return true;
-	}
 
 	render() {
 		const {accessToken, loading} = this.props.authentication;

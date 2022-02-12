@@ -2,7 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import {Dimensions, FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/Feather';
 import Animated, {Extrapolate} from 'react-native-reanimated';
 import {connect} from 'react-redux';
 import TrackItem from '../../components/Track/TrackItem';
@@ -123,10 +123,6 @@ class PlaylistScreen extends React.Component {
 			}
 		});
 
-	}
-
-	shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
-		return false;
 	}
 
 	render() {
@@ -256,7 +252,7 @@ class PlaylistScreen extends React.Component {
 													alignItems: 'center',
 													justifyContent: 'center'
 												}}>
-												<FontAwesome5Icon name="lightbulb" size={16} color="white"
+												<Icon name="lightbulb" size={16} color="white"
 												                  style={{marginRight: 5}}/>
 												<Text style={{color: 'white'}}>
 													Enrichir
@@ -275,7 +271,7 @@ class PlaylistScreen extends React.Component {
 												alignItems: 'center',
 												justifyContent: 'center'
 											}}>
-												<FontAwesome5Icon name="download" size={16} color="white"
+												<Icon name="download" size={16} color="white"
 												                  style={{marginRight: 5}}/>
 											</TouchableOpacity>
 										</View>
@@ -291,7 +287,7 @@ class PlaylistScreen extends React.Component {
 												alignItems: 'center',
 												justifyContent: 'center'
 											}}>
-												<FontAwesome5Icon name="user-plus" size={16} color="white"
+												<Icon name="user-plus" size={16} color="white"
 												                  style={{marginRight: 5}}/>
 											</TouchableOpacity>
 										</View>
@@ -307,7 +303,7 @@ class PlaylistScreen extends React.Component {
 												alignItems: 'center',
 												justifyContent: 'center'
 											}}>
-												<FontAwesome5Icon name="ellipsis-v" size={16} color="white"
+												<Icon name="more-vertical" size={16} color="white"
 												                  style={{marginRight: 5}}/>
 											</TouchableOpacity>
 										</View>
@@ -332,7 +328,7 @@ class PlaylistScreen extends React.Component {
 												alignItems: 'center',
 												justifyContent: 'center'
 											}}>
-											<FontAwesome5Icon name="plus" size={16} color="white"
+											<Icon name="plus" size={16} color="white"
 											                  style={{marginRight: 5}}/>
 											<Text style={{color: 'white'}}>
 												Ajouter des titres

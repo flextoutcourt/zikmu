@@ -1,4 +1,4 @@
-import Icon from "react-native-vector-icons/FontAwesome5";
+import Icon from "react-native-vector-icons/Feather";
 import {TouchableOpacity, Vibration} from "react-native";
 import React from "react";
 import {connect} from "react-redux";
