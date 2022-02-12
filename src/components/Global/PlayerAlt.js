@@ -27,13 +27,7 @@ import SeekBar from './Player/Seek';
 import TrackItem from '../Track/TrackItem';
 import AlbumItemWithOffset from '../Album/AlbumItemWithOffset';
 import listeningHandler from '../../utils/listeningHandler';
-import {
-	setAccessToken,
-	setLoadingFalse,
-	setLoadingTrue,
-	setRefreshToken,
-} from '../../redux/features/authentication/authenticationSlice';
-import {getListening} from '../../redux/features/listening/listeningSlice';
+import {setListening, refreshListening} from '../../redux/features/listening/listeningSlice';
 
 class PlayerAlt extends React.Component {
 
@@ -44,6 +38,8 @@ class PlayerAlt extends React.Component {
 			devices: null,
 			paroles: false,
 			big: false,
+			current_progress: 0,
+			time_iteration: 0,
 			device_menu: {
 				big: false,
 				top: new Animated.Value(Dimensions.get('screen').height),
@@ -233,28 +229,52 @@ class PlayerAlt extends React.Component {
 	}
 
 	_start_interval = () => {
-		// this.interval = setInterval(() => {
+		this.interval = setInterval(() => {
 			this._get_listening();
-		// }, 2000)
+		}, 1000)
 	}
 
 	_stop_auto_refresh = () => {
 		// clearInterval(this.interval);
 	}
 
+	call_timerInterval = (timestamp) => {
+		// if(this.timer == null){
+		// 	if(this.props.store.listening.listening.is_playing){
+		// 		this.timer = setInterval(() => {
+		// 			if(this.state.current_progress == 0){
+		// 				this.setState({current_progress: this.props.store.listening.listening.progress_ms});
+		// 			}
+		// 			this.setState({
+		// 				current_progress: this.state.current_progress + 1000
+		// 			});
+		// 		});
+		// 	}
+		// }else{
+		// 	if(this.props.store.listening.listening.is_playing == false){
+		// 		clearInterval(this.timer);
+		// 	}
+		// }
+	}
+
+	forceStateRefresh = async () => {
+		const listeningObject = await listeningHandler.get_listening_state(this.props.store.authentication.accessToken);
+		this.props.setListening({listening: listeningObject.data});
+	}
+
 	_get_listening = async () => {
 		const listeningObject = await listeningHandler.get_listening_state(this.props.store.authentication.accessToken);
-		this.props.getListening({listening: listeningObject.data})
-		// this.setState({listening: this.props.store.listening.listening});
-		// this.setState({listening: this.props.store.listening.listening});
-		// const promise = axios.get('https://api.spotify.com/v1/me/player', {
-		// 	headers: {
-		// 		Accept: "application/json",
-		// 		Authorization: "Bearer " + this.props.store.authentication.accessToken,
-		// 		"Content-Type": "application/json"
-		// 	},
-		// });
-		// return promise.then(data => data.data);
+		if(this.props.store.listening.listening){
+			this.props.refreshListening({listening: listeningObject.data})
+		}else{
+			this.props.setListening({listening: listeningObject.data});
+			if(this.current_progressInterval){
+				clearInterval(this.current_progressInterval);
+			}
+			this.current_progressInterval = setInterval(() => {
+				this.setState({current_progress: this.state.current_progress + 1000});
+			}, 1000);
+		}
 	}
 
 	_pause = () => {
@@ -266,6 +286,7 @@ class PlayerAlt extends React.Component {
 			},
 			method: "PUT"
 		})
+		this.forceStateRefresh();
 	}
 
 	_play = () => {
@@ -277,6 +298,7 @@ class PlayerAlt extends React.Component {
 			},
 			method: "PUT"
 		})
+		this.forceStateRefresh();
 	}
 
 	_next = () => {
@@ -288,10 +310,11 @@ class PlayerAlt extends React.Component {
 			},
 			method: 'POST'
 		});
+		this.forceStateRefresh()
 	}
 
 	_prev = () => {
-		if (this.props.store.listening.listening?.progress_ms > 10000) {
+		if (this.state.current_progress > 10000) {
 			this._seek(0);
 		} else {
 			fetch('https://api.spotify.com/v1/me/player/previous', {
@@ -303,6 +326,7 @@ class PlayerAlt extends React.Component {
 				method: 'POST'
 			})
 		}
+		this.forceStateRefresh()
 	}
 
 	_seek = (position) => {
@@ -314,9 +338,10 @@ class PlayerAlt extends React.Component {
 			},
 			method: "PUT"
 		})
-			.catch(e => {
-				console.log(e);
-			})
+		.catch(e => {
+			console.log(e);
+		})
+		this.forceStateRefresh()
 	}
 
 	_shuffle = () => {
@@ -328,6 +353,7 @@ class PlayerAlt extends React.Component {
 			},
 			method: 'PUT'
 		})
+		this.forceStateRefresh()
 	}
 
 	_repeat = () => {
@@ -347,6 +373,7 @@ class PlayerAlt extends React.Component {
 			},
 			method: 'PUT'
 		})
+		this.forceStateRefresh()
 	}
 
 	_display_device_icon = (device_type) => {
@@ -755,7 +782,7 @@ class PlayerAlt extends React.Component {
 												}}>
 													<SeekBar
 														trackLength={!isNaN(this.props.store.listening.listening?.item?.duration_ms / 1000) ? this.props.store.listening.listening?.item?.duration_ms / 1000 : 10}
-														currentPosition={!isNaN(this.props.store.listening.listening?.progress_ms / 1000) ? this.props.store.listening.listening?.progress_ms / 1000 : 0}
+														currentPosition={!isNaN(this.state.current_progress / 1000) ? this.state.current_progress / 1000 : 0}
 														onSeek={this._seek}/>
 												</View>
 												<View style={{
@@ -1230,7 +1257,8 @@ const mapStateToProps = store => {
 	}
 }
 const mapDispatchToProps = {
-	getListening,
+	setListening,
+	refreshListening,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayerAlt)
