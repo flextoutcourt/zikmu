@@ -125,10 +125,6 @@ class PlaylistScreen extends React.Component {
 
 	}
 
-	shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
-		return false;
-	}
-
 	render() {
 		const scale = this.state.scrollY.interpolate({
 			inputRange: [-Dimensions.get('screen').height, 0, 125],
