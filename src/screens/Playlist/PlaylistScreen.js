@@ -8,7 +8,7 @@ import {connect} from 'react-redux';
 import TrackItem from '../../components/Track/TrackItem';
 import Header from '../../components/Playlist/Header';
 
-class PlaylistScreen extends React.PureComponent {
+class PlaylistScreen extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -125,6 +125,10 @@ class PlaylistScreen extends React.PureComponent {
 
 	}
 
+	shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+		return false;
+	}
+
 	render() {
 		const scale = this.state.scrollY.interpolate({
 			inputRange: [-Dimensions.get('screen').height, 0, 125],
@@ -201,10 +205,10 @@ class PlaylistScreen extends React.PureComponent {
 											position: 'relative',
 											opacity: opacity,
 										}}>
-										<Animated.Image
-											source={{uri: this.state.playlist?.images[0]?.url}}
-											style={{width: '100%', height: '100%', borderRadius: br}}
-										/>
+										{/*<Animated.Image*/}
+										{/*	source={{uri: this.state.playlist?.images[0]?.url}}*/}
+										{/*	style={{width: '100%', height: '100%', borderRadius: br}}*/}
+										{/*/>*/}
 										<Animated.Text
 											style={{
 												position: 'absolute',
