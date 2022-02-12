@@ -2,13 +2,14 @@ import React, {Component} from 'react';
 import {ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {connect} from 'react-redux';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/Feather';
 import RecentComponent from '../../components/Home/Recents/RecentComponent';
 import GenreComponent from '../../components/Home/Genres/GenreComponent';
 import ReleaseComponent from '../../components/Home/Release/ReleaseComponent';
 import FollowComponent from '../../components/Home/Follows/FollowComponent';
+import PlayerAlt from '../../components/Global/PlayerAlt';
 
-class HomeScreen extends React.PureComponent {
+class HomeScreen extends React.Component {
 	constructor(props) {
 		super(props);
 	}
@@ -55,10 +56,10 @@ class HomeScreen extends React.PureComponent {
 						<Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>{this._display_message()}</Text>
 						<View style={{flexDirection: 'row'}}>
 							{/*<TouchableOpacity onPress={() => alert('settings')} style={{marginLeft: 20}}>*/}
-							{/*	<FontAwesome5Icon name={'cogs'} solid={true} size={24} color={'white'} />*/}
+							{/*	<Icon name={'settings'} solid={true} size={24} color={'white'} />*/}
 							{/*</TouchableOpacity>*/}
 							<TouchableOpacity onPress={() => this.props.navigation.push('Self')} style={{marginLeft: 20}}>
-								<FontAwesome5Icon name={'cogs'} solid={true} size={24} color={'white'} />
+								<Icon name={'settings'} solid={true} size={24} color={'white'} />
 							</TouchableOpacity>
 						</View>
 					</View>

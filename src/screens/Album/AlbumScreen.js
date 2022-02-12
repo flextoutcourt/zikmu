@@ -2,7 +2,7 @@ import axios from 'axios';
 import React from 'react';
 import {Dimensions, FlatList, Image, SectionList, StatusBar, StyleSheet, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/Feather';
 import {connect} from 'react-redux';
 import Animated, {Extrapolate} from 'react-native-reanimated';
 import TrackItem from '../../components/Track/TrackItem';
@@ -95,7 +95,7 @@ class AlbumScreen extends React.PureComponent {
 				),
 				headerRight: () => (
 					<View>
-						<FontAwesome5Icon
+						<Icon
 							name="heart"
 							size={24}
 							color={'white'}
@@ -254,7 +254,7 @@ class AlbumScreen extends React.PureComponent {
 										renderItem={({item}) => {
 											return (
 												<View style={{flexDirection: 'row', marginVertical: 5}}>
-													<FontAwesome5Icon name={'copyright'} size={18} color='white'/>
+													<Icon name={'copyright'} size={18} color='white'/>
 													<Text style={{marginLeft: 10}}>{item?.text}</Text>
 												</View>
 											)
@@ -271,7 +271,7 @@ class AlbumScreen extends React.PureComponent {
 										justifyContent: 'flex-start',
 										marginLeft: 5,
 									}}>
-									<FontAwesome5Icon name="compact-disc" size={24}/>
+									<Icon name="disc" size={24}/>
 									<Text
 										style={{
 											fontSize: 18,

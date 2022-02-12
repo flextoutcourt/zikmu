@@ -35,7 +35,7 @@ import {
 } from '../../redux/features/authentication/authenticationSlice';
 import {getListening} from '../../redux/features/listening/listeningSlice';
 
-class PlayerAlt extends React.PureComponent {
+class PlayerAlt extends React.Component {
 
 	constructor(props) {
 		super(props);
@@ -229,18 +229,15 @@ class PlayerAlt extends React.PureComponent {
 	}
 
 	componentDidMount() {
-		setInterval(() => {
-			this._get_listening();
-		}, 1000)
-		// BackHandler.addEventListener('hardwareBackPress', () => {
-		// 	this.handleBackButton();
-		// })
+		this._get_listening();
 	}
 
-	componentWillUnmount() {
-		// BackHandler.removeEventListener('hardwareBackPress', () => {
-		// 	this.handleBackButton();
-		// })
+	componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+
+	}
+
+	shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+		return true;
 	}
 
 	_get_listening = async () => {
@@ -554,141 +551,116 @@ class PlayerAlt extends React.PureComponent {
 		return (
 			this.props.store.listening.listening
 				?
-				<BottomTabBarHeightContext.Consumer>
-					{tabBarHeight => {
-						return (
-
-							<Animated.View style={{
-								position: 'absolute',
-								bottom: this.state.player.bottom,
-								left: this.state.player.left,
-								right: this.state.player.right,
-								top: this.state.player.top,
-								backgroundColor: '#B00D72',
-								borderRadius: 10,
-								paddingTop: this.state.player.padding,
-							}}>
-								<LinearGradient colors={['#B00D72', '#5523BF']} style={{borderRadius: 10}}>
-								<TouchableOpacity onPress={() => this.state.big ? null : this._deploy_big_player()} disabled={this.state.big}>
-									<View style={{margin: 10}}>
-										{
-											this.state.big
-												?
-												<View style={{flex: 1, width: Dimensions.get('screen').width -20, minHeight: 50, alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', paddingHorizontal: 10}}>
-													<TouchableOpacity onPress={() => this._deploy_big_player()}>
-														<Icon name={"chevron-down"} size={24} color={"white"}/>
-													</TouchableOpacity>
-													<TouchableOpacity onPress={() => this._deploy_track_infos()}>
-														<Icon name={"menu"} size={24} color={"white"}/>
-													</TouchableOpacity>
-												</View>
-												:
-												null
-										}
-										<View style={{
-											flexDirection: 'row',
-											alignItems: 'center',
-											justifyContent: 'flex-start',
-											flexWrap: this.state.big ? 'wrap' : 'nowrap'
+					<Animated.View style={{
+						position: 'absolute',
+						bottom: this.state.player.bottom,
+						left: this.state.player.left,
+						right: this.state.player.right,
+						top: this.state.player.top,
+						backgroundColor: '#B00D72',
+						borderRadius: 10,
+						paddingTop: this.state.player.padding,
+					}}>
+						<LinearGradient colors={['#B00D72', '#5523BF']} style={{borderRadius: 10}}>
+						<TouchableOpacity onPress={() => this.state.big ? null : this._deploy_big_player()} disabled={this.state.big}>
+							<View style={{margin: 10}}>
+								{
+									this.state.big
+										?
+										<View style={{flex: 1, width: Dimensions.get('screen').width -20, minHeight: 50, alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', paddingHorizontal: 10}}>
+											<TouchableOpacity onPress={() => this._deploy_big_player()}>
+												<Icon name={"chevron-down"} size={24} color={"white"}/>
+											</TouchableOpacity>
+											<TouchableOpacity onPress={() => this._deploy_track_infos()}>
+												<Icon name={"menu"} size={24} color={"white"}/>
+											</TouchableOpacity>
+										</View>
+										:
+										null
+								}
+								<View style={{
+									flexDirection: 'row',
+									alignItems: 'center',
+									justifyContent: 'flex-start',
+									flexWrap: this.state.big ? 'wrap' : 'nowrap'
+								}}>
+									<Animated.View style={{
+										flexDirection: 'row',
+										alignItems: 'center',
+										justifyContent: 'flex-start',
+										flex: 1,
+										flexWrap: this.state.big ? 'wrap' : 'nowrap',
+										elevation: 10,
+									}}>
+										<Animated.View style={{
+											width: this.state.player.track_image.width ?? 40,
+											height: this.state.player.track_image.height ?? 40,
+											shadowOffset: { width: 10, height: 10},
+											shadowColor: '#000',
+											shadowOpacity: 1,
+											elevation: 10,
+											borderRadius: 10,
+											overflow: 'visible'
+										}}>
+											<Animated.Image
+												source={{uri: this.props.store.listening.listening?.item?.album?.images[0]?.url}}
+												style={{
+													minWidth: this.state.player.track_image.width ?? 40,
+													minHeight: this.state.player.track_image.height ?? 40,
+													maxWidth: this.state.player.track_image.width,
+													maxHeight: this.state.player.track_image.height,
+													margin: "auto",
+													borderRadius: 10,
+													flex: this.state.player.track_image.flex,
+												}}/>
+										</Animated.View>
+										<Animated.View style={{
+											flex: 6,
+											minWidth: this.state.big ? Dimensions.get('screen').width - 20 : 'auto',
+											maxWidth: this.state.big ? Dimensions.get('screen').width - 20 : 'auto',
+											marginTop: this.state.big ? 25 : 0,
+											minHeight: this.state.big ? Dimensions.get('screen').height - 20 : 40,
+											maxHeight: this.state.big ? Dimensions.get('screen').height - 20 : 40
 										}}>
 											<Animated.View style={{
-												flexDirection: 'row',
+												marginLeft: 5,
+												flexDirection: this.state.big ? 'row' : 'row',
 												alignItems: 'center',
-												justifyContent: 'flex-start',
-												flex: 1,
-												flexWrap: this.state.big ? 'wrap' : 'nowrap',
-												elevation: 10,
+												justifyContent: this.state.big ? 'space-between' : 'flex-start',
+												fontSize: this.state.player.track_infos.fontSize
 											}}>
 												<Animated.View style={{
-													width: this.state.player.track_image.width ?? 40,
-													height: this.state.player.track_image.height ?? 40,
-													shadowOffset: { width: 10, height: 10},
-													shadowColor: '#000',
-													shadowOpacity: 1,
-													elevation: 10,
-													borderRadius: 10,
-													overflow: 'visible'
+													flexDirection: this.state.big ? 'column' : 'row',
+													alignItems: this.state.big ? 'flex-start' : 'center',
+													justifyContent: 'flex-start',
+													flex: 1,
+													maxWidth: this.state.big ? '100%' : '90%'
 												}}>
-													<Animated.Image
-														source={{uri: this.props.store.listening.listening?.item?.album?.images[0]?.url}}
-														style={{
-															minWidth: this.state.player.track_image.width ?? 40,
-															minHeight: this.state.player.track_image.height ?? 40,
-															maxWidth: this.state.player.track_image.width,
-															maxHeight: this.state.player.track_image.height,
-															margin: "auto",
-															borderRadius: 10,
-															flex: this.state.player.track_image.flex,
-														}}/>
-												</Animated.View>
-												<Animated.View style={{
-													flex: 6,
-													minWidth: this.state.big ? Dimensions.get('screen').width - 20 : 'auto',
-													maxWidth: this.state.big ? Dimensions.get('screen').width - 20 : 'auto',
-													marginTop: this.state.big ? 25 : 0,
-													minHeight: this.state.big ? Dimensions.get('screen').height - 20 : 40,
-													maxHeight: this.state.big ? Dimensions.get('screen').height - 20 : 40
-												}}>
-													<Animated.View style={{
-														marginLeft: 5,
-														flexDirection: this.state.big ? 'row' : 'row',
-														alignItems: 'center',
-														justifyContent: this.state.big ? 'space-between' : 'flex-start',
-														fontSize: this.state.player.track_infos.fontSize
-													}}>
-														<Animated.View style={{
-															flexDirection: this.state.big ? 'column' : 'row',
-															alignItems: this.state.big ? 'flex-start' : 'center',
-															justifyContent: 'flex-start',
-															flex: 1,
-															maxWidth: this.state.big ? '100%' : '90%'
-														}}>
-															<Text style={{
-																color: 'white',
-																fontSize: this.state.player.track_infos.fontSize,
-																maxWidth: this.state.big ? '90%' : '100%'
-															}}
-														  		numberOfLines={1}>
-																{this.props.store.listening.listening?.item?.name}
-															</Text>
-															{!this.state.big ? <Icon name={"circle"} size={5}
-															                                style={{marginHorizontal: 5}}/> : null}
-															{
-																this.state.big
-																?
-																	<FlatList
-																		data={this.props.store.listening.listening?.item?.artists}
-																		horizontal={true}
-																		contentContainerStyle={{maxWidth: '90%'}}
-																		ItemSeparatorComponent={() => (
-																			<Icon name={"circle"} size={5}
-																						 style={{marginHorizontal: 5, alignSelf: 'center'}}/>
-																		)}
-																		renderItem={({item, key}) => (
-																			<TouchableOpacity onPress={() => {
-																				rootNavigation.push('Artist', {
-																					artist_id: item.id
-																				});
-																				setTimeout(() => {
-																					this.state.big ? this._deploy_big_player() : null
-																				}, 500)
-																			}
-																			}>
-																				<Text style={{
-																						color: 'white',
-																						fontSize: this.state.player.track_infos.fontSize - (this.state.big ? 4 : 0)
-																					}}
-																					numberOfLines={1}
-																				>
-																					{item.name}
-																				</Text>
-																			</TouchableOpacity>
-																		)}
-																	/>
-																:
+													<Text style={{
+														color: 'white',
+														fontSize: this.state.player.track_infos.fontSize,
+														maxWidth: this.state.big ? '90%' : '100%'
+													}}
+														numberOfLines={1}>
+														{this.props.store.listening.listening?.item?.name}
+													</Text>
+													{!this.state.big ? <Icon name={"circle"} size={5}
+																					style={{marginHorizontal: 5}}/> : null}
+													{
+														this.state.big
+														?
+															<FlatList
+																data={this.props.store.listening.listening?.item?.artists}
+																horizontal={true}
+																contentContainerStyle={{maxWidth: '90%'}}
+																ItemSeparatorComponent={() => (
+																	<Icon name={"circle"} size={5}
+																				 style={{marginHorizontal: 5, alignSelf: 'center'}}/>
+																)}
+																renderItem={({item, key}) => (
 																	<TouchableOpacity onPress={() => {
-																		rootNavigation.navigate('Artist', {
-																			artist_id: this.props.store.listening.listening?.item?.artists[0].id
+																		rootNavigation.push('Artist', {
+																			artist_id: item.id
 																		});
 																		setTimeout(() => {
 																			this.state.big ? this._deploy_big_player() : null
@@ -696,538 +668,553 @@ class PlayerAlt extends React.PureComponent {
 																	}
 																	}>
 																		<Text style={{
-																			color: 'white',
-																			fontSize: this.state.player.track_infos.fontSize - (this.state.big ? 4 : 0)
-																		}} numberOfLines={1}>{this.props.store.listening.listening?.item?.artists[0]?.name}</Text>
+																				color: 'white',
+																				fontSize: this.state.player.track_infos.fontSize - (this.state.big ? 4 : 0)
+																			}}
+																			numberOfLines={1}
+																		>
+																			{item.name}
+																		</Text>
 																	</TouchableOpacity>
+																)}
+															/>
+														:
+															<TouchableOpacity onPress={() => {
+																rootNavigation.navigate('Artist', {
+																	artist_id: this.props.store.listening.listening?.item?.artists[0].id
+																});
+																setTimeout(() => {
+																	this.state.big ? this._deploy_big_player() : null
+																}, 500)
 															}
-
-														</Animated.View>
-														{this.state.big ?
-															<View style={{flexDirection: 'row'}}>
-																<Liked track={this.state?.listening?.item} iconSize={this.state.big ? 24 : 24}/>
-																{
-																	this.props.store.listening.listening?.actions?.disallows?.toggling_repeat_context && this.props.store.listening.listening?.actions?.disallows?.toggling_repeat_track && this.props.store.listening.listening?.actions?.disallows?.toggling_shuffle
-																	?
-																		<TouchableOpacity onPress={() => alert('not liked')} style={{marginLeft: 10}}>
-																			<Icon name={'slash'} size={24} color={'white'}/>
-																		</TouchableOpacity>
-																	:
-																		null
-																}
-															</View> : null}
-													</Animated.View>
-													{
-														!this.state.big
-															?
-															<View style={{
-																marginLeft: 5,
-																flexDirection: 'row',
-																marginTop: 2,
-																alignItems: 'center'
-															}}>
-
-																<Icon
-																	name={this._display_device_icon(this.props.store.listening.listening?.device?.type)}
-																	size={16}
-																	style={{color: 'white', fontWeight: 'bold'}}/>
+															}>
 																<Text style={{
-																	marginLeft: 5,
-																	color: "white",
-																	fontWeight: 'bold'
-																}}>{this.props.store.listening.listening?.device?.name}</Text>
-															</View>
-															:
-															null
+																	color: 'white',
+																	fontSize: this.state.player.track_infos.fontSize - (this.state.big ? 4 : 0)
+																}} numberOfLines={1}>{this.props.store.listening.listening?.item?.artists[0]?.name}</Text>
+															</TouchableOpacity>
 													}
+
 												</Animated.View>
+												{this.state.big ?
+													<View style={{flexDirection: 'row'}}>
+														<Liked track={this.state?.listening?.item} iconSize={this.state.big ? 24 : 24}/>
+														{
+															this.props.store.listening.listening?.actions?.disallows?.toggling_repeat_context && this.props.store.listening.listening?.actions?.disallows?.toggling_repeat_track && this.props.store.listening.listening?.actions?.disallows?.toggling_shuffle
+															?
+																<TouchableOpacity onPress={() => alert('not liked')} style={{marginLeft: 10}}>
+																	<Icon name={'slash'} size={24} color={'white'}/>
+																</TouchableOpacity>
+															:
+																null
+														}
+													</View> : null}
 											</Animated.View>
 											{
-												this.state.big
+												!this.state.big
 													?
 													<View style={{
-														flexDirection: 'column',
-														alignItems: 'flex-end',
-														justifyContent: 'flex-end',
-														height: Dimensions.get('screen').height / 4
+														marginLeft: 5,
+														flexDirection: 'row',
+														marginTop: 2,
+														alignItems: 'center'
 													}}>
-														<View style={{
-															flexDirection: 'row',
-															marginTop: 5,
-															width: Dimensions.get('screen').width - 20
-														}}>
-															<SeekBar
-																trackLength={!isNaN(this.props.store.listening.listening?.item?.duration_ms / 1000) ? this.props.store.listening.listening?.item?.duration_ms / 1000 : 10}
-																currentPosition={!isNaN(this.props.store.listening.listening?.progress_ms / 1000) ? this.props.store.listening.listening?.progress_ms / 1000 : 0}
-																onSeek={this._seek}/>
-														</View>
-														<View style={{
-															width: Dimensions.get('screen').width - 20,
-															flexDirection: 'row',
-															justifyContent: 'space-around',
-															alignItems: 'center',
-															flex: 1
-														}}>
-															<TouchableOpacity onPress={() => this._shuffle()} disabled={this.props.store.listening.listening.actions.disallows.toggling_shuffle}>
-																<Icon name="shuffle" size={24}
-																      style={{color: this.props.store.listening.listening?.shuffle_state ? 'green' :'white', opacity: this.props.store.listening.listening.actions.disallows.toggling_shuffle ? 0.2 : 1}}/>
-															</TouchableOpacity>
-															<TouchableOpacity onPress={() => this._prev()}>
-																<Icon name="skip-back"
-																      size={this.state.big ? 36 : 24} style={{
-																	marginLeft: 10,
-																	marginRight: 10,
-																	color: 'white'
-																}}/>
-															</TouchableOpacity>
-															{
-																this.props.store.listening.listening.is_playing
-																	?
-																	<TouchableOpacity
-																		onPress={() => {
-																			this._pause()
-																		}}
-																	>
-																		<Icon name="pause"
-																		      size={this.state.big ? 48 : 24} style={{
-																			marginLeft: 10,
-																			marginRight: 0,
-																			color: 'white'
-																		}}/>
-																	</TouchableOpacity>
-																	:
-																	<TouchableOpacity
-																		onPress={() => {
-																			this._play()
-																		}}
-																	>
-																		<Icon name="play"
-																		      size={this.state.big ? 48 : 24} style={{
-																			marginLeft: 10,
-																			marginRight: 0,
-																			color: 'white'
-																		}}/>
-																	</TouchableOpacity>
-															}
-															<TouchableOpacity onPress={() => this._next()}>
-																<Icon name="skip-forward"
-																      size={this.state.big ? 36 : 24} style={{
-																	marginLeft: 10,
-																	marginRight: 10,
-																	color: 'white'
-																}}/>
-															</TouchableOpacity>
-															<TouchableOpacity onPress={() => this._repeat()} disabled={this.props.store.listening.listening.actions.disallows.toggling_repeat_track || this.props.store.listening.listening.actions.disallows.toggling_repeat_context}>
-																<Icon name="repeat" size={24}
-																      style={{color: this.props.store.listening.listening?.repeat_state == 'context' ? 'green' : this.props.store.listening.listening?.repeat_state == 'track' ? '#B00D70' : 'white', opacity: this.props.store.listening.listening.actions.disallows.toggling_repeat_track || this.props.store.listening.listening.actions.disallows.toggling_repeat_context ? 0.2 : 1}}/>
-															</TouchableOpacity>
-														</View>
-														<View style={{
-															width: Dimensions.get('screen').width - 20,
-															flexDirection: 'row',
-															justifyContent: 'space-around',
-															alignItems: 'center'
-														}}>
-															<TouchableOpacity onPress={() => this._deploy_devices_menu()} style={{
-																marginLeft: 5,
-																flexDirection: 'row',
-																marginTop: 2,
-																alignItems: 'center',
-																flex: 2
-															}}>
-																<Icon
-																	name={this._display_device_icon(this.props.store.listening.listening?.device?.type)}
-																	size={24} style={{
-																	color: 'white',
-																	fontWeight: 'bold',
-																	marginLeft: 15
-																}}/>
-																<Text style={{
-																	marginLeft: 5,
-																	color: "white",
-																	fontWeight: 'bold'
-																}}>{this.props.store.listening.listening?.device?.name}</Text>
-															</TouchableOpacity>
-															<View style={{
-																flex: 2,
-																flexDirection: 'row',
-																justifyContent: 'flex-end',
-																alignItems: 'center',
-																marginRight: 15
-															}}>
-																<TouchableOpacity
-																	onPress={() => this._deploy_share_menu()}>
-																	<Icon name="share" size={this.state.big ? 24 : 24}
-																	      style={{
-																		      marginLeft: 20,
-																		      marginRight: 20,
-																		      color: 'white'
-																	      }}/>
-																</TouchableOpacity>
-																<TouchableOpacity
-																	onPress={() => this._deploy_waiting_list()}>
-																	<Icon name="list" size={24}
-																	      style={{color: 'white'}}/>
-																</TouchableOpacity>
-															</View>
-														</View>
+
+														<Icon
+															name={this._display_device_icon(this.props.store.listening.listening?.device?.type)}
+															size={16}
+															style={{color: 'white', fontWeight: 'bold'}}/>
+														<Text style={{
+															marginLeft: 5,
+															color: "white",
+															fontWeight: 'bold'
+														}}>{this.props.store.listening.listening?.device?.name}</Text>
 													</View>
 													:
-													<Animated.View style={{
-														flex: 1,
-														flexDirection: 'row',
-														alignItems: 'center',
-														justifyContent: this.state.big ? 'space-between' : 'flex-end',
-														minWidth: this.state.big ? Dimensions.get('screen').width - 20 : 'auto'
-													}}>
-														<Icon name="speaker" size={this.state.big ? 48 : 24}
-														      style={{marginLeft: 10, marginRight: 10}}/>
-														<Liked track={this.state?.listening?.item}
-														       iconSize={this.state.big ? 48 : 24}/>
-														{
-															this.props.store.listening.listening.is_playing
-																?
-																<TouchableOpacity
-																	onPress={() => {
-																		this._pause()
-																	}}
-																>
-																	<Icon name="pause" size={this.state.big ? 48 : 24}
-																	      style={{
-																		      marginLeft: 10,
-																		      marginRight: 0,
-																		      color: 'white'
-																	      }}/>
-																</TouchableOpacity>
-																:
-																<TouchableOpacity
-																	onPress={() => {
-																		this._play()
-																	}}
-																>
-																	<Icon name="play" size={this.state.big ? 48 : 24}
-																	      style={{
-																		      marginLeft: 10,
-																		      marginRight: 0,
-																		      color: 'white'
-																	      }}/>
-																</TouchableOpacity>
-
-														}
-													</Animated.View>
+													null
 											}
-
-										</View>
-										{
-											!this.state.big
-												?
+										</Animated.View>
+									</Animated.View>
+									{
+										this.state.big
+											?
+											<View style={{
+												flexDirection: 'column',
+												alignItems: 'flex-end',
+												justifyContent: 'flex-end',
+												height: Dimensions.get('screen').height / 4
+											}}>
 												<View style={{
 													flexDirection: 'row',
 													marginTop: 5,
-													width: '100%',
-													position: 'absolute',
-													bottom: -10,
-													left: 0,
-													right: 0
+													width: Dimensions.get('screen').width - 20
 												}}>
-													<View style={{
-														height: 2,
-														backgroundColor: 'grey',
-														flex: 1,
-														alignSelf: 'center',
-														borderRadius: 5
-													}}>
-														<View style={{
-															height: 2,
-															backgroundColor: 'white',
-															width: (this.props.store.listening.listening?.progress_ms) / (this.props.store.listening.listening?.item?.duration_ms) * 100 + "%",
-															borderRadius: 5
+													<SeekBar
+														trackLength={!isNaN(this.props.store.listening.listening?.item?.duration_ms / 1000) ? this.props.store.listening.listening?.item?.duration_ms / 1000 : 10}
+														currentPosition={!isNaN(this.props.store.listening.listening?.progress_ms / 1000) ? this.props.store.listening.listening?.progress_ms / 1000 : 0}
+														onSeek={this._seek}/>
+												</View>
+												<View style={{
+													width: Dimensions.get('screen').width - 20,
+													flexDirection: 'row',
+													justifyContent: 'space-around',
+													alignItems: 'center',
+													flex: 1
+												}}>
+													<TouchableOpacity onPress={() => this._shuffle()} disabled={this.props.store.listening.listening.actions.disallows.toggling_shuffle}>
+														<Icon name="shuffle" size={24}
+															  style={{color: this.props.store.listening.listening?.shuffle_state ? 'green' :'white', opacity: this.props.store.listening.listening.actions.disallows.toggling_shuffle ? 0.2 : 1}}/>
+													</TouchableOpacity>
+													<TouchableOpacity onPress={() => this._prev()}>
+														<Icon name="skip-back"
+															  size={this.state.big ? 36 : 24} style={{
+															marginLeft: 10,
+															marginRight: 10,
+															color: 'white'
 														}}/>
+													</TouchableOpacity>
+													{
+														this.props.store.listening.listening.is_playing
+															?
+															<TouchableOpacity
+																onPress={() => {
+																	this._pause()
+																}}
+															>
+																<Icon name="pause"
+																	  size={this.state.big ? 48 : 24} style={{
+																	marginLeft: 10,
+																	marginRight: 0,
+																	color: 'white'
+																}}/>
+															</TouchableOpacity>
+															:
+															<TouchableOpacity
+																onPress={() => {
+																	this._play()
+																}}
+															>
+																<Icon name="play"
+																	  size={this.state.big ? 48 : 24} style={{
+																	marginLeft: 10,
+																	marginRight: 0,
+																	color: 'white'
+																}}/>
+															</TouchableOpacity>
+													}
+													<TouchableOpacity onPress={() => this._next()}>
+														<Icon name="skip-forward"
+															  size={this.state.big ? 36 : 24} style={{
+															marginLeft: 10,
+															marginRight: 10,
+															color: 'white'
+														}}/>
+													</TouchableOpacity>
+													<TouchableOpacity onPress={() => this._repeat()} disabled={this.props.store.listening.listening.actions.disallows.toggling_repeat_track || this.props.store.listening.listening.actions.disallows.toggling_repeat_context}>
+														<Icon name="repeat" size={24}
+															  style={{color: this.props.store.listening.listening?.repeat_state == 'context' ? 'green' : this.props.store.listening.listening?.repeat_state == 'track' ? '#B00D70' : 'white', opacity: this.props.store.listening.listening.actions.disallows.toggling_repeat_track || this.props.store.listening.listening.actions.disallows.toggling_repeat_context ? 0.2 : 1}}/>
+													</TouchableOpacity>
+												</View>
+												<View style={{
+													width: Dimensions.get('screen').width - 20,
+													flexDirection: 'row',
+													justifyContent: 'space-around',
+													alignItems: 'center'
+												}}>
+													<TouchableOpacity onPress={() => this._deploy_devices_menu()} style={{
+														marginLeft: 5,
+														flexDirection: 'row',
+														marginTop: 2,
+														alignItems: 'center',
+														flex: 2
+													}}>
+														<Icon
+															name={this._display_device_icon(this.props.store.listening.listening?.device?.type)}
+															size={24} style={{
+															color: 'white',
+															fontWeight: 'bold',
+															marginLeft: 15
+														}}/>
+														<Text style={{
+															marginLeft: 5,
+															color: "white",
+															fontWeight: 'bold'
+														}}>{this.props.store.listening.listening?.device?.name}</Text>
+													</TouchableOpacity>
+													<View style={{
+														flex: 2,
+														flexDirection: 'row',
+														justifyContent: 'flex-end',
+														alignItems: 'center',
+														marginRight: 15
+													}}>
+														<TouchableOpacity
+															onPress={() => this._deploy_share_menu()}>
+															<Icon name="share" size={this.state.big ? 24 : 24}
+																  style={{
+																	  marginLeft: 20,
+																	  marginRight: 20,
+																	  color: 'white'
+																  }}/>
+														</TouchableOpacity>
+														<TouchableOpacity
+															onPress={() => this._deploy_waiting_list()}>
+															<Icon name="list" size={24}
+																  style={{color: 'white'}}/>
+														</TouchableOpacity>
 													</View>
 												</View>
-												:
-												null
-										}
-									</View>
+											</View>
+											:
+											<Animated.View style={{
+												flex: 1,
+												flexDirection: 'row',
+												alignItems: 'center',
+												justifyContent: this.state.big ? 'space-between' : 'flex-end',
+												minWidth: this.state.big ? Dimensions.get('screen').width - 20 : 'auto'
+											}}>
+												<Icon name="speaker" size={this.state.big ? 48 : 24}
+													  style={{marginLeft: 10, marginRight: 10}}/>
+												<Liked track={this.state?.listening?.item}
+													   iconSize={this.state.big ? 48 : 24}/>
+												{
+													this.props.store.listening.listening.is_playing
+														?
+														<TouchableOpacity
+															onPress={() => {
+																this._pause()
+															}}
+														>
+															<Icon name="pause" size={this.state.big ? 48 : 24}
+																  style={{
+																	  marginLeft: 10,
+																	  marginRight: 0,
+																	  color: 'white'
+																  }}/>
+														</TouchableOpacity>
+														:
+														<TouchableOpacity
+															onPress={() => {
+																this._play()
+															}}
+														>
+															<Icon name="play" size={this.state.big ? 48 : 24}
+																  style={{
+																	  marginLeft: 10,
+																	  marginRight: 0,
+																	  color: 'white'
+																  }}/>
+														</TouchableOpacity>
+
+												}
+											</Animated.View>
+									}
+
+								</View>
+								{
+									!this.state.big
+										?
+										<View style={{
+											flexDirection: 'row',
+											marginTop: 5,
+											width: '100%',
+											position: 'absolute',
+											bottom: -10,
+											left: 0,
+											right: 0
+										}}>
+											<View style={{
+												height: 2,
+												backgroundColor: 'grey',
+												flex: 1,
+												alignSelf: 'center',
+												borderRadius: 5
+											}}>
+												<View style={{
+													height: 2,
+													backgroundColor: 'white',
+													width: (this.props.store.listening.listening?.progress_ms) / (this.props.store.listening.listening?.item?.duration_ms) * 100 + "%",
+													borderRadius: 5
+												}}/>
+											</View>
+										</View>
+										:
+										null
+								}
+							</View>
+						</TouchableOpacity>
+						</LinearGradient>
+						<Animated.View style={{position: 'absolute', top: this.state.device_menu.top, left: this.state.device_menu.left, right: this.state.device_menu.right, bottom: this.state.device_menu.bottom, height: this.state.device_menu.height, backgroundColor: '#8e44ad', paddingTop: 10, flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
+							<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row', paddingHorizontal: 30}}>
+								<TouchableOpacity onPress={() => this._deploy_devices_menu()}>
+									<Icon name={"x"} size={24} color={"white"}/>
 								</TouchableOpacity>
-								</LinearGradient>
-								<Animated.View style={{position: 'absolute', top: this.state.device_menu.top, left: this.state.device_menu.left, right: this.state.device_menu.right, bottom: this.state.device_menu.bottom, height: this.state.device_menu.height, backgroundColor: '#8e44ad', paddingTop: 10, flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
+							</View>
+							<View style={{flex: 1, padding: 30}}>
+								<View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+									<Icon name={'music'} size={48} color={'white'} />
+									<View style={{marginLeft: 20}}>
+										<Text style={{color: 'white', fontSize: 22, fontWeight: 'bold'}}>Écoute en cours sur :</Text>
+										<Text style={{color: 'white', fontSize: 18}}>{this.state.devices?.active?.name}</Text>
+									</View>
+								</View>
+								<Text style={{fontSize: 16, color: 'white', marginVertical: 10}}>Séléctionnez un appareil</Text>
+								<FlatList
+									data={this.state.devices?.list}
+									renderItem={({item, key}) => (
+										<TouchableOpacity onPress={() => this._transfer_playback(item.id)} style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+											<Icon name={this._display_device_icon(item.type)} size={48} color={'white'} />
+											<Text style={{fontSize: 16, marginLeft: 25}}>{item.name}</Text>
+										</TouchableOpacity>
+									)}
+								/>
+							</View>
+						</Animated.View>
+						<Animated.View style={{position: 'absolute', top: this.state.waiting_list.top, left: this.state.waiting_list.left, right: this.state.waiting_list.right, bottom: this.state.waiting_list.bottom, height: this.state.waiting_list.height, backgroundColor: '#B00D72', paddingTop: 0, flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
+							<LinearGradient colors={['#8e44ad', '#2f3640']} style={{paddingTop: StatusBar.currentHeight, flex: 1}} >
+								<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row', paddingHorizontal: 30}}>
+									<TouchableOpacity onPress={() => this._deploy_waiting_list()}>
+										<Icon name={"x"} size={24} color={"white"}/>
+									</TouchableOpacity>
+								</View>
+								{
+									this.state.waiting_list.big
+									?
+										<View style={{elevation: 10, shadowColor: '#000'}}>
+											<Text style={{marginLeft: 10, fontSize: 16, color: 'white'}}>En cours de lecture :</Text>
+											<TrackItem track={this.props.store.listening.listening?.item} album={this.props.store.listening.listening?.item?.album} />
+											{this.props.store.listening.listening?.context ? <Text style={{marginLeft: 10, marginBottom: 10, fontSize: 16, color: 'white'}}>Prochains titres {this.state.context?.type == 'album' ? "de " + this.props.store.listening.listening?.item?.album?.name : null} : </Text> : null}
+										</View>
+									:
+										null
+								}
+								<View style={{elevation: 10}}>
+									{
+										this.state.waiting_list.big
+										?
+											<View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
+												{
+													this.props.store.listening.listening.context
+														?
+															<AlbumItemWithOffset context={this.props.store.listening.listening?.context} listening={this.props.store.listening.listening} />
+														:
+														null
+												}
+											</View>
+										:
+											null
+									}
+								</View>
+							</LinearGradient>
+						</Animated.View>
+						<Animated.View style={{position: 'absolute', top: this.state.share_menu.top, left: this.state.share_menu.left, right: this.state.share_menu.right, bottom: this.state.share_menu.bottom, height: this.state.share_menu.height, backgroundColor: '#B00D72', flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
+							<LinearGradient colors={['#8e44ad', '#2f3640']} style={{flex: 1, borderRadius: 10, paddingTop: StatusBar.currentHeight}}>
+								<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', paddingHorizontal: 30}}>
+									<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white'}}>Partager</Text>
+									<TouchableOpacity onPress={() => this._deploy_share_menu()}>
+										<Icon name={"x"} size={24} color={"white"}/>
+									</TouchableOpacity>
+								</View>
+								<View style={{flex: 1, padding: 30}}>
+									<View style={{flexDirection: 'row', justifyContent: 'center'}}>
+										<View style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 10, marginVertical: 30}}>
+											<View style={{height: Dimensions.get('screen').width / 2, width: Dimensions.get('screen').width / 2, elevation: 10}}>
+												<View style={{flex: 1, backgroundColor: 'black', elevation: 10, borderRadius: 10}}>
+													<Image source={{uri: this.props.store.listening.listening?.item?.album?.images[1]?.url}} style={{...StyleSheet.absoluteFill, borderRadius: 10}}/>
+												</View>
+											</View>
+											<View style={{width: Dimensions.get('screen').width / 2, backgroundColor: '#2f3640', padding: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10}}>
+												<Text style={{color: "white", fontSize: 14, textAlign: 'center'}}>{this.props.store.listening.listening?.item?.name}</Text>
+												<FlatList
+													data={this.props.store.listening.listening?.item?.artists}
+													renderItem={({item, key}) => (
+														<TouchableOpacity onPress={() => {
+															rootNavigation.push('Artist', {
+																artist_id: item.id
+															});
+															setTimeout(() => {
+																this.state.big ? this._deploy_big_player() : null
+																this.state.share_menu.big ? this._deploy_share_menu() : null
+															}, 500)
+														}}>
+															<Text style={{marginTop: 2,fontSize: 12, textAlign: 'center'}}>{item.name}</Text>
+														</TouchableOpacity>
+													)}
+													ItemSeparatorComponent={() => (
+														<Text>, </Text>
+													)}
+													horizontal={true}
+												/>
+											</View>
+										</View>
+									</View>
+									<View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 30, flexWrap: 'wrap'}}>
+										<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+											<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
+												<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/facebook.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
+											</TouchableOpacity>
+											<Text style={{marginTop: 5}}>Copier le lien</Text>
+										</View>
+										<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+											<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
+												<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/whatsapp.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
+											</TouchableOpacity>
+											<Text style={{marginTop: 5}}>Whatsapp</Text>
+										</View>
+										<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+											<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
+												<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/instagram.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
+											</TouchableOpacity>
+											<Text style={{marginTop: 5}}>Stories</Text>
+										</View>
+										<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+											<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
+												<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/messenger.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
+											</TouchableOpacity>
+											<Text style={{marginTop: 5}}>Messenger</Text>
+										</View>
+									</View>
+									<View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 15, flexWrap: 'wrap'}}>
+										<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+											<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48, borderColor: "#3B579D", borderWidth: 2}}>
+												<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/facebook.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48, borderWidth: 2, borderColor: '#2f3640'}} />
+											</TouchableOpacity>
+											<Text style={{marginTop: 5}}>Stories</Text>
+										</View>
+										<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+											<TouchableOpacity onPress={() => Share.share({
+												title: `${this.props.store.listening.listening?.item?.name} - ${this.props.store.listening.listening?.item?.artists[0]?.name}`,
+												// message: `${this.props.store.listening.listening?.item?.external_urls?.spotify}`,
+												message: 'Zik_mu://track/'+this.props.store.listening.listening?.item?.id,
+												url: 'https://flexcorp-dev.fr'
+											}, {
+												dialogTitle: `${this.props.store.listening.listening?.item?.name} - ${this.props.store.listening.listening?.item?.artists[0]?.name}`
+											})} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
+												<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/twitter.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
+											</TouchableOpacity>
+											<Text style={{marginTop: 5}}>Twitter</Text>
+										</View>
+										<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+											<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
+												<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/snapchat.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
+											</TouchableOpacity>
+											<Text style={{marginTop: 5}}>Snapchat</Text>
+										</View>
+										<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
+											<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
+												<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/facebook.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
+											</TouchableOpacity>
+											<Text>Sms</Text>
+										</View>
+									</View>
+								</View>
+							</LinearGradient>
+						</Animated.View>
+						<Animated.View style={{position: 'absolute', top: this.state.track_infos.top, left: this.state.track_infos.left, right: this.state.track_infos.right, bottom: this.state.track_infos.bottom, height: this.state.track_infos.height, backgroundColor: '#B00D72', paddingTop: 0, flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
+							<LinearGradient colors={['#8e44ad', '#2f3640']} style={{paddingTop: StatusBar.currentHeight, flex: 1}} >
+								<View>
 									<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row', paddingHorizontal: 30}}>
-										<TouchableOpacity onPress={() => this._deploy_devices_menu()}>
+										<TouchableOpacity onPress={() => this._deploy_track_infos()}>
 											<Icon name={"x"} size={24} color={"white"}/>
 										</TouchableOpacity>
 									</View>
-									<View style={{flex: 1, padding: 30}}>
-										<View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-											<Icon name={'music'} size={48} color={'white'} />
-											<View style={{marginLeft: 20}}>
-												<Text style={{color: 'white', fontSize: 22, fontWeight: 'bold'}}>Écoute en cours sur :</Text>
-												<Text style={{color: 'white', fontSize: 18}}>{this.state.devices?.active?.name}</Text>
-											</View>
+									<View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 30, paddingVertical: 10, zIndex: 10, backgroundColor: 'transparent'}}>
+										<View style={{flex: 1, flexDirection: 'row', justifyContent: "space-around"}}>
+											<TouchableOpacity onPress={() => this._shuffle()} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+												<Icon name="shuffle" size={36}
+													  style={{color: this.props.store.listening.listening?.shuffle_state ? 'green' :'white', opacity: this.props.store.listening.listening.actions.disallows.toggling_shuffle ? 0.2 : 1}}/>
+												<Text style={{marginTop: 5}}>Lecture aléatoire</Text>
+											</TouchableOpacity>
+											<TouchableOpacity onPress={() => this._repeat()} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+												<Icon name="repeat" size={36}
+													  style={{color: this.props.store.listening.listening?.repeat_state == 'context' ? 'green' : this.props.store.listening.listening?.repeat_state == 'track' ? '#B00D70' : 'white', opacity: this.props.store.listening.listening.actions.disallows.toggling_repeat_track || this.props.store.listening.listening.actions.disallows.toggling_repeat_context ? 0.2 : 1}}/>
+												<Text style={{marginTop: 5}}>Répéter</Text>
+											</TouchableOpacity>
+											<TouchableOpacity onPress={() => {
+												this._deploy_track_infos();
+												setTimeout(() => {
+													this._deploy_waiting_list();
+												}, 500);
+											}} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+												<Icon name={'list'} size={36} color={'white'}/>
+												<Text style={{marginTop: 5}}>File d'attente</Text>
+											</TouchableOpacity>
 										</View>
-										<Text style={{fontSize: 16, color: 'white', marginVertical: 10}}>Séléctionnez un appareil</Text>
-										<FlatList
-											data={this.state.devices?.list}
-											renderItem={({item, key}) => (
-												<TouchableOpacity onPress={() => this._transfer_playback(item.id)} style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
-													<Icon name={this._display_device_icon(item.type)} size={48} color={'white'} />
-													<Text style={{fontSize: 16, marginLeft: 25}}>{item.name}</Text>
-												</TouchableOpacity>
-											)}
-										/>
 									</View>
-								</Animated.View>
-								<Animated.View style={{position: 'absolute', top: this.state.waiting_list.top, left: this.state.waiting_list.left, right: this.state.waiting_list.right, bottom: this.state.waiting_list.bottom, height: this.state.waiting_list.height, backgroundColor: '#B00D72', paddingTop: 0, flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
-									<LinearGradient colors={['#8e44ad', '#2f3640']} style={{paddingTop: StatusBar.currentHeight, flex: 1}} >
-										<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row', paddingHorizontal: 30}}>
-											<TouchableOpacity onPress={() => this._deploy_waiting_list()}>
-												<Icon name={"x"} size={24} color={"white"}/>
-											</TouchableOpacity>
-										</View>
-										{
-											this.state.waiting_list.big
-											?
-												<View style={{elevation: 10, shadowColor: '#000'}}>
-													<Text style={{marginLeft: 10, fontSize: 16, color: 'white'}}>En cours de lecture :</Text>
-													<TrackItem track={this.props.store.listening.listening?.item} album={this.props.store.listening.listening?.item?.album} />
-													{this.props.store.listening.listening?.context ? <Text style={{marginLeft: 10, marginBottom: 10, fontSize: 16, color: 'white'}}>Prochains titres {this.state.context?.type == 'album' ? "de " + this.props.store.listening.listening?.item?.album?.name : null} : </Text> : null}
-												</View>
-											:
-												null
-										}
-										<View style={{elevation: 10}}>
-											{
-												this.state.waiting_list.big
-												?
-													<View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-														{
-															this.props.store.listening.listening.context
-																?
-																	<AlbumItemWithOffset context={this.props.store.listening.listening?.context} listening={this.props.store.listening.listening} />
-																:
-																null
-														}
-													</View>
-												:
-													null
-											}
-										</View>
-									</LinearGradient>
-								</Animated.View>
-								<Animated.View style={{position: 'absolute', top: this.state.share_menu.top, left: this.state.share_menu.left, right: this.state.share_menu.right, bottom: this.state.share_menu.bottom, height: this.state.share_menu.height, backgroundColor: '#B00D72', flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
-									<LinearGradient colors={['#8e44ad', '#2f3640']} style={{flex: 1, borderRadius: 10, paddingTop: StatusBar.currentHeight}}>
-										<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'space-between', flexDirection: 'row', paddingHorizontal: 30}}>
-											<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white'}}>Partager</Text>
-											<TouchableOpacity onPress={() => this._deploy_share_menu()}>
-												<Icon name={"x"} size={24} color={"white"}/>
-											</TouchableOpacity>
-										</View>
-										<View style={{flex: 1, padding: 30}}>
-											<View style={{flexDirection: 'row', justifyContent: 'center'}}>
-												<View style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 10, marginVertical: 30}}>
-													<View style={{height: Dimensions.get('screen').width / 2, width: Dimensions.get('screen').width / 2, elevation: 10}}>
-														<View style={{flex: 1, backgroundColor: 'black', elevation: 10, borderRadius: 10}}>
-															<Image source={{uri: this.props.store.listening.listening?.item?.album?.images[1]?.url}} style={{...StyleSheet.absoluteFill, borderRadius: 10}}/>
-														</View>
-													</View>
-													<View style={{width: Dimensions.get('screen').width / 2, backgroundColor: '#2f3640', padding: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10}}>
-														<Text style={{color: "white", fontSize: 14, textAlign: 'center'}}>{this.props.store.listening.listening?.item?.name}</Text>
-														<FlatList
-															data={this.props.store.listening.listening?.item?.artists}
-															renderItem={({item, key}) => (
-																<TouchableOpacity onPress={() => {
-																	rootNavigation.push('Artist', {
-																		artist_id: item.id
-																	});
-																	setTimeout(() => {
-																		this.state.big ? this._deploy_big_player() : null
-																		this.state.share_menu.big ? this._deploy_share_menu() : null
- 																	}, 500)
-																}}>
-																	<Text style={{marginTop: 2,fontSize: 12, textAlign: 'center'}}>{item.name}</Text>
-																</TouchableOpacity>
-															)}
-															ItemSeparatorComponent={() => (
-																<Text>, </Text>
-															)}
-															horizontal={true}
-														/>
-													</View>
-												</View>
+								</View>
+								<ScrollView scrollEnabled={true} style={{width: Dimensions.get('screen').width, paddingHorizontal: 10, flex: 1}}>
+									<View style={{alignItems: 'center', justifyContent: 'center', width: Dimensions.get('screen').width, marginTop: 25, flex: 1}}>
+										<View style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 10, flex: 1}}>
+											<View style={{height: Dimensions.get('screen').width / 2, width: Dimensions.get('screen').width / 2, elevation: 10}}>
+												<Image source={{uri: this.props.store.listening.listening?.item?.album?.images[1]?.url}} style={{...StyleSheet.absoluteFill, borderTopLeftRadius: 10, borderTopRightRadius: 10}}/>
 											</View>
-											<View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 30, flexWrap: 'wrap'}}>
-												<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-													<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
-														<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/facebook.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
-													</TouchableOpacity>
-													<Text style={{marginTop: 5}}>Copier le lien</Text>
-												</View>
-												<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-													<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
-														<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/whatsapp.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
-													</TouchableOpacity>
-													<Text style={{marginTop: 5}}>Whatsapp</Text>
-												</View>
-												<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-													<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
-														<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/instagram.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
-													</TouchableOpacity>
-													<Text style={{marginTop: 5}}>Stories</Text>
-												</View>
-												<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-													<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
-														<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/messenger.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
-													</TouchableOpacity>
-													<Text style={{marginTop: 5}}>Messenger</Text>
-												</View>
-											</View>
-											<View style={{flexDirection: 'row', justifyContent: 'space-between', marginTop: 15, flexWrap: 'wrap'}}>
-												<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-													<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48, borderColor: "#3B579D", borderWidth: 2}}>
-														<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/facebook.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48, borderWidth: 2, borderColor: '#2f3640'}} />
-													</TouchableOpacity>
-													<Text style={{marginTop: 5}}>Stories</Text>
-												</View>
-												<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-													<TouchableOpacity onPress={() => Share.share({
-														title: `${this.props.store.listening.listening?.item?.name} - ${this.props.store.listening.listening?.item?.artists[0]?.name}`,
-														// message: `${this.props.store.listening.listening?.item?.external_urls?.spotify}`,
-														message: 'Zik_mu://track/'+this.props.store.listening.listening?.item?.id,
-														url: 'https://flexcorp-dev.fr'
-													}, {
-														dialogTitle: `${this.props.store.listening.listening?.item?.name} - ${this.props.store.listening.listening?.item?.artists[0]?.name}`
-													})} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
-														<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/twitter.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
-													</TouchableOpacity>
-													<Text style={{marginTop: 5}}>Twitter</Text>
-												</View>
-												<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-													<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
-														<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/snapchat.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
-													</TouchableOpacity>
-													<Text style={{marginTop: 5}}>Snapchat</Text>
-												</View>
-												<View style={{flex:1, flexDirection: 'column', alignItems: 'center', justifyContent: 'center'}}>
-													<TouchableOpacity onPress={() => alert('pressed')} style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 48, width: 48, height: 48}}>
-														<Image source={{uri: 'http://zikmu.api.flexcorp-dev.fr/tmp/icons/facebook.png'}} style={{...StyleSheet.absoluteFill, borderRadius: 48}} />
-													</TouchableOpacity>
-													<Text>Sms</Text>
-												</View>
+											<View style={{width: Dimensions.get('screen').width / 2, backgroundColor: 'red', padding: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10}}>
+												<Text>Partager</Text>
 											</View>
 										</View>
-									</LinearGradient>
-								</Animated.View>
-								<Animated.View style={{position: 'absolute', top: this.state.track_infos.top, left: this.state.track_infos.left, right: this.state.track_infos.right, bottom: this.state.track_infos.bottom, height: this.state.track_infos.height, backgroundColor: '#B00D72', paddingTop: 0, flex: 1, borderRadius: 10, elevation: 10, shadowColor: "#000000"}}>
-									<LinearGradient colors={['#8e44ad', '#2f3640']} style={{paddingTop: StatusBar.currentHeight, flex: 1}} >
-										<View>
-											<View style={{width: Dimensions.get('screen').width, height: 50, alignItems: 'center', justifyContent: 'flex-end', flexDirection: 'row', paddingHorizontal: 30}}>
-												<TouchableOpacity onPress={() => this._deploy_track_infos()}>
-													<Icon name={"x"} size={24} color={"white"}/>
-												</TouchableOpacity>
-											</View>
-											<View style={{flexDirection: 'row', justifyContent: 'flex-start', paddingHorizontal: 30, paddingVertical: 10, zIndex: 10, backgroundColor: 'transparent'}}>
-												<View style={{flex: 1, flexDirection: 'row', justifyContent: "space-around"}}>
-													<TouchableOpacity onPress={() => this._shuffle()} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-														<Icon name="shuffle" size={36}
-															  style={{color: this.props.store.listening.listening?.shuffle_state ? 'green' :'white', opacity: this.props.store.listening.listening.actions.disallows.toggling_shuffle ? 0.2 : 1}}/>
-														<Text style={{marginTop: 5}}>Lecture aléatoire</Text>
-													</TouchableOpacity>
-													<TouchableOpacity onPress={() => this._repeat()} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-														<Icon name="repeat" size={36}
-															  style={{color: this.props.store.listening.listening?.repeat_state == 'context' ? 'green' : this.props.store.listening.listening?.repeat_state == 'track' ? '#B00D70' : 'white', opacity: this.props.store.listening.listening.actions.disallows.toggling_repeat_track || this.props.store.listening.listening.actions.disallows.toggling_repeat_context ? 0.2 : 1}}/>
-														<Text style={{marginTop: 5}}>Répéter</Text>
-													</TouchableOpacity>
-													<TouchableOpacity onPress={() => {
-														this._deploy_track_infos();
-														setTimeout(() => {
-															this._deploy_waiting_list();
-														}, 500);
-													}} style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
-														<Icon name={'list'} size={36} color={'white'}/>
-														<Text style={{marginTop: 5}}>File d'attente</Text>
-													</TouchableOpacity>
-												</View>
-											</View>
+										<View style={{marginTop: 5, flex: 1}}>
+											<Text style={{color: 'white', fontWeight: "bold", marginTop: 5, textAlign: 'center'}}>{this.props.store.listening.listening?.item?.name}</Text>
+											<FlatList
+												data={this.props.store.listening.listening?.item?.artists}
+												horizontal={true}
+												style={{textAlign: 'center'}}
+												renderItem={({item, key}) => (
+													<Text style={{color: 'lightgrey', marginTop: 5, textAlign: 'center'}}>{item.name}</Text>
+												)}
+												ItemSeparatorComponent={() => (<Text style={{marginTop: 5}}>, </Text>)}
+											/>
 										</View>
-										<ScrollView scrollEnabled={true} style={{width: Dimensions.get('screen').width, paddingHorizontal: 10, flex: 1}}>
-											<View style={{alignItems: 'center', justifyContent: 'center', width: Dimensions.get('screen').width, marginTop: 25, flex: 1}}>
-												<View style={{elevation: 10, backgroundColor: '#2f3640', borderRadius: 10, flex: 1}}>
-													<View style={{height: Dimensions.get('screen').width / 2, width: Dimensions.get('screen').width / 2, elevation: 10}}>
-														<Image source={{uri: this.props.store.listening.listening?.item?.album?.images[1]?.url}} style={{...StyleSheet.absoluteFill, borderTopLeftRadius: 10, borderTopRightRadius: 10}}/>
-													</View>
-													<View style={{width: Dimensions.get('screen').width / 2, backgroundColor: 'red', padding: 10, borderBottomLeftRadius: 10, borderBottomRightRadius: 10}}>
-														<Text>Partager</Text>
-													</View>
-												</View>
-												<View style={{marginTop: 5, flex: 1}}>
-													<Text style={{color: 'white', fontWeight: "bold", marginTop: 5, textAlign: 'center'}}>{this.props.store.listening.listening?.item?.name}</Text>
-													<FlatList
-														data={this.props.store.listening.listening?.item?.artists}
-														horizontal={true}
-														style={{textAlign: 'center'}}
-														renderItem={({item, key}) => (
-															<Text style={{color: 'lightgrey', marginTop: 5, textAlign: 'center'}}>{item.name}</Text>
-														)}
-														ItemSeparatorComponent={() => (<Text style={{marginTop: 5}}>, </Text>)}
-													/>
-												</View>
-											</View>
-											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<Icon name={'heart'} size={24} color={'white'} />
-												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Liker</Text>
-											</TouchableOpacity>
-											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<Icon name={'slash'} size={24} color={'white'} />
-												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Masquer ce titre</Text>
-											</TouchableOpacity>
-											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<Icon name={'home'} size={24} color={'white'} />
-												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Ajouter à une playlist</Text>
-											</TouchableOpacity>
-											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<Icon name={'plus'} size={24} color={'white'} />
-												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Ajouter à la file d'attente</Text>
-											</TouchableOpacity>
-											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<Icon name="disc" color={"white"} size={24}/>
-												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Voir l'album</Text>
-											</TouchableOpacity>
-											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<Icon name="user" color={"white"} size={24}/>
-												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Voir l'artiste</Text>
-											</TouchableOpacity>
-											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<Icon name="share" color={"white"} size={24}/>
-												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Partager</Text>
-											</TouchableOpacity>
-											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<Icon name="clock" solid={false} color={"white"} size={24}/>
-												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Minuteur de veille</Text>
-											</TouchableOpacity>
-											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<Icon name="mic" color={"white"} size={24}/>
-												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Radio liée au titre</Text>
-											</TouchableOpacity>
-											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<Icon name={'info'} size={24} color={'white'} />
-												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Afficher les crédits</Text>
-											</TouchableOpacity>
-											<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
-												<Icon name={'alert-triangle'} size={24} color={'white'} />
-												<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Signaler un abus</Text>
-											</TouchableOpacity>
-										</ScrollView>
-									</LinearGradient>
-								</Animated.View>
-							</Animated.View>
-
-						)
-					}}
-
-				</BottomTabBarHeightContext.Consumer>
-
+									</View>
+									<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
+										<Icon name={'heart'} size={24} color={'white'} />
+										<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Liker</Text>
+									</TouchableOpacity>
+									<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
+										<Icon name={'slash'} size={24} color={'white'} />
+										<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Masquer ce titre</Text>
+									</TouchableOpacity>
+									<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
+										<Icon name={'home'} size={24} color={'white'} />
+										<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Ajouter à une playlist</Text>
+									</TouchableOpacity>
+									<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
+										<Icon name={'plus'} size={24} color={'white'} />
+										<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Ajouter à la file d'attente</Text>
+									</TouchableOpacity>
+									<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
+										<Icon name="disc" color={"white"} size={24}/>
+										<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Voir l'album</Text>
+									</TouchableOpacity>
+									<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
+										<Icon name="user" color={"white"} size={24}/>
+										<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Voir l'artiste</Text>
+									</TouchableOpacity>
+									<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
+										<Icon name="share" color={"white"} size={24}/>
+										<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Partager</Text>
+									</TouchableOpacity>
+									<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
+										<Icon name="clock" solid={false} color={"white"} size={24}/>
+										<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Minuteur de veille</Text>
+									</TouchableOpacity>
+									<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
+										<Icon name="mic" color={"white"} size={24}/>
+										<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Radio liée au titre</Text>
+									</TouchableOpacity>
+									<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
+										<Icon name={'info'} size={24} color={'white'} />
+										<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Afficher les crédits</Text>
+									</TouchableOpacity>
+									<TouchableOpacity onPress={() => alert('test')} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', flex: 1}}>
+										<Icon name={'alert-triangle'} size={24} color={'white'} />
+										<Text style={{fontSize: 16, fontWeight: 'bold', color: 'white', marginVertical: 20, marginLeft: 10}}>Signaler un abus</Text>
+									</TouchableOpacity>
+								</ScrollView>
+							</LinearGradient>
+						</Animated.View>
+					</Animated.View>
 				:
-				null
+					null
 		)
 	}
 

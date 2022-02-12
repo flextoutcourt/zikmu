@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Image, StatusBar, ScrollView, Dimensions} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/Feather';
 
 import {connect} from 'react-redux';
 import axios from 'axios';
@@ -26,7 +26,7 @@ class SelfHeader extends React.PureComponent{
             }}>
                 <View style={{flexDirection: 'row', alignItems: 'center'}}>
                     <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                        <FontAwesome5Icon name={"arrow-left"} size={24} color={'white'} />
+                        <Icon name={"arrow-left"} size={24} color={'white'} />
                     </TouchableOpacity>
                     <Text style={{color: 'white', marginLeft: 10}}>Votre profil</Text>
                 </View>

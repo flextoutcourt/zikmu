@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Image, StatusBar, ScrollView, Dimensions} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/Feather';
 
 import {connect} from 'react-redux';
 import Animated, {Extrapolate} from 'react-native-reanimated';
@@ -61,7 +61,7 @@ class SelfHeader extends React.PureComponent{
                 }}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
                         <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                            <FontAwesome5Icon name={"arrow-left"} size={24} color={'white'} />
+                            <Icon name={"arrow-left"} size={24} color={'white'} />
                         </TouchableOpacity>
                         <View style={{flexDirection: 'row', marginLeft: 10, alignItems: 'center'}}>
                             {this.props.user?.images[0] ? (

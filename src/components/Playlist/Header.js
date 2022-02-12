@@ -75,7 +75,7 @@ class Header extends React.PureComponent {
 						<TouchableOpacity
 							onPress={() => alert('liked')}
 							style={{marginLeft: 15}}>
-							<FontAwesome5Icon name="ellipsis-v" size={24} color={'white'}/>
+							<FontAwesome5Icon name="more-vertical" size={24} color={'white'}/>
 						</TouchableOpacity>
 					</View>
 				</Animated.View>

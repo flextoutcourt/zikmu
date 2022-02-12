@@ -43,7 +43,7 @@ class RecentComponent extends React.PureComponent {
 	}
 
 	componentDidMount = () => {
-		this._get_recent().then(json => this.setState({recent: this._sort_array(json)}));
+		this._get_recent().then(json => this.setState({recent: json.items}));
 	};
 
 	render() {

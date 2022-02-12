@@ -3,7 +3,7 @@ import React from 'react';
 import {Dimensions, Image, StatusBar, StyleSheet, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Animated, {Extrapolate} from 'react-native-reanimated';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/Feather';
 import {connect} from 'react-redux';
 import Albums from '../../components/Artist/Albums';
 import Header from '../../components/Artist/Header';
@@ -59,7 +59,7 @@ class ArtistScreen extends React.PureComponent {
 					</View>
 				),
 				headerRight: () => (
-					<FontAwesome5Icon name="heart" size={24} color={'red'}/>
+					<Icon name="heart" size={24} color={'red'}/>
 				),
 			});
 		});

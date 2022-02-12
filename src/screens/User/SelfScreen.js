@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Image, StatusBar, ScrollView, Dimensions} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/Feather';
 
 import {connect} from 'react-redux';
 import SelfHeader from '../../components/User/SelfHeader';
@@ -53,7 +53,7 @@ class SelfScreen extends PureComponent{
                             <Text style={{fontSize: 18, color: 'white', fontWeight: "bold", marginLeft: 10}}>{this.state.user?.display_name}</Text>
                         </View>
                         <View style={{marginLeft: 20}}>
-                            <FontAwesome5Icon name={'chevron-right'} solid={true} size={24} color={'white'} />
+                            <Icon name={'chevron-right'} solid={true} size={24} color={'white'} />
                         </View>
                     </TouchableOpacity>
                 {/*    Profil utilisateur*/}

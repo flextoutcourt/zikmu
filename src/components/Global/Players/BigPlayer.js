@@ -144,7 +144,7 @@ class Bigplayer extends React.PureComponent {
                             <Icon name="arrow-left" size={24} color={"white"}/>
                         </TouchableOpacity>
                         <TouchableOpacity>
-                            <Icon name="ellipsis-v" size={24} color={"white"}/>
+                            <Icon name="more-vertical" size={24} color={"white"}/>
                         </TouchableOpacity>
                     </View>
                     <Text numberOfLines={1} style={{fontSize: 24, textAlign: 'center', color: 'white', marginBottom: 20}}>{this.state.listening?.item?.album?.name}</Text>

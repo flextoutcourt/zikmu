@@ -40,7 +40,7 @@ class ArtistAlt extends React.PureComponent {
 				style={{flexDirection: 'column', alignItems: 'center', margin: 10}}
 			>
 				<Image source={{uri: this.state.artist?.images[1]?.url}}
-				       style={{...styles.images, borderRadius: this.state.artist?.images[1].height}}/>
+				       style={{...styles.images, borderRadius: this.state.artist?.images[1]?.height}}/>
 				<Text style={{...styles.text, color: 'white', fontSize: 16, fontWeight: "800"}}>{this.state.artist?.name}</Text>
 			</TouchableOpacity>
 		);
