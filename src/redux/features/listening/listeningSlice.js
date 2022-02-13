@@ -13,7 +13,7 @@ const listeningSlice = createSlice({
             if(
                 state.listening.item.id !== action.payload.listening.item.id ||
                 state.listening.is_playing !== action.payload.listening.is_playing
-            ) {
+            ){
                 state.listening = action.payload.listening
             }
         }

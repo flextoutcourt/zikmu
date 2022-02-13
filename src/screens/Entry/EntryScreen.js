@@ -72,7 +72,7 @@ class EntryScreen extends PureComponent {
 							translucent={true}
 						/>
 						<LoggedinNavigation/>
-						{/*<PlayerAlt/>*/}
+						<PlayerAlt/>
 					</SafeAreaView>
 				</SafeAreaProvider>
 			);
