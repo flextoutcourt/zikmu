@@ -34,7 +34,7 @@ class Artistitem extends React.PureComponent {
 			<TouchableOpacity onPress={() => {
 				alert(this.state.artist?.name);
 			}}
-			                  style={{flexDirection: 'row', alignItems: 'center'}}>
+			  style={{flexDirection: 'row', alignItems: 'center', marginVertical: 5}}>
 				<Image source={{uri: this.state.artist?.images[2]?.url}} style={{
 					height: 48,
 					width: 48,

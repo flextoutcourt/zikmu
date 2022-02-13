@@ -33,6 +33,7 @@ function PlaylistItem({playlist}) {
 						<Text style={{fontWeight: 'bold', color: 'white'}}>
 							{playlist?.name}
 						</Text>
+						<Text>{playlist?.tracks?.total} sons</Text>
 					</View>
 				</View>
 				<TouchableOpacity>

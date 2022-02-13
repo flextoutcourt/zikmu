@@ -45,17 +45,23 @@ class SelfScreen extends PureComponent{
                 <ScrollView style={{paddingTop: 2 * StatusBar.currentHeight}}>
                     <TouchableOpacity onPress={() => this.props.navigation.push('User', {
                         user_id: this.state.user?.id
-                    })} style={{padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between'}}>
+                    })} style={{padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10}}>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
                             <View style={{height: 100, width: 100, borderRadius: 100}}>
-                                <Image source={{uri: 'https://picsum.photos/100'}} style={{...StyleSheet.absoluteFill, borderRadius: 100}} />
+                                <Image source={{uri: this.state.user?.images[0]?.url}} style={{...StyleSheet.absoluteFill, borderRadius: 100}} />
                             </View>
-                            <Text style={{fontSize: 18, color: 'white', fontWeight: "bold", marginLeft: 10}}>{this.state.user?.display_name}</Text>
+                            <View style={{marginLeft: 10}}>
+                                <Text style={{fontSize: 18, color: 'white', fontWeight: "bold"}}>{this.state.user?.display_name}</Text>
+                                <Text>Voir le profil</Text>
+                            </View>
                         </View>
                         <View style={{marginLeft: 20}}>
                             <Icon name={'chevron-right'} solid={true} size={24} color={'white'} />
                         </View>
                     </TouchableOpacity>
+                    <View style={{padding: 10}}>
+                        <Text style={{...styles.title}}>Compte</Text>
+                    </View>
                 {/*    Profil utilisateur*/}
                 {/*    Differents settings */}
                 </ScrollView>
@@ -74,6 +80,11 @@ const mapStateToProps = store => {
 const styles = StyleSheet.create({
     container: {
         flex: 1
+    },
+    title: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: 'white'
     }
 })
 
