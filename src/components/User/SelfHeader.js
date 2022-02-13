@@ -24,11 +24,11 @@ class SelfHeader extends React.PureComponent{
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)', position: 'absolute',
                 left: 0, right: 0, top: StatusBar.currentHeight, height: 50, paddingHorizontal: 10, zIndex: 10
             }}>
-                <View style={{flexDirection: 'row', alignItems: 'center'}}>
+                <View style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
                     <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
                         <Icon name={"arrow-left"} size={24} color={'white'} />
                     </TouchableOpacity>
-                    <Text style={{color: 'white', marginLeft: 10}}>Votre profil</Text>
+                    <Text style={{color: 'white', textAlign: 'center', flex: 1, transform: [{translateX: -12}], fontSize: 16, fontWeight: "bold"}}>Préférences</Text>
                 </View>
             </View>
         )

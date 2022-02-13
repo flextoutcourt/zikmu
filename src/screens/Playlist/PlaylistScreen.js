@@ -13,15 +13,15 @@ class PlaylistScreen extends React.Component {
 		super(props);
 		this.state = {
 			playlist: null,
+			playlistItems: null,
 			scrollY: new Animated.Value(0),
 			englithment: null
 		};
 	}
 
-	_get_playlist = () => {
+	_get_playlist = (offset) => {
 		const promise = axios.get(
-			'https://api.spotify.com/v1/playlists/' +
-			this.props.route.params.playlist_id,
+			`https://api.spotify.com/v1/playlists/${this.props.route.params.playlist_id}`,
 			{
 				headers: {
 					Accept: 'application/json',
@@ -33,6 +33,19 @@ class PlaylistScreen extends React.Component {
 		);
         return promise.then(data => data.data);
 	};
+
+	_get_playlist_tracks = (offset) => {
+		const promise = axios.get(`https://api.spotify.com/v1/playlists/${this.props.route.params.playlist_id}/tracks?offset=${offset}`,
+			{
+				headers: {
+					Accept: "application/json",
+					Authorization: `Bearer ${this.props.store.authentication.accessToken}`,
+					'Content-Type': 'application/json',
+				},
+			},
+		);
+		return promise.then(data => data.data);
+	}
 
 	_to_array_tracks = () => {
 		let tracks_array = [];
@@ -96,6 +109,7 @@ class PlaylistScreen extends React.Component {
 			extrapolate: Extrapolate.CLAMP,
 		});
 		this._get_playlist().then(json => {
+			this.setState({playlistItems: json.tracks.items});
 			this.setState({playlist: json});
 			if(json.collaborative){
 				let users = [];
@@ -142,23 +156,29 @@ class PlaylistScreen extends React.Component {
 			extrapolate: Extrapolate.CLAMP,
 		});
 
-		const br = this.state.scrollY.interpolate({
-			inputRange: [0, 10],
-			outputRange: [0, 10],
-			extrapolate: Extrapolate.CLAMP,
-		});
-
 		const height = this.state.scrollY.interpolate({
 			inputRange: [0, 125],
-			outputRange: [Dimensions.get('screen').width, Dimensions.get('screen').width],
+			outputRange: [Dimensions.get('screen').width - (StatusBar.currentHeight * 2), Dimensions.get('screen').width],
 			extrapolate: Extrapolate.CLAMP
 		});
 
 		const mt = this.state.scrollY.interpolate({
 			inputRange: [0, 125],
-			outputRange: [0, 125],
+			outputRange: [StatusBar.currentHeight + 10, StatusBar.currentHeight + 30],
 			extrapolate: Extrapolate.CLAMP
 		});
+
+		const ml = this.state.scrollY.interpolate({
+			inputRange: [0, 125],
+			outputRange: [StatusBar.currentHeight, 0],
+			extrapolate: Extrapolate.CLAMP
+		});
+
+		const br = this.state.scrollY.interpolate({
+			inputRange: [0, 125],
+			outputRange: [10, 25],
+			extrapolate: Extrapolate.CLAMP
+		})
 
 		const transform = [{scale}];
 		return (
@@ -181,44 +201,39 @@ class PlaylistScreen extends React.Component {
 						{listener: '', useNativeDriver: true},
 					)}
 					scrollEventThrottle={16}>
+					<Animated.View
+						style={{
+							alignItems: 'flex-start',
+							justifyContent: 'flex-start',
+							margin: 0,
+							marginBottom: mb,
+							marginTop: mt,
+							marginLeft: ml,
+							transform: transform,
+							width: height,
+							height: height,
+							opacity: opacity,
+						}}>
+						<Animated.Image
+							source={{uri: this.state.playlist?.images[0]?.url}}
+							style={{
+								width: '100%',
+								height: '100%',
+								marginBottom: 15,
+								borderRadius: br,
+								elevation: 10,
+							}}
+						/>
+					</Animated.View>
 					{this.state.playlist ? (
 						<FlatList
-							data={this.state.playlist?.tracks?.items}
+							data={this.state.playlistItems}
 							scrollEnabled={false}
 							horizontal={false}
+							onEndReachedThreshold={0.2}
 							ListHeaderComponent={() => (
 								<Animated.View style={{}}>
-									<Animated.View
-										style={{
-											alignItems: 'flex-start',
-											justifyContent: 'flex-start',
-											elevation: 10,
-											marginBottom: mb,
-											marginTop: mt,
-											transform: transform,
-											width: height,
-											height: height,
-											position: 'relative',
-											opacity: opacity,
-										}}>
-										{/*<Animated.Image*/}
-										{/*	source={{uri: this.state.playlist?.images[0]?.url}}*/}
-										{/*	style={{width: '100%', height: '100%', borderRadius: br}}*/}
-										{/*/>*/}
-										<Animated.Text
-											style={{
-												position: 'absolute',
-												bottom: 5,
-												left: 10,
-												backgroundColor: 'red',
-												borderRadius: 9,
-												padding: 5,
-												elevation: 10,
-												opacity: opacity,
-											}}>
-											{this.state.playlist?.followers?.total} {this.state.playlist?.followers?.total > 1 ? 'Followers' : 'Follower'}
-										</Animated.Text>
-									</Animated.View>
+
 									<Animated.View style={{opacity: opacity}}>
 										<Text
 											style={{

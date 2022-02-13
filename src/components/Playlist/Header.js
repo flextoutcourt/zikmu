@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Dimensions, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View,} from 'react-native';
 import Animated, {Extrapolate} from 'react-native-reanimated';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import Icon from 'react-native-vector-icons/Feather';
 
 class Header extends React.PureComponent {
 	constructor(props) {
@@ -39,7 +39,7 @@ class Header extends React.PureComponent {
 						onPress={() => {
 							this.props.navigation.goBack();
 						}}>
-						<FontAwesome5Icon
+						<Icon
 							name="arrow-left"
 							color={'white'}
 							size={24}
@@ -70,12 +70,12 @@ class Header extends React.PureComponent {
 					</View>
 					<View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
 						<TouchableOpacity onPress={() => alert('liked')}>
-							<FontAwesome5Icon name="heart" size={24} color={'white'}/>
+							<Icon name="heart" size={24} color={'white'}/>
 						</TouchableOpacity>
 						<TouchableOpacity
 							onPress={() => alert('liked')}
 							style={{marginLeft: 15}}>
-							<FontAwesome5Icon name="more-vertical" size={24} color={'white'}/>
+							<Icon name="more-vertical" size={24} color={'white'}/>
 						</TouchableOpacity>
 					</View>
 				</Animated.View>
