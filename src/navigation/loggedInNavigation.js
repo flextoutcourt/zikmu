@@ -3,6 +3,7 @@ import {Button, StyleSheet, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 import Icon from 'react-native-vector-icons/Feather';
 import {navigationRef} from '../utils/RootNavigation';
 import {BlurView} from 'expo-blur';
@@ -25,6 +26,7 @@ import NewsScreen from '../screens/Genres/Items/NewsScreen';
 import SelfScreen from '../screens/User/SelfScreen';
 import UserScreen from '../screens/User/UserScreen';
 import PlayerAlt from '../components/Global/PlayerAlt';
+import StoryScreen from '../screens/Stories/StoryScreen';
 
 export const config = {
 	screens: {
@@ -57,7 +59,7 @@ export const config = {
 
 const Tab = createBottomTabNavigator();
 
-const Stack = createNativeStackNavigator();
+const Stack = createSharedElementStackNavigator();
 
 class HomeNavigationStack extends React.PureComponent{
 	render(){
@@ -87,6 +89,7 @@ class HomeNavigationStack extends React.PureComponent{
 				<Stack.Screen name="Genre_News" component={NewsScreen} />
 				<Stack.Screen name="Self" component={SelfScreen} />
 				<Stack.Screen name="User" component={UserScreen} />
+				<Stack.Screen name="Story" component={StoryScreen} />
 			</Stack.Navigator>
 		);
 	}
