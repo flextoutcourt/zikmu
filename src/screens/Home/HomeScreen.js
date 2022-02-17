@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
@@ -8,6 +8,7 @@ import GenreComponent from '../../components/Home/Genres/GenreComponent';
 import ReleaseComponent from '../../components/Home/Release/ReleaseComponent';
 import FollowComponent from '../../components/Home/Follows/FollowComponent';
 import PlayerAlt from '../../components/Global/PlayerAlt';
+import {SharedElement} from 'react-native-shared-element';
 
 class HomeScreen extends React.Component {
 	constructor(props) {
@@ -51,7 +52,67 @@ class HomeScreen extends React.Component {
 					marginTop: 0,
 					...styles.container,
 				}}>
-				<ScrollView style={{flex: 1, paddingTop: StatusBar.currentHeight, paddingBottom: 155}}>
+				<View style={{borderBottomWidth: 1, borderColor: 'red'}}>
+					<ScrollView horizontal={true} style={{ paddingTop: StatusBar.currentHeight + 10, paddingBottom: 10}}>
+						<TouchableOpacity onPress={() => this.props.navigation.push('Story', {
+							story: 1
+						})} style={styles.stories.imageContainer}>
+							<SharedElement id={`story.1`} style={{...StyleSheet.absoluteFill}}>
+                                <Image source={{uri: "https://picsum.photos/64"}} style={styles.stories.image}/>
+                            </SharedElement>
+						</TouchableOpacity>
+						<TouchableOpacity onPress={() => this.props.navigation.push('Story', {
+							story: 1
+						})} style={styles.stories.imageContainer}>
+							<SharedElement id={`story.2`} style={{...StyleSheet.absoluteFill}}>
+                                <Image source={{uri: "https://picsum.photos/64"}} style={styles.stories.image}/>
+                            </SharedElement>
+						</TouchableOpacity>
+						<TouchableOpacity onPress={() => this.props.navigation.push('Story', {
+							story: 1
+						})} style={styles.stories.imageContainer}>
+							<SharedElement id={`story.3`} style={{...StyleSheet.absoluteFill}}>
+                                <Image source={{uri: "https://picsum.photos/64"}} style={styles.stories.image}/>
+                            </SharedElement>
+						</TouchableOpacity>
+						<TouchableOpacity onPress={() => this.props.navigation.push('Story', {
+							story: 1
+						})} style={styles.stories.imageContainer}>
+							<SharedElement id={`story.4`} style={{...StyleSheet.absoluteFill}}>
+                                <Image source={{uri: "https://picsum.photos/64"}} style={styles.stories.image}/>
+                            </SharedElement>
+						</TouchableOpacity>
+						<TouchableOpacity onPress={() => this.props.navigation.push('Story', {
+							story: 1
+						})} style={styles.stories.imageContainer}>
+							<SharedElement id={`story.5`} style={{...StyleSheet.absoluteFill}}>
+                                <Image source={{uri: "https://picsum.photos/64"}} style={styles.stories.image}/>
+                            </SharedElement>
+						</TouchableOpacity>
+						<TouchableOpacity onPress={() => this.props.navigation.push('Story', {
+							story: 1
+						})} style={styles.stories.imageContainer}>
+							<SharedElement id={`story.6`} style={{...StyleSheet.absoluteFill}}>
+                                <Image source={{uri: "https://picsum.photos/64"}} style={styles.stories.image}/>
+                            </SharedElement>
+						</TouchableOpacity>
+						<TouchableOpacity onPress={() => this.props.navigation.push('Story', {
+							story: 1
+						})} style={styles.stories.imageContainer}>
+							<SharedElement id={`story.7`} style={{...StyleSheet.absoluteFill}}>
+                                <Image source={{uri: "https://picsum.photos/64"}} style={styles.stories.image}/>
+                            </SharedElement>
+						</TouchableOpacity>
+						<TouchableOpacity onPress={() => this.props.navigation.push('Story', {
+							story: 1
+						})} style={styles.stories.imageContainer}>
+							<SharedElement id={`story.8`} style={{...StyleSheet.absoluteFill}}>
+                                <Image source={{uri: "https://picsum.photos/64"}} style={styles.stories.image}/>
+                            </SharedElement>
+						</TouchableOpacity>
+					</ScrollView>
+				</View>
+				<ScrollView style={{flex: 1, paddingBottom: 155}}>
 					<View style={{flex: 1, paddingVertical: 20, paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
 						<Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>{this._display_message()}</Text>
 						<View style={{flexDirection: 'row'}}>
@@ -65,10 +126,10 @@ class HomeScreen extends React.Component {
 					</View>
 					<RecentComponent {...this.props} isTop={true}/>
 					<ReleaseComponent {...this.props} />
-                    <GenreComponent {...this.props} />
+					<GenreComponent {...this.props} />
 					<RecentComponent {...this.props} isTop={false} />
 					<FollowComponent {...this.props} />
-                </ScrollView>
+				</ScrollView>
 			</LinearGradient>
 		);
 	}
@@ -86,6 +147,21 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: '#2c3e50',
 	},
+	stories: {
+		image: {
+			...StyleSheet.absoluteFill,
+			borderRadius: 64
+		},
+		imageContainer: {
+			borderRadius: 64,
+			width: 64,
+			height: 64,
+			elevation: 10,
+			marginHorizontal: 10,
+			borderColor: 'white',
+			borderWidth: 2
+		}
+	}
 });
 
 export default connect(mapStateToProps)(HomeScreen);
