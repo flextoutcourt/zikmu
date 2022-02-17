@@ -89,7 +89,9 @@ class HomeNavigationStack extends React.PureComponent{
 				<Stack.Screen name="Genre_News" component={NewsScreen} />
 				<Stack.Screen name="Self" component={SelfScreen} />
 				<Stack.Screen name="User" component={UserScreen} />
-				<Stack.Screen name="Story" component={StoryScreen} />
+				<Stack.Screen name="Story" component={StoryScreen} sharedElements={(route) => {
+					return [route.params.story]
+				}} />
 			</Stack.Navigator>
 		);
 	}
@@ -132,7 +134,6 @@ class libraryNavigationStack extends React.PureComponent {
 			<View style={{flex: 1}}>
 				<Stack.Navigator
 					screenOptions={{
-						gestureEnabled: true,
 					}}
 					defaultScreenOptions={{
 						headerShown: false,

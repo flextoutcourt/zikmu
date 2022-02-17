@@ -1,18 +1,23 @@
 import React, {PureComponent} from 'react';
-import {View, StyleSheet, Image, Text} from 'react-native';
-import {SharedElement} from 'react-native-shared-element'
+import {View, StyleSheet, Image, Text, Dimensions} from 'react-native';
+import {SharedElement} from 'react-navigation-shared-element'
+
+import { PanGestureHandler } from "react-native-gesture-handler";
 
 class StoryScreen extends PureComponent{
 
     constructor(props){
         super(props)
+        this.state = {
+            story: props.route.params.story
+        }
     }
 
     render(){
         return(
-            <View style={{flex: 1}}>
-                <SharedElement id={`story.3`} style={{...StyleSheet.absoluteFill}}>
-                    <Image source={{uri: 'https://picsum.photos/1440'}} style={StyleSheet.absoluteFill} />
+            <View style={{flex: 1  }}>
+                <SharedElement id={this.state.story.id} style={{...StyleSheet.absoluteFill}}>
+                    <Image source={{uri: this.state.story.picture}} style={{...StyleSheet.absoluteFill}} />
                 </SharedElement>
             </View>
         )
