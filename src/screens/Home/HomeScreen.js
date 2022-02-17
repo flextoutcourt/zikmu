@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
@@ -8,7 +8,7 @@ import GenreComponent from '../../components/Home/Genres/GenreComponent';
 import ReleaseComponent from '../../components/Home/Release/ReleaseComponent';
 import FollowComponent from '../../components/Home/Follows/FollowComponent';
 import PlayerAlt from '../../components/Global/PlayerAlt';
-import {SharedElement} from 'react-native-shared-element';
+import {SharedElement} from 'react-navigation-shared-element';
 
 class HomeScreen extends React.Component {
 	constructor(props) {
@@ -45,6 +45,34 @@ class HomeScreen extends React.Component {
 	}
 
 	render() {
+
+		const stories = [
+			{
+				id: 1,
+				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg'
+			},
+			{
+				id: 2,
+				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg'
+			},
+			{
+				id: 3,
+				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg'
+			},
+			{
+				id: 4,
+				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg'
+			},
+			{
+				id: 5,
+				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg'
+			},
+			{
+				id: 6,
+				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg'
+			}
+		];
+
 		return (
 			<LinearGradient
 				colors={['#B00D72', '#5523BF']}
@@ -54,62 +82,15 @@ class HomeScreen extends React.Component {
 				}}>
 				<View style={{borderBottomWidth: 1, borderColor: 'red'}}>
 					<ScrollView horizontal={true} style={{ paddingTop: StatusBar.currentHeight + 10, paddingBottom: 10}}>
-						<TouchableOpacity onPress={() => this.props.navigation.push('Story', {
-							story: 1
-						})} style={styles.stories.imageContainer}>
-							<SharedElement id={`story.1`} style={{...StyleSheet.absoluteFill}}>
-                                <Image source={{uri: "https://picsum.photos/64"}} style={styles.stories.image}/>
-                            </SharedElement>
-						</TouchableOpacity>
-						<TouchableOpacity onPress={() => this.props.navigation.push('Story', {
-							story: 1
-						})} style={styles.stories.imageContainer}>
-							<SharedElement id={`story.2`} style={{...StyleSheet.absoluteFill}}>
-                                <Image source={{uri: "https://picsum.photos/64"}} style={styles.stories.image}/>
-                            </SharedElement>
-						</TouchableOpacity>
-						<TouchableOpacity onPress={() => this.props.navigation.push('Story', {
-							story: 1
-						})} style={styles.stories.imageContainer}>
-							<SharedElement id={`story.3`} style={{...StyleSheet.absoluteFill}}>
-                                <Image source={{uri: "https://picsum.photos/64"}} style={styles.stories.image}/>
-                            </SharedElement>
-						</TouchableOpacity>
-						<TouchableOpacity onPress={() => this.props.navigation.push('Story', {
-							story: 1
-						})} style={styles.stories.imageContainer}>
-							<SharedElement id={`story.4`} style={{...StyleSheet.absoluteFill}}>
-                                <Image source={{uri: "https://picsum.photos/64"}} style={styles.stories.image}/>
-                            </SharedElement>
-						</TouchableOpacity>
-						<TouchableOpacity onPress={() => this.props.navigation.push('Story', {
-							story: 1
-						})} style={styles.stories.imageContainer}>
-							<SharedElement id={`story.5`} style={{...StyleSheet.absoluteFill}}>
-                                <Image source={{uri: "https://picsum.photos/64"}} style={styles.stories.image}/>
-                            </SharedElement>
-						</TouchableOpacity>
-						<TouchableOpacity onPress={() => this.props.navigation.push('Story', {
-							story: 1
-						})} style={styles.stories.imageContainer}>
-							<SharedElement id={`story.6`} style={{...StyleSheet.absoluteFill}}>
-                                <Image source={{uri: "https://picsum.photos/64"}} style={styles.stories.image}/>
-                            </SharedElement>
-						</TouchableOpacity>
-						<TouchableOpacity onPress={() => this.props.navigation.push('Story', {
-							story: 1
-						})} style={styles.stories.imageContainer}>
-							<SharedElement id={`story.7`} style={{...StyleSheet.absoluteFill}}>
-                                <Image source={{uri: "https://picsum.photos/64"}} style={styles.stories.image}/>
-                            </SharedElement>
-						</TouchableOpacity>
-						<TouchableOpacity onPress={() => this.props.navigation.push('Story', {
-							story: 1
-						})} style={styles.stories.imageContainer}>
-							<SharedElement id={`story.8`} style={{...StyleSheet.absoluteFill}}>
-                                <Image source={{uri: "https://picsum.photos/64"}} style={styles.stories.image}/>
-                            </SharedElement>
-						</TouchableOpacity>
+						{stories.map((story, key) => (
+							<TouchableOpacity onPress={() => this.props.navigation.navigate('Story', {
+								story: story
+							})} style={styles.stories.imageContainer}>
+								<SharedElement id={story.id} style={{...StyleSheet.absoluteFill}}>
+									<Image source={{uri: story.picture}} style={styles.stories.image}/>
+								</SharedElement>
+							</TouchableOpacity>
+						))}
 					</ScrollView>
 				</View>
 				<ScrollView style={{flex: 1, paddingBottom: 155}}>
@@ -159,7 +140,8 @@ const styles = StyleSheet.create({
 			elevation: 10,
 			marginHorizontal: 10,
 			borderColor: 'white',
-			borderWidth: 2
+			borderWidth: 2,
+			overflow: 'hidden'
 		}
 	}
 });
