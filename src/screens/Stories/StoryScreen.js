@@ -53,7 +53,7 @@ const StoryScreen = ({route, navigation}) => {
         <PanGestureHandler onGestureEvent={onGestureEvent}>
             <Animated.View style={style}>
                 <SharedElement id={story.id} style={{flex: 1}}>
-                    <Image
+                    <Animated.Image
                         source={{uri: story.source}}
                         style={{...styles.imageContainer}}
                         resizeMode={"cover"}

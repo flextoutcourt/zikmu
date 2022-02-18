@@ -59,30 +59,128 @@ class HomeScreen extends React.Component {
 		const stories = [
 			{
 				id: 1,
+				user: {
+					name: 'Vald',
+					picture: 'https://picsum.photos/48',
+				},
 				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg'
 			},
 			{
 				id: 2,
+
+				user: {
+					name: 'Sch',
+					picture: 'https://picsum.photos/48',
+				},
 				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/1.jpg'
 			},
 			{
 				id: 3,
+
+				user: {
+					name: 'Capri',
+					picture: 'https://picsum.photos/48',
+				},
 				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/2.jpg'
 			},
 			{
 				id: 4,
+
+				user: {
+					name: 'Bu$hi',
+					picture: 'https://picsum.photos/48',
+				},
 				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/3.jpg'
 			},
 			{
 				id: 5,
+
+				user: {
+					name: 'Fianso',
+					picture: 'https://picsum.photos/48',
+				},
 				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/5.jpg'
 			},
 			{
 				id: 6,
+
+				user: {
+					name: 'ZKR',
+					picture: 'https://picsum.photos/48',
+				},
 				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/6.jpg'
 			},
 			{
 				id: 7,
+
+				user: {
+					name: 'Vald',
+					picture: 'https://picsum.photos/48',
+				},
+				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/7.jpg',
+				video: 'https://www.youtube.com/embed/xPbRsca_l7c'
+			},
+			{
+				id: 11,
+
+				user: {
+					name: 'Damso',
+					picture: 'https://picsum.photos/48',
+				},
+				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg'
+			},
+			{
+				id: 12,
+
+				user: {
+					name: 'Seezy',
+					picture: 'https://picsum.photos/48',
+				},
+				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/1.jpg'
+			},
+			{
+				id: 13,
+
+				user: {
+					name: 'Kalash Criminel',
+					picture: 'https://picsum.photos/48',
+				},
+				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/2.jpg'
+			},
+			{
+				id: 14,
+
+				user: {
+					name: 'Freeze Corleone',
+					picture: 'https://picsum.photos/48',
+				},
+				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/3.jpg'
+			},
+			{
+				id: 15,
+
+				user: {
+					name: 'Kaaris',
+					picture: 'https://picsum.photos/48',
+				},
+				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/5.jpg'
+			},
+			{
+				id: 16,
+
+				user: {
+					name: 'Ninho',
+					picture: 'https://picsum.photos/48',
+				},
+				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/6.jpg'
+			},
+			{
+				id: 17,
+
+				user: {
+					name: 'Rim\'k',
+					picture: 'https://picsum.photos/48',
+				},
 				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/7.jpg',
 				video: 'https://www.youtube.com/embed/xPbRsca_l7c'
 			}
@@ -95,22 +193,27 @@ class HomeScreen extends React.Component {
 					marginTop: 0,
 					...styles.container,
 				}}>
-				<View style={{borderBottomWidth: 1, borderColor: 'red'}}>
-					<ScrollView horizontal={true} style={{ paddingTop: StatusBar.currentHeight + 10, paddingBottom: 10}}>
-						{stories.map((story, key) => (
-							<Pressable onPress={() => this.props.navigation.navigate('Story', {
-								story: story
-							})}>
-								<SharedElement id={story.id}>
-									<View style={{...styles.stories.imageContainer}}>
-										<Image source={{uri: story.picture}} style={styles.stories.image}/>
-									</View>
-								</SharedElement>
-							</Pressable>
-						))}
-					</ScrollView>
-				</View>
-				<ScrollView style={{flex: 1, paddingBottom: 155}}>
+				<View style={{}}>
+					<ScrollView style={{ paddingTop: StatusBar.currentHeight + 10, paddingBottom: 10}} stickyHeaderIndices={[0]} stickyHeaderHiddenOnScroll={true}>
+						<ScrollView showsHorizontalScrollIndicator={false} horizontal={true} style={{flex: 1, backgroundColor: "#B00D72", paddingVertical: 10, elevation: 10, borderRadius: 10, marginHorizontal: 10}}>
+							{stories.map((story, key) => (
+								<Pressable onPress={() => this.props.navigation.navigate('Story', {
+									story: story
+								})} style={{position: 'relative'}}>
+									<SharedElement id={story.id}>
+										<View style={{...styles.stories.imageContainer}}>
+											<Image source={{uri: story.picture}} style={styles.stories.image}/>
+										</View>
+									</SharedElement>
+									<Pressable onPress={() => {
+										//fetch artist_id from database ticket #FLEX-38
+										// this.props.navigation.push('Artist', {});
+									}} style={{flex: 1, flexDirection: 'row', justifyContent: 'center', maxWidth: "99%"}}>
+										<Text style={{textAlign: 'center', marginTop: 5, color: 'white'}} numberOfLines={1}>{story.user.name}</Text>
+									</Pressable>
+								</Pressable>
+							))}
+						</ScrollView>
 					<View style={{flex: 1, paddingVertical: 20, paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
 						<Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>{this._display_message()}</Text>
 						<View style={{flexDirection: 'row'}}>
@@ -125,6 +228,8 @@ class HomeScreen extends React.Component {
 					<RecentComponent {...this.props} isTop={false} />
 					<FollowComponent {...this.props} />
 				</ScrollView>
+
+				</View>
 			</LinearGradient>
 		);
 	}
@@ -155,7 +260,6 @@ const styles = StyleSheet.create({
 			marginHorizontal: 10,
 			borderColor: 'white',
 			borderWidth: 2,
-			overflow: 'hidden'
 		}
 	}
 });
