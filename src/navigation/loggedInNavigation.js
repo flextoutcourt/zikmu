@@ -66,9 +66,10 @@ class HomeNavigationStack extends React.PureComponent{
 		return (
 			<Stack.Navigator
 				screenOptions={{
-					gestureEnabled: true,
+					gestureEnabled: false,
 					headerShown: false,
-				}}>
+				}}
+			>
 				<Stack.Screen
 					options={{
 						transitionSpec: {
@@ -89,9 +90,14 @@ class HomeNavigationStack extends React.PureComponent{
 				<Stack.Screen name="Genre_News" component={NewsScreen} />
 				<Stack.Screen name="Self" component={SelfScreen} />
 				<Stack.Screen name="User" component={UserScreen} />
-				<Stack.Screen name="Story" component={StoryScreen} sharedElements={(route) => {
-					return [route.params.story]
-				}} />
+				<Stack.Screen
+					name="Story"
+					component={StoryScreen}
+					sharedElements={(route) => {
+						const { story } = route.params;
+						return [story];
+					}}
+				/>
 			</Stack.Navigator>
 		);
 	}

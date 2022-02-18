@@ -1,5 +1,15 @@
 import React, {Component} from 'react';
-import {Dimensions, Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+	Dimensions,
+	Image,
+	Pressable,
+	ScrollView,
+	StatusBar,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {connect} from 'react-redux';
 import Icon from 'react-native-vector-icons/Feather';
@@ -53,23 +63,28 @@ class HomeScreen extends React.Component {
 			},
 			{
 				id: 2,
-				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg'
+				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/1.jpg'
 			},
 			{
 				id: 3,
-				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg'
+				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/2.jpg'
 			},
 			{
 				id: 4,
-				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg'
+				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/3.jpg'
 			},
 			{
 				id: 5,
-				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg'
+				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/5.jpg'
 			},
 			{
 				id: 6,
-				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg'
+				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/6.jpg'
+			},
+			{
+				id: 7,
+				picture: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/7.jpg',
+				video: 'https://www.youtube.com/embed/xPbRsca_l7c'
 			}
 		];
 
@@ -83,13 +98,15 @@ class HomeScreen extends React.Component {
 				<View style={{borderBottomWidth: 1, borderColor: 'red'}}>
 					<ScrollView horizontal={true} style={{ paddingTop: StatusBar.currentHeight + 10, paddingBottom: 10}}>
 						{stories.map((story, key) => (
-							<TouchableOpacity onPress={() => this.props.navigation.navigate('Story', {
+							<Pressable onPress={() => this.props.navigation.navigate('Story', {
 								story: story
-							})} style={styles.stories.imageContainer}>
-								<SharedElement id={story.id} style={{...StyleSheet.absoluteFill}}>
-									<Image source={{uri: story.picture}} style={styles.stories.image}/>
+							})}>
+								<SharedElement id={story.id}>
+									<View style={{...styles.stories.imageContainer}}>
+										<Image source={{uri: story.picture}} style={styles.stories.image}/>
+									</View>
 								</SharedElement>
-							</TouchableOpacity>
+							</Pressable>
 						))}
 					</ScrollView>
 				</View>
@@ -97,9 +114,6 @@ class HomeScreen extends React.Component {
 					<View style={{flex: 1, paddingVertical: 20, paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
 						<Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>{this._display_message()}</Text>
 						<View style={{flexDirection: 'row'}}>
-							{/*<TouchableOpacity onPress={() => alert('settings')} style={{marginLeft: 20}}>*/}
-							{/*	<Icon name={'settings'} solid={true} size={24} color={'white'} />*/}
-							{/*</TouchableOpacity>*/}
 							<TouchableOpacity onPress={() => this.props.navigation.push('Self')} style={{marginLeft: 20}}>
 								<Icon name={'settings'} solid={true} size={24} color={'white'} />
 							</TouchableOpacity>
@@ -131,12 +145,12 @@ const styles = StyleSheet.create({
 	stories: {
 		image: {
 			...StyleSheet.absoluteFill,
-			borderRadius: 64
+			borderRadius: 10
 		},
 		imageContainer: {
-			borderRadius: 64,
+			borderRadius: 10,
 			width: 64,
-			height: 64,
+			height: 64 * 1.77,
 			elevation: 10,
 			marginHorizontal: 10,
 			borderColor: 'white',
