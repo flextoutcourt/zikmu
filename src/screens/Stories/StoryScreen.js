@@ -1,18 +1,34 @@
-import React, {PureComponent} from 'react';
-import {View, StyleSheet, Image, Text, Dimensions} from 'react-native';
-import {SharedElement} from 'react-navigation-shared-element'
-import Animated, {useAnimatedGestureHandler, useSharedValue, useAnimatedStyle, withSpring, runOnJS, interpolate, Extrapolate, withTiming} from 'react-native-reanimated';
+import { NavigationProp, RouteProp } from "@react-navigation/native";
+import React from "react";
+import {StyleSheet, Dimensions, Text} from 'react-native';
+import { PanGestureHandler } from "react-native-gesture-handler";
+import Animated, {
+    Extrapolate,
+    interpolate,
+    runOnJS,
+    useAnimatedGestureHandler,
+    useAnimatedStyle,
+    useSharedValue,
+    withSpring,
+    withTiming,
+} from "react-native-reanimated";
 import { useVector, snapPoint } from "react-native-redash";
+import { SharedElement } from "react-navigation-shared-element";
 
-import { PanGestureHandler} from "react-native-gesture-handler";
+import { SnapchatRoutes } from "./Model";
 
-const { width, height } = Dimensions.get("window");
+interface StoryScreenProps {
+    navigation: NavigationProp<SnapchatRoutes, "Story">;
+    route: RouteProp<SnapchatRoutes, "Story">;
+}
 
-const StoryScreen = ({route, navigation}) => {
+const { width,  height } = Dimensions.get("window");
 
+const StoryScreen = ({ route, navigation }: StoryScreenProps) => {
     const isGestureActive = useSharedValue(false);
     const translation = useVector();
     const { story } = route.params;
+    alert(JSON.stringify(story));
     const onGestureEvent = useAnimatedGestureHandler({
         onStart: () => (isGestureActive.value = true),
         onActive: ({ translationX, translationY }) => {
@@ -48,27 +64,32 @@ const StoryScreen = ({route, navigation}) => {
             ],
         };
     });
-
-    return(
+    const borderStyle = useAnimatedStyle(() => {
+        return {
+            borderRadius: withTiming(isGestureActive.value ? 24 : 0),
+        };
+    });
+    return (
         <PanGestureHandler onGestureEvent={onGestureEvent}>
             <Animated.View style={style}>
-                <SharedElement id={story.id} style={{flex: 1}}>
+                <SharedElement id={story.id} style={{ flex: 1 }}>
                     <Animated.Image
                         source={{uri: story.source}}
-                        style={{...styles.imageContainer}}
-                        resizeMode={"cover"}
+                        style={[
+                            {
+                                ...StyleSheet.absoluteFillObject,
+                                width: undefined,
+                                height: undefined,
+                                backgroundColor: 'red',
+                                resizeMode: "cover",
+                                borderRadius: 10
+                            },
+                        ]}
                     />
                 </SharedElement>
             </Animated.View>
         </PanGestureHandler>
-    )
-
-}
-
-const styles = StyleSheet.create({
-    imageContainer: {
-        ...StyleSheet.absoluteFill
-    }
-})
+    );
+};
 
 export default StoryScreen;

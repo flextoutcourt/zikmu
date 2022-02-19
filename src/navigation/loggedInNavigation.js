@@ -68,15 +68,12 @@ class HomeNavigationStack extends React.PureComponent{
 				screenOptions={{
 					gestureEnabled: false,
 					headerShown: false,
+					cardOverlayEnabled: true,
+					cardStyle: { backgroundColor: "transparent" },
 				}}
+				mode="modal"
 			>
 				<Stack.Screen
-					options={{
-						transitionSpec: {
-							open: config,
-							close: config,
-						},
-					}}
 					name="Home"
 					component={HomeScreen}
 				/>
