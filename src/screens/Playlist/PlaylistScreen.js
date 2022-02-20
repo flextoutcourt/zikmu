@@ -15,7 +15,8 @@ class PlaylistScreen extends React.Component {
 			playlist: null,
 			playlistItems: null,
 			scrollY: new Animated.Value(0),
-			englithment: null
+			englithment: null,
+			suggested: null
 		};
 	}
 
@@ -71,10 +72,9 @@ class PlaylistScreen extends React.Component {
 		return artist_array.toString();
 	}
 
-	_enlight_playlist = () => {
-		console.log(this._to_array_artists());
+	_call_enligth = (limit = 5, array = null) => {
 		const promise = axios.get(
-			`https://api.spotify.com/v1/recommendations?seed_tracks=${this.state.playlist.tracks.items[0].track.id}&limit=10`,
+			`https://api.spotify.com/v1/recommendations?seed_tracks=${array ? array[Math.floor(Math.round(array.length - 1))].track.id : this.state.playlistItems[Math.floor(Math.random() * this.state.playlistItems.length -1)].track.id}&limit=5`,
 			{
 				headers: {
 					Accept: 'application/json',
@@ -84,7 +84,50 @@ class PlaylistScreen extends React.Component {
 				},
 			},
 		);
-        return promise.then(data => alert(JSON.stringify(data)));
+		return promise.then(data => data);
+	}
+
+	_enlight_playlist = () => {
+		// console.log(this._to_array_artists());
+		const promise = this._call_enligth(5);
+        return promise.then(data => {
+			let tracks = [];
+			let tracks_uris = '';
+			data.data.tracks.map((item, key) => {
+				tracks.push({track: item});
+				if(key !== data.data.tracks.length -1){
+					tracks_uris += item.uri + ',';
+				}else{
+					tracks_uris += item.uri;
+				}
+			});
+			// alert(JSON.stringify(tracks_uris));
+			this._add_to_playlist(tracks_uris);
+			this.setState({playlistItems: [...this.state.playlistItems, ...tracks]})
+		});
+	}
+
+	_add_to_playlist = (tracks_uris) => {
+		const promise = fetch(`https://api.spotify.com/v1/playlists/${this.props.route.params.playlist_id}/tracks?uris=${tracks_uris}`, {
+			headers: {
+				Accept: "application/json",
+				Authorization: "Bearer " + this.props.store.authentication.accessToken,
+				"Content-Type": "application/json"
+			},
+			method: "POST"
+		})
+		return promise.then(data => data);
+	}
+
+	_get_suggested = (array) => {
+		const promise = this._call_enligth(10, array);
+		promise.then((data) => {
+			let tracks = [];
+			data.data.tracks.map((item, key) => {
+				tracks.push({track: item});
+			});
+			this.setState({suggested: tracks});
+		});
 	}
 
 	_get_user = (href) => {
@@ -135,8 +178,9 @@ class PlaylistScreen extends React.Component {
 					}
 				}))
 			}
-		});
 
+			this._get_suggested(json.tracks.items);
+		})
 	}
 
 	render() {
@@ -255,7 +299,7 @@ class PlaylistScreen extends React.Component {
 											justifyContent: 'flex-start'
 										}}>
 											<TouchableOpacity
-												onPress={() => this._enlight_playlist().then(json => alert(JSON.stringify(json)))}
+												onPress={() => this._enlight_playlist()}
 												style={{
 													borderStyle: 'solid',
 													borderRadius: 100,
@@ -267,7 +311,7 @@ class PlaylistScreen extends React.Component {
 													alignItems: 'center',
 													justifyContent: 'center'
 												}}>
-												<Icon name="lightbulb" size={16} color="white"
+												<Icon name="heart" size={16} color="white"
 												                  style={{marginRight: 5}}/>
 												<Text style={{color: 'white'}}>
 													Enrichir
@@ -388,15 +432,23 @@ class PlaylistScreen extends React.Component {
 									Nos Suggestions
 								</Text>
 							</TouchableOpacity>
-							<FlatList
-								data={this.state.suggested?.tracks?.items}
-								keyExtractor={(item, index) => index.toString()}
-								renderItem={(item, key) => (
-									<TrackItem track={item.track}/>
-								)}
-							/>
 							<View style={{height: 800, width: Dimensions.get('screen').width - 20}}>
-
+								<FlatList
+									data={this.state.suggested}
+									keyExtractor={(item, index) => index.toString()}
+									renderItem={(item, index) => (
+										<TrackItem
+											track={item?.track}
+											album={item?.track?.album}
+											playlist={this.state.playlist}
+											collab_users={this.state.playlist?.collab_users}
+											added_by={item.added_by}
+											type={'playlist'}
+											playlist_uri={this.state.playlist?.uri}
+											playlist_index={index}
+										/>
+									)}
+								/>
 							</View>
 						</View>
 					</LinearGradient>

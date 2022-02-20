@@ -3,6 +3,7 @@ import {Button, StyleSheet, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import { createSharedElementStackNavigator } from "react-navigation-shared-element";
 import Icon from 'react-native-vector-icons/Feather';
 import {navigationRef} from '../utils/RootNavigation';
 import {BlurView} from 'expo-blur';
@@ -25,6 +26,7 @@ import NewsScreen from '../screens/Genres/Items/NewsScreen';
 import SelfScreen from '../screens/User/SelfScreen';
 import UserScreen from '../screens/User/UserScreen';
 import PlayerAlt from '../components/Global/PlayerAlt';
+import StoryScreen from '../screens/Stories/StoryScreen';
 
 export const config = {
 	screens: {
@@ -57,23 +59,21 @@ export const config = {
 
 const Tab = createBottomTabNavigator();
 
-const Stack = createNativeStackNavigator();
+const Stack = createSharedElementStackNavigator();
 
 class HomeNavigationStack extends React.PureComponent{
 	render(){
 		return (
 			<Stack.Navigator
 				screenOptions={{
-					gestureEnabled: true,
+					gestureEnabled: false,
 					headerShown: false,
-				}}>
+					cardOverlayEnabled: true,
+					cardStyle: { backgroundColor: "transparent" },
+				}}
+				mode="modal"
+			>
 				<Stack.Screen
-					options={{
-						transitionSpec: {
-							open: config,
-							close: config,
-						},
-					}}
 					name="Home"
 					component={HomeScreen}
 				/>
@@ -87,6 +87,14 @@ class HomeNavigationStack extends React.PureComponent{
 				<Stack.Screen name="Genre_News" component={NewsScreen} />
 				<Stack.Screen name="Self" component={SelfScreen} />
 				<Stack.Screen name="User" component={UserScreen} />
+				<Stack.Screen
+					name="Story"
+					component={StoryScreen}
+					sharedElements={(route) => {
+						const { story } = route.params;
+						return [story];
+					}}
+				/>
 			</Stack.Navigator>
 		);
 	}
@@ -126,62 +134,59 @@ class SearchNavigationStack extends React.PureComponent {
 class libraryNavigationStack extends React.PureComponent {
 	render(){
 		return (
-			<View style={{flex: 1}}>
-				<Stack.Navigator
-					screenOptions={{
-						gestureEnabled: true,
-					}}
-					defaultScreenOptions={{
+			<Stack.Navigator
+				screenOptions={{
+				}}
+				defaultScreenOptions={{
+					headerShown: false,
+				}}>
+				<Stack.Screen
+					options={{
+						transitionSpec: {
+							open: config,
+							close: config,
+						},
 						headerShown: false,
-					}}>
-					<Stack.Screen
-						options={{
-							transitionSpec: {
-								open: config,
-								close: config,
-							},
-							headerShown: false,
-						}}
-						name="Test"
-						component={Library}
-					/>
-					<Stack.Screen name="Category" component={Category}/>
-					<Stack.Screen
-						name="Album"
-						component={Album}
-						options={{
-							headerShown: false,
-							headerTransparent: true,
-							title: '',
-						}}
-					/>
-					<Stack.Screen
-						name="Artist"
-						component={Artist}
-						options={{
-							headerShown: false,
-							title: '',
-						}}
-					/>
-					<Stack.Screen name="MyTracks" component={Tracks} options={{
+					}}
+					name="Test"
+					component={Library}
+				/>
+				<Stack.Screen name="Category" component={Category}/>
+				<Stack.Screen
+					name="Album"
+					component={Album}
+					options={{
 						headerShown: false,
 						headerTransparent: true,
 						title: '',
-					}}/>
-					<Stack.Screen
-						name="Playlist"
-						component={Playlist}
-						options={{
-							headerShown: false,
-							headerTransparent: true,
-							title: '',
-						}}
-					/>
-					<Stack.Screen name="Genre" component={Genre}/>
-					<Stack.Screen name="Genre_Popular" component={PopularScreen} />
-					<Stack.Screen name="Genre_News" component={NewsScreen} />
-				</Stack.Navigator>
-			</View>
+					}}
+				/>
+				<Stack.Screen
+					name="Artist"
+					component={Artist}
+					options={{
+						headerShown: false,
+						title: '',
+					}}
+				/>
+				<Stack.Screen name="MyTracks" component={Tracks} options={{
+					headerShown: false,
+					headerTransparent: true,
+					title: '',
+				}}/>
+				<Stack.Screen
+					name="Playlist"
+					component={Playlist}
+					options={{
+						headerShown: false,
+						headerTransparent: true,
+						title: '',
+					}}
+				/>
+				<Stack.Screen name="Genre" component={Genre}/>
+				<Stack.Screen name="Genre_Popular" component={PopularScreen} />
+				<Stack.Screen name="Genre_News" component={NewsScreen} />
+			</Stack.Navigator>
 		);
 	}
 }

@@ -234,46 +234,29 @@ class PlayerAlt extends React.Component {
 		}, 1000)
 	}
 
-	_stop_auto_refresh = () => {
-		// clearInterval(this.interval);
-	}
-
-	call_timerInterval = (timestamp) => {
-		// if(this.timer == null){
-		// 	if(this.props.store.listening.listening.is_playing){
-		// 		this.timer = setInterval(() => {
-		// 			if(this.state.current_progress == 0){
-		// 				this.setState({current_progress: this.props.store.listening.listening.progress_ms});
-		// 			}
-		// 			this.setState({
-		// 				current_progress: this.state.current_progress + 1000
-		// 			});
-		// 		});
-		// 	}
-		// }else{
-		// 	if(this.props.store.listening.listening.is_playing == false){
-		// 		clearInterval(this.timer);
-		// 	}
-		// }
-	}
-
 	forceStateRefresh = async () => {
 		const listeningObject = await listeningHandler.get_listening_state(this.props.store.authentication.accessToken);
 		this.props.setListening({listening: listeningObject.data});
 	}
 
+	_clear_interval = () => {
+		clearInterval(this.timer);
+	}
+
+	_create_interval = (initialPosition) => {
+		this.setState({currentProgress: initialPosition});
+		alert(initialPosition);
+		this.timer = setInterval(() => {
+			this.setState({currentProgress: this.props.store.listening.current_progress + 1000});
+		}, 1000);
+	}
+
 	_get_listening = async () => {
 		const listeningObject = await listeningHandler.get_listening_state(this.props.store.authentication.accessToken);
 		if(this.props.store.listening.listening){
-			this.props.refreshListening({listening: listeningObject.data})
+			this.props.refreshListening({listening: listeningObject.data});
 		}else{
 			this.props.setListening({listening: listeningObject.data});
-			if(this.current_progressInterval){
-				clearInterval(this.current_progressInterval);
-			}
-			this.current_progressInterval = setInterval(() => {
-				this.setState({current_progress: this.state.current_progress + 1000});
-			}, 1000);
 		}
 	}
 
@@ -286,7 +269,7 @@ class PlayerAlt extends React.Component {
 			},
 			method: "PUT"
 		})
-		this.forceStateRefresh();
+		this.forceStateRefresh()
 	}
 
 	_play = () => {
@@ -298,7 +281,8 @@ class PlayerAlt extends React.Component {
 			},
 			method: "PUT"
 		})
-		this.forceStateRefresh();
+
+		this.forceStateRefresh()
 	}
 
 	_next = () => {
@@ -314,7 +298,7 @@ class PlayerAlt extends React.Component {
 	}
 
 	_prev = () => {
-		if (this.state.current_progress > 10000) {
+		if (this.props.store.listening.current_progress > 10000) {
 			this._seek(0);
 		} else {
 			fetch('https://api.spotify.com/v1/me/player/previous', {
@@ -422,7 +406,6 @@ class PlayerAlt extends React.Component {
 	}
 
 	_deploy_waiting_list = () => {
-		this._stop_auto_refresh();
 		if(this.state.waiting_list.big){
 			Animated.spring(this.state.waiting_list.top, {
 				toValue: Dimensions.get('screen').height,
@@ -455,7 +438,6 @@ class PlayerAlt extends React.Component {
 	}
 
 	_deploy_share_menu = () => {
-		this._stop_auto_refresh();
 		if(this.state.share_menu.big){
 			Animated.spring(this.state.share_menu.top, {
 				toValue: Dimensions.get('screen').height,
@@ -487,7 +469,6 @@ class PlayerAlt extends React.Component {
 	}
 
 	_deploy_track_infos = () => {
-		this._stop_auto_refresh();
 		if(this.state.track_infos.big){
 			Animated.spring(this.state.track_infos.top, {
 				toValue: Dimensions.get('screen').height,
@@ -782,7 +763,7 @@ class PlayerAlt extends React.Component {
 												}}>
 													<SeekBar
 														trackLength={!isNaN(this.props.store.listening.listening?.item?.duration_ms / 1000) ? this.props.store.listening.listening?.item?.duration_ms / 1000 : 10}
-														currentPosition={!isNaN(this.state.current_progress / 1000) ? this.state.current_progress / 1000 : 0}
+														currentPosition={!isNaN(this.props.store.listening.current_progress / 1000) ? this.props.store.listening.current_progress / 1000 : 0}
 														onSeek={this._seek}/>
 												</View>
 												<View style={{
