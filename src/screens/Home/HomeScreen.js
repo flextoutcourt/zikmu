@@ -67,7 +67,8 @@ const HomeScreen = (props) =>  {
 					name: 'Vald',
 					picture: 'https://picsum.photos/48',
 				},
-				source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg'
+				source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg',
+				video: 'https://www.youtube.com/embed/xPbRsca_l7c'
 			},
 			{
 				id: 2,
@@ -209,7 +210,7 @@ const HomeScreen = (props) =>  {
 							</SharedElement>
 							<Pressable onPress={() => {
 								//fetch artist_id from database ticket #FLEX-38
-								// this.props.navigation.push('Artist', {});
+								// navigation.push('Artist', {});
 							}} style={{flex: 1, flexDirection: 'row', justifyContent: 'center', maxWidth: "99%"}}>
 								<Text style={{textAlign: 'center', marginTop: 5, color: 'white'}} numberOfLines={1}>{story.user.name}</Text>
 							</Pressable>
@@ -219,7 +220,7 @@ const HomeScreen = (props) =>  {
 				<View style={{flex: 1, paddingVertical: 20, paddingHorizontal: 10, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
 					<Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>{_display_message()}</Text>
 					<View style={{flexDirection: 'row'}}>
-						<TouchableOpacity onPress={() => this.props.navigation.push('Self')} style={{marginLeft: 20}}>
+						<TouchableOpacity onPress={() => navigation.push('Self')} style={{marginLeft: 20}}>
 							<Icon name={'settings'} solid={true} size={24} color={'white'} />
 						</TouchableOpacity>
 					</View>
