@@ -15,20 +15,13 @@ import Animated, {
 import { useVector, snapPoint } from "react-native-redash";
 import { SharedElement } from "react-navigation-shared-element";
 
-import { SnapchatRoutes } from "./Model";
-
-interface StoryScreenProps {
-    navigation: NavigationProp<SnapchatRoutes, "Story">;
-    route: RouteProp<SnapchatRoutes, "Story">;
-}
 
 const { width,  height } = Dimensions.get("window");
 
-const StoryScreen = ({ route, navigation }: StoryScreenProps) => {
+const StoryScreen = ({ route, navigation }) => {
     const isGestureActive = useSharedValue(false);
     const translation = useVector();
     const { story } = route.params;
-    alert(JSON.stringify(story));
     const onGestureEvent = useAnimatedGestureHandler({
         onStart: () => (isGestureActive.value = true),
         onActive: ({ translationX, translationY }) => {
@@ -80,7 +73,6 @@ const StoryScreen = ({ route, navigation }: StoryScreenProps) => {
                                 ...StyleSheet.absoluteFillObject,
                                 width: undefined,
                                 height: undefined,
-                                backgroundColor: 'red',
                                 resizeMode: "cover",
                                 borderRadius: 10
                             },
