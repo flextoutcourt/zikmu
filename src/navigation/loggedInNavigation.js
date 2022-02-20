@@ -134,61 +134,59 @@ class SearchNavigationStack extends React.PureComponent {
 class libraryNavigationStack extends React.PureComponent {
 	render(){
 		return (
-			<View style={{flex: 1}}>
-				<Stack.Navigator
-					screenOptions={{
-					}}
-					defaultScreenOptions={{
+			<Stack.Navigator
+				screenOptions={{
+				}}
+				defaultScreenOptions={{
+					headerShown: false,
+				}}>
+				<Stack.Screen
+					options={{
+						transitionSpec: {
+							open: config,
+							close: config,
+						},
 						headerShown: false,
-					}}>
-					<Stack.Screen
-						options={{
-							transitionSpec: {
-								open: config,
-								close: config,
-							},
-							headerShown: false,
-						}}
-						name="Test"
-						component={Library}
-					/>
-					<Stack.Screen name="Category" component={Category}/>
-					<Stack.Screen
-						name="Album"
-						component={Album}
-						options={{
-							headerShown: false,
-							headerTransparent: true,
-							title: '',
-						}}
-					/>
-					<Stack.Screen
-						name="Artist"
-						component={Artist}
-						options={{
-							headerShown: false,
-							title: '',
-						}}
-					/>
-					<Stack.Screen name="MyTracks" component={Tracks} options={{
+					}}
+					name="Test"
+					component={Library}
+				/>
+				<Stack.Screen name="Category" component={Category}/>
+				<Stack.Screen
+					name="Album"
+					component={Album}
+					options={{
 						headerShown: false,
 						headerTransparent: true,
 						title: '',
-					}}/>
-					<Stack.Screen
-						name="Playlist"
-						component={Playlist}
-						options={{
-							headerShown: false,
-							headerTransparent: true,
-							title: '',
-						}}
-					/>
-					<Stack.Screen name="Genre" component={Genre}/>
-					<Stack.Screen name="Genre_Popular" component={PopularScreen} />
-					<Stack.Screen name="Genre_News" component={NewsScreen} />
-				</Stack.Navigator>
-			</View>
+					}}
+				/>
+				<Stack.Screen
+					name="Artist"
+					component={Artist}
+					options={{
+						headerShown: false,
+						title: '',
+					}}
+				/>
+				<Stack.Screen name="MyTracks" component={Tracks} options={{
+					headerShown: false,
+					headerTransparent: true,
+					title: '',
+				}}/>
+				<Stack.Screen
+					name="Playlist"
+					component={Playlist}
+					options={{
+						headerShown: false,
+						headerTransparent: true,
+						title: '',
+					}}
+				/>
+				<Stack.Screen name="Genre" component={Genre}/>
+				<Stack.Screen name="Genre_Popular" component={PopularScreen} />
+				<Stack.Screen name="Genre_News" component={NewsScreen} />
+			</Stack.Navigator>
 		);
 	}
 }

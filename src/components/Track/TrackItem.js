@@ -3,14 +3,18 @@ import {Dimensions, FlatList, Image, Text, TouchableOpacity, Vibration, View,} f
 import {connect} from 'react-redux';
 import Liked from "./Liked";
 import Collab from "./Collab";
+import Swipeable from 'react-native-gesture-handler/Swipeable';
+import Icon from 'react-native-vector-icons/Feather';
 
 class TrackItem extends React.PureComponent {
 	constructor(props) {
 		super(props);
 		this.state = {
 			track: props.track,
-			isCollab: false
+			isCollab: false,
+			added_to_queue: false,
 		}
+		this.swipeableRef = React.createRef();
 	}
 
 	_set_offset = (disc_number, track_number) => {
@@ -77,79 +81,114 @@ class TrackItem extends React.PureComponent {
 
 	}
 
+	_renderLeftActions = (progress, dragX) => {
+		return(
+			<View style={{height: 48, width: 48, backgroundColor: this.state.added_to_queue ? 'green' : 'purple', margin: 10, borderRadius: 10, alignItems: 'center', justifyContent: 'center'}}>
+				<Icon name={this.state.added_to_queue ? 'check' : 'list'} size={24} color="white"
+					  style={{marginRight: 5, fontWeight: 'bold'}}/>
+			</View>
+		)
+	}
+
+	_add_to_queue = () => {
+		this.setState({added_to_queue: true});
+		fetch(`https://api.spotify.com/v1/me/player/queue?uri=${this.state.track.uri}`, {
+			headers: {
+				Accept: "application/json",
+				Authorization: "Bearer " + this.props.store.authentication.accessToken,
+				"Content-Type": "application/json"
+			},
+			method: "POST"
+		})
+		setTimeout(() => {
+			this.swipeableRef.current.close();
+			setTimeout(() => {
+				this.setState({added_to_queue: false});
+			}, 200)
+		}, 200)
+	}
+
+	_renderRightActions = (progress, dragX) => {
+		return(
+			<></>
+		)
+	}
+
 	render() {
 		return (
 			<View>
-				<TouchableOpacity
-					onPress={() =>
-						this._play(
-							this.props.type === 'album'
-								? this.props.album?.uri
-								: this.props.type === 'playlist'
-									? this.state.track?.uri
-									: this.state.track?.uri,
-							this.state.track?.track_number,
-							this.state.track?.disc_number,
-						)
-					}>
-					<View
-						style={{
-							padding: 0,
-							margin: 10,
-							flexDirection: 'row',
-							alignItems: 'center',
-							justifyContent: 'space-between',
-							width: Dimensions.get('screen').width - 20,
-						}}>
+				<Swipeable ref={this.swipeableRef} overshootLeft={true} renderLeftActions={this._renderLeftActions} renderRightActions={this._renderRightActions} onSwipeableLeftOpen={() => this._add_to_queue()}>
+					<TouchableOpacity
+						onPress={() =>
+							this._play(
+								this.props.type === 'album'
+									? this.props.album?.uri
+									: this.props.type === 'playlist'
+										? this.state.track?.uri
+										: this.state.track?.uri,
+								this.state.track?.track_number,
+								this.state.track?.disc_number,
+							)
+						}>
 						<View
 							style={{
+								padding: 0,
+								margin: 10,
 								flexDirection: 'row',
 								alignItems: 'center',
-								elevation: 5,
-							}}>
-							<Image
-								source={{uri: this.props.album?.images[2]?.url}}
-								style={{width: 50, height: 50, borderRadius: 10}}
-							/>
-						</View>
-						<View
-							style={{
-								marginLeft: 10,
-								flex: 1,
-								flexDirection: 'row',
 								justifyContent: 'space-between',
-								paddingRight: 10,
+								width: Dimensions.get('screen').width - 20,
 							}}>
-							<View>
-								<Text
-									style={{
-										fontWeight: 'bold',
-										color: 'white',
-										maxWidth: (Dimensions.get('screen').width / 3) * 1.7
-									}}
-									numberOfLines={1}
-								>
-									{this.state.track?.name}
-								</Text>
-								<FlatList
-									data={this.state.track?.artists}
-									scrollEnabled={true}
-									horizontal={true}
-									ItemSeparatorComponent={() => <Text>, </Text>}
-									renderItem={({item, key}) => (
-										<Text style={{color: 'white'}}>{item.name}</Text>
-									)}
-									contentContainerStyle={{maxWidth: Dimensions.get('screen').width / 1.9}}
+							<View
+								style={{
+									flexDirection: 'row',
+									alignItems: 'center',
+									elevation: 5,
+								}}>
+								<Image
+									source={{uri: this.props.album?.images[2]?.url}}
+									style={{width: 50, height: 50, borderRadius: 10}}
 								/>
 							</View>
-							<View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-								<Collab
-									collab={this._find_user(this.props.added_by?.id)}/>
-								<Liked track={this.state.track}/>
+							<View
+								style={{
+									marginLeft: 10,
+									flex: 1,
+									flexDirection: 'row',
+									justifyContent: 'space-between',
+									paddingRight: 10,
+								}}>
+								<View>
+									<Text
+										style={{
+											fontWeight: 'bold',
+											color: this.props.store.listening.listening.item.id === this.state.track?.id ? 'green' : 'white',
+											maxWidth: (Dimensions.get('screen').width / 3) * 1.7
+										}}
+										numberOfLines={1}
+									>
+										{this.state.track?.name}
+									</Text>
+									<FlatList
+										data={this.state.track?.artists}
+										scrollEnabled={true}
+										horizontal={true}
+										ItemSeparatorComponent={() => <Text>, </Text>}
+										renderItem={({item, key}) => (
+											<Text style={{color: this.props.store.listening.listening.item.id === this.state.track?.id ? 'green' : 'white'}}>{item.name}</Text>
+										)}
+										contentContainerStyle={{maxWidth: Dimensions.get('screen').width / 1.9}}
+									/>
+								</View>
+								<View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+									<Collab
+										collab={this._find_user(this.props.added_by?.id)}/>
+									<Liked track={this.state.track}/>
+								</View>
 							</View>
 						</View>
-					</View>
-				</TouchableOpacity>
+					</TouchableOpacity>
+				</Swipeable>
 			</View>
 		);
 	}
