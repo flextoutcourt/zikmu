@@ -21,6 +21,10 @@ import {
 import LoggedinNavigation from '../../navigation/loggedInNavigation';
 import GuestNavigation from '../../navigation/guestNavigation';
 
+
+import OneSignal from 'react-native-onesignal';
+OneSignal.setAppId("046417d8-d5df-4ade-b19d-91e2954b6790");
+
 class EntryScreen extends PureComponent {
 	state = {refreshToken: ''};
 
