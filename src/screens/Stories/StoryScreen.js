@@ -1,6 +1,6 @@
 import { NavigationProp, RouteProp } from "@react-navigation/native";
 import React from "react";
-import {StyleSheet, Dimensions, Text} from 'react-native';
+import {StyleSheet, Dimensions, Text, View} from 'react-native';
 import { PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
     Extrapolate,
@@ -66,18 +66,26 @@ const StoryScreen = ({ route, navigation }) => {
         <PanGestureHandler onGestureEvent={onGestureEvent}>
             <Animated.View style={style}>
                 <SharedElement id={story.id} style={{ flex: 1 }}>
-                    <Animated.Image
-                        source={{uri: story.source}}
-                        style={[
-                            {
-                                ...StyleSheet.absoluteFillObject,
-                                width: undefined,
-                                height: undefined,
-                                resizeMode: "cover",
-                                borderRadius: 10
-                            },
-                        ]}
-                    />
+                    {
+                        !story.video
+                        ?
+                            <Animated.Image
+                                source={{uri: story.source}}
+                                style={[
+                                    {
+                                        ...StyleSheet.absoluteFillObject,
+                                        width: undefined,
+                                        height: undefined,
+                                        resizeMode: "cover",
+                                        borderRadius: 10
+                                    },
+                                ]}
+                            />
+                        :
+                            <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+                                <Text style={{color: 'black'}}>Video exists</Text>
+                            </View>
+                    }
                 </SharedElement>
             </Animated.View>
         </PanGestureHandler>
