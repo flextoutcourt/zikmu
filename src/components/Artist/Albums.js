@@ -40,7 +40,7 @@ class Albums extends React.PureComponent {
 					data={this.state.albums?.items}
 					horizontal={true}
 					style={{marginBottom: 50}}
-					renderItem={({item, key}) => <AlbumItem album={item}/>}
+					renderItem={({item, key}) => <AlbumItem {...this.props} album={item}/>}
 				/>
 			</View>
 		);

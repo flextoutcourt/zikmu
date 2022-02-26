@@ -1,6 +1,15 @@
 import axios from 'axios';
 import React from 'react';
-import {Dimensions, FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+	ActivityIndicator,
+	Dimensions,
+	FlatList,
+	StatusBar,
+	StyleSheet,
+	Text,
+	TouchableOpacity,
+	View,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Feather';
 import Animated, {Extrapolate} from 'react-native-reanimated';
@@ -16,7 +25,8 @@ class PlaylistScreen extends React.Component {
 			playlistItems: null,
 			scrollY: new Animated.Value(0),
 			englithment: null,
-			suggested: null
+			suggested: null,
+			isLoadingTracks: true
 		};
 	}
 
@@ -35,8 +45,9 @@ class PlaylistScreen extends React.Component {
         return promise.then(data => data.data);
 	};
 
-	_get_playlist_tracks = (offset) => {
-		const promise = axios.get(`https://api.spotify.com/v1/playlists/${this.props.route.params.playlist_id}/tracks?offset=${offset}`,
+	_get_playlist_tracks = (offset, limit = 20) => {
+		this.setState({isLoadingTracks: true});
+		const promise = axios.get(`https://api.spotify.com/v1/playlists/${this.props.route.params.playlist_id}/tracks?offset=${offset}&limit=${limit}`,
 			{
 				headers: {
 					Accept: "application/json",
@@ -145,6 +156,23 @@ class PlaylistScreen extends React.Component {
 		return promise.then(data => data.data);
 	}
 
+	_get_collab = (json) => {
+		let users = [];
+		json.tracks?.items?.map((item, key) => {
+			if(users.indexOf(item?.added_by?.href) === -1){
+				users.push(item?.added_by?.href);
+			}
+		})
+		let users_array = [];
+		users?.map((item, key) => {
+			this._get_user(item).then(json => {
+				users_array.push(json);
+			});
+
+		});
+		return users_array;
+	}
+
 	componentDidMount() {
 		const opacity = this.state.scrollY.interpolate({
 			inputRange: [250, 325],
@@ -152,22 +180,13 @@ class PlaylistScreen extends React.Component {
 			extrapolate: Extrapolate.CLAMP,
 		});
 		this._get_playlist().then(json => {
-			this.setState({playlistItems: json.tracks.items});
 			this.setState({playlist: json});
 			if(json.collaborative){
-				let users = [];
-				json.tracks?.items?.map((item, key) => {
-					if(users.indexOf(item?.added_by?.href) === -1){
-						users.push(item?.added_by?.href);
-					}
+				this._get_playlist_tracks(0).then(json => {
+					this.setState({playlistItems: json.items, isLoadingTrack: false});
+					this._get_collab(json);
 				})
-				let users_array = [];
-				users?.map((item, key) => {
-					this._get_user(item).then(json => {
-						users_array.push(json);
-					});
-
-				});
+				let users_array = this._get_collab(json);
 				this.setState((prevState) => ({
 					...prevState,
 					playlist:{
@@ -275,6 +294,20 @@ class PlaylistScreen extends React.Component {
 							scrollEnabled={false}
 							horizontal={false}
 							onEndReachedThreshold={0.2}
+							removeClippedSubviews={true}
+							onEndReached={() => {
+								this._get_playlist_tracks(this.state.playlistItems.length).then(json => {
+									this.setState(prevState => ({playlistItems: prevState.playlistItems.concat(json.items)}));
+									this._get_collab(json);
+								})
+							}}
+							ListFooterComponent={() => (
+								this.state.isLoadingTracks
+									?
+										<ActivityIndicator />
+									:
+										null
+							)}
 							ListHeaderComponent={() => (
 								<Animated.View style={{}}>
 

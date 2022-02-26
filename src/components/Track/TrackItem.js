@@ -119,6 +119,10 @@ class TrackItem extends React.PureComponent {
 			<View>
 				<Swipeable ref={this.swipeableRef} overshootLeft={true} renderLeftActions={this._renderLeftActions} renderRightActions={this._renderRightActions} onSwipeableLeftOpen={() => this._add_to_queue()}>
 					<TouchableOpacity
+						onLongPress={() => {
+							alert('on long press')
+							Vibration.vibrate(10)
+						}}
 						onPress={() =>
 							this._play(
 								this.props.type === 'album'

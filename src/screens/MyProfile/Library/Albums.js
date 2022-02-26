@@ -68,7 +68,7 @@ class Albums extends React.PureComponent {
 						});
 					}}
 					contentContainerStyle={{paddingBottom: 120}}
-					renderItem={({item, key}) => <AlbumItem album={item?.album}/>}
+					renderItem={({item, key}) => <AlbumItem {...this.props} album={item?.album}/>}
 				/>
 			</LinearGradient>
 		);
