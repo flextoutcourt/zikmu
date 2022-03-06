@@ -57,11 +57,46 @@ export const config = {
 	},
 };
 
+const linking = {
+    screens: {
+        HomeStack: {
+            screens: {
+                Artist: {
+                    path: 'home/artist/:artist_id',
+                    parse: {
+                        id: id => id.replace(/^@/, ''),
+                    },
+                }
+            },
+        },
+        SearchStack: {
+            screens: {
+                Artist: {
+                    path: 'search/artist/:artist_id',
+                    parse: {
+                        id: id => id.replace(/^@/, ''),
+                    }
+                }
+            }
+        },
+        LibraryStack: {
+            screens: {
+                Artist: {
+                    path: 'library/artist/:artist_id',
+                    parse: {
+                        id: id => id.replace(/^@/, ''),
+                    }
+                }
+            }
+        }
+    }
+}
+
 const Tab = createBottomTabNavigator();
 
 const Stack = createSharedElementStackNavigator();
 
-class HomeNavigationStack extends React.PureComponent{
+class HomeStack extends React.PureComponent{
 	render(){
 		return (
 			<Stack.Navigator
@@ -77,7 +112,7 @@ class HomeNavigationStack extends React.PureComponent{
 					name="Home"
 					component={HomeScreen}
 				/>
-				<Stack.Screen name="Category" component={Category}/>
+				<Stack.Screen name="Category" component={Category}  />
 				<Stack.Screen name="Album" component={Album}/>
 				<Stack.Screen name="Artist" component={Artist}/>
 				<Stack.Screen name="Track" component={Track}/>
@@ -100,7 +135,7 @@ class HomeNavigationStack extends React.PureComponent{
 	}
 }
 
-class SearchNavigationStack extends React.PureComponent {
+class SearchStack extends React.PureComponent {
 	render(){
 		return (
 			<Stack.Navigator
@@ -131,7 +166,7 @@ class SearchNavigationStack extends React.PureComponent {
 	}
 }
 
-class libraryNavigationStack extends React.PureComponent {
+class LibraryStack extends React.PureComponent {
 	render(){
 		return (
 			<Stack.Navigator
@@ -192,6 +227,7 @@ class libraryNavigationStack extends React.PureComponent {
 }
 
 
+
 class LoggedInNavigation extends React.PureComponent{
 
 	constructor(props) {
@@ -210,12 +246,9 @@ class LoggedInNavigation extends React.PureComponent{
 		);
 	}
 
-
-
-
 	render(){
 		return (
-			<NavigationContainer ref={navigationRef}>
+			<NavigationContainer ref={navigationRef} linking={linking}>
 				<Tab.Navigator
 					screenOptions={({route}) => ({
 						tabBarIcon: ({focused, color, size}) => {
@@ -245,9 +278,9 @@ class LoggedInNavigation extends React.PureComponent{
 						),
 						headerShown: false,
 					})}>
-					<Tab.Screen name="Accueil" component={HomeNavigationStack}/>
-					<Tab.Screen name="Rechercher" component={SearchNavigationStack}/>
-					<Tab.Screen name="Librarie" component={libraryNavigationStack}/>
+					<Tab.Screen name="HomeStack" component={HomeStack}/>
+					<Tab.Screen name="SearchStack" component={SearchStack}/>
+					<Tab.Screen name="LibraryStack" component={LibraryStack}/>
 				</Tab.Navigator>
 			</NavigationContainer>
 		);
