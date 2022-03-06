@@ -18,7 +18,6 @@ OneSignal.promptForPushNotificationsWithUserResponse(response => {
 
 //Method for handling notifications received while app in foreground
 OneSignal.setNotificationWillShowInForegroundHandler(notificationReceivedEvent => {
-    console.log("OneSignal: notification will show in foreground:", notificationReceivedEvent);
     let notification = notificationReceivedEvent.getNotification();
     const data = notification.additionalData
 
