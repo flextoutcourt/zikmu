@@ -60,6 +60,7 @@ export const config = {
 const linking = {
     screens: {
         HomeStack: {
+            initialRouteName: 'Home',
             screens: {
                 Artist: {
                     path: 'home/artist/:artist_id',
@@ -70,6 +71,7 @@ const linking = {
             },
         },
         SearchStack: {
+            initialRouteName: 'Search',
             screens: {
                 Artist: {
                     path: 'search/artist/:artist_id',
@@ -80,6 +82,7 @@ const linking = {
             }
         },
         LibraryStack: {
+            initialRouteName: 'Test',
             screens: {
                 Artist: {
                     path: 'library/artist/:artist_id',
@@ -253,13 +256,13 @@ class LoggedInNavigation extends React.PureComponent{
 					screenOptions={({route}) => ({
 						tabBarIcon: ({focused, color, size}) => {
 							let iconName = 'home';
-							if (route.name === 'Accueil') {
+							if (route.name === 'Home') {
 								iconName = focused ? 'home' : 'home';
 								color = focused ? '#B00D70' : 'white';
-							} else if (route.name === 'Rechercher') {
+							} else if (route.name === 'Search') {
 								iconName = focused ? 'search' : 'search';
 								color = focused ? '#B00D70' : 'white';
-							} else if (route.name === 'Librarie') {
+							} else if (route.name === 'Library') {
 								iconName = focused ? 'book' : 'book';
 								color = focused ? '#B00D70' : 'white';
 							}
@@ -278,9 +281,9 @@ class LoggedInNavigation extends React.PureComponent{
 						),
 						headerShown: false,
 					})}>
-					<Tab.Screen name="HomeStack" component={HomeStack}/>
-					<Tab.Screen name="SearchStack" component={SearchStack}/>
-					<Tab.Screen name="LibraryStack" component={LibraryStack}/>
+					<Tab.Screen name="Home" component={HomeStack}/>
+					<Tab.Screen name="Search" component={SearchStack}/>
+					<Tab.Screen name="Library" component={LibraryStack}/>
 				</Tab.Navigator>
 			</NavigationContainer>
 		);
