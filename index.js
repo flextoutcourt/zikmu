@@ -11,10 +11,12 @@ import OneSignal from 'react-native-onesignal';
 OneSignal.setLogLevel(6, 0);
 OneSignal.setAppId("046417d8-d5df-4ade-b19d-91e2954b6790");
 
-//Prompt for push on iOS
-OneSignal.promptForPushNotificationsWithUserResponse(response => {
+if(Platform.OS === "ios"){
+    //Prompt for push on iOS
+    OneSignal.promptForPushNotificationsWithUserResponse(response => {
+    });
+}
 
-});
 
 //Method for handling notifications received while app in foreground
 OneSignal.setNotificationWillShowInForegroundHandler(notificationReceivedEvent => {
