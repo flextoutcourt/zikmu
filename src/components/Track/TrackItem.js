@@ -166,7 +166,7 @@ class TrackItem extends React.PureComponent {
 									<Text
 										style={{
 											fontWeight: 'bold',
-											color: this.props.store.listening.listening.item.id === this.state.track?.id ? 'green' : 'white',
+											color: this.props.store?.listening?.listening?.item?.id === this.state.track?.id ? 'green' : 'white',
 											maxWidth: (Dimensions.get('screen').width / 3) * 1.7
 										}}
 										numberOfLines={1}
@@ -179,7 +179,7 @@ class TrackItem extends React.PureComponent {
 										horizontal={true}
 										ItemSeparatorComponent={() => <Text>, </Text>}
 										renderItem={({item, key}) => (
-											<Text style={{color: this.props.store.listening.listening.item.id === this.state.track?.id ? 'green' : 'white'}}>{item.name}</Text>
+											<Text style={{color: this.props.store?.listening?.listening?.item?.id === this.state.track?.id ? 'green' : 'white'}}>{item.name}</Text>
 										)}
 										contentContainerStyle={{maxWidth: Dimensions.get('screen').width / 1.9}}
 									/>
