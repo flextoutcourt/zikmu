@@ -71,6 +71,13 @@
 			<string>Zocial.ttf</string>
 		</array>
 		<key>CFBundleURLTypes</key>
-		<array/>
+		<array>
+			<dict>
+				<key>CFBundleURLSchemes</key>
+				<array>
+					<string>zikmu</string>
+				</array>
+			</dict>
+		</array>
 	</dict>
 </plist>
