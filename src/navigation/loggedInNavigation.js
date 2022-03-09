@@ -1,6 +1,6 @@
-import React, {useContext} from 'react';
-import {Button, StyleSheet, Text, View} from 'react-native';
-import {NavigationContainer} from '@react-navigation/native';
+import React, {useContext, useEffect} from 'react';
+import {Button, Linking, StyleSheet, Text, View} from 'react-native';
+import {NavigationContainer, useNavigation} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import { createSharedElementStackNavigator } from "react-navigation-shared-element";
@@ -27,73 +27,7 @@ import SelfScreen from '../screens/User/SelfScreen';
 import UserScreen from '../screens/User/UserScreen';
 import PlayerAlt from '../components/Global/PlayerAlt';
 import StoryScreen from '../screens/Stories/StoryScreen';
-
-export const config = {
-	screens: {
-		Home: {
-			path: 'home',
-		},
-		Settings: {
-			path: 'callback',
-		},
-		Test: {
-			path: 'test',
-		},
-		Category: {
-			path: 'category',
-		},
-		Playlist: {
-			path: 'playlist',
-		},
-		Album: {
-			path: 'album',
-		},
-		Track: {
-			path: 'track',
-		},
-		Artist: {
-			path: 'artist',
-		},
-	},
-};
-
-const linking = {
-    screens: {
-        HomeStack: {
-            initialRouteName: 'Home',
-            screens: {
-                Artist: {
-                    path: 'home/artist/:artist_id',
-                    parse: {
-                        id: id => id.replace(/^@/, ''),
-                    },
-                }
-            },
-        },
-        SearchStack: {
-            initialRouteName: 'Search',
-            screens: {
-                Artist: {
-                    path: 'search/artist/:artist_id',
-                    parse: {
-                        id: id => id.replace(/^@/, ''),
-                    }
-                }
-            }
-        },
-        LibraryStack: {
-            initialRouteName: 'Test',
-            screens: {
-                Artist: {
-                    path: 'library/artist/:artist_id',
-                    parse: {
-                        id: id => id.replace(/^@/, ''),
-                    }
-                }
-            }
-        }
-    }
-}
+import DeepLinking from "react-native-deep-linking";
 
 const Tab = createBottomTabNavigator();
 
@@ -147,12 +81,6 @@ class SearchStack extends React.PureComponent {
 					headerShown: false,
 				}}>
 				<Stack.Screen
-					options={{
-						transitionSpec: {
-							open: config,
-							close: config,
-						},
-					}}
 					name="Search"
 					component={SearchScreen}
 				/>
@@ -180,10 +108,6 @@ class LibraryStack extends React.PureComponent {
 				}}>
 				<Stack.Screen
 					options={{
-						transitionSpec: {
-							open: config,
-							close: config,
-						},
 						headerShown: false,
 					}}
 					name="Test"
@@ -231,63 +155,65 @@ class LibraryStack extends React.PureComponent {
 
 
 
-class LoggedInNavigation extends React.PureComponent{
+const LoggedInNavigation = () => {
 
-	constructor(props) {
-		super(props);
-	}
+    const navigation = useNavigation();
 
-	TestScreen({navigation}) {
-		return (
-			<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-				<Text>Test !</Text>
-				<Button
-					title="Go to Home"
-					onPress={() => navigation.navigate('Home')}
-				/>
-			</View>
+    DeepLinking.addScheme(['zikmu://']);
+    DeepLinking.addRoute('home/artist/:id', response => {
+        navigation.navigate('Artist', {
+            artist_id: response.id
+        })
+    });
+
+    useEffect(() => {
+        Linking.addEventListener('url', handleOpenURL);
+        return (() => {
+            Linking.remove('url', handleOpenURL);
+        })
+    }, []);
+
+    const handleOpenURL = (event) => {
+        alert(event.url);
+        DeepLinking.evaluateUrl(event.url);
+    }
+    return (
+        <NavigationContainer ref={navigationRef}>
+            <Tab.Navigator
+                screenOptions={({route}) => ({
+                    tabBarIcon: ({focused, color, size}) => {
+                        let iconName = 'home';
+                        if (route.name === 'Home') {
+                            iconName = focused ? 'home' : 'home';
+                            color = focused ? '#B00D70' : 'white';
+                        } else if (route.name === 'Search') {
+                            iconName = focused ? 'search' : 'search';
+                            color = focused ? '#B00D70' : 'white';
+                        } else if (route.name === 'Library') {
+                            iconName = focused ? 'book' : 'book';
+                            color = focused ? '#B00D70' : 'white';
+                        }
+                        return <Icon name={iconName} size={24} color={color}/>;
+                    },
+                    tabBarActiveTintColor: '#B00D70',
+                    tabBarInactiveTintColor: 'white',
+                    tabBarStyle: {
+                        position: 'absolute',
+                        bottom: 0,
+                        borderTopWidth: 0,
+                        elevation: 0
+                    },
+                    tabBarBackground: () => (
+                        <BlurView tint="dark" intensity={85} style={StyleSheet.absoluteFill}/>
+                    ),
+                    headerShown: false,
+                })}>
+                <Tab.Screen name="Home" component={HomeStack}/>
+                <Tab.Screen name="Search" component={SearchStack}/>
+                <Tab.Screen name="Library" component={LibraryStack}/>
+            </Tab.Navigator>
+        </NavigationContainer>
 		);
-	}
-
-	render(){
-		return (
-			<NavigationContainer ref={navigationRef} linking={linking}>
-				<Tab.Navigator
-					screenOptions={({route}) => ({
-						tabBarIcon: ({focused, color, size}) => {
-							let iconName = 'home';
-							if (route.name === 'Home') {
-								iconName = focused ? 'home' : 'home';
-								color = focused ? '#B00D70' : 'white';
-							} else if (route.name === 'Search') {
-								iconName = focused ? 'search' : 'search';
-								color = focused ? '#B00D70' : 'white';
-							} else if (route.name === 'Library') {
-								iconName = focused ? 'book' : 'book';
-								color = focused ? '#B00D70' : 'white';
-							}
-							return <Icon name={iconName} size={24} color={color}/>;
-						},
-						tabBarActiveTintColor: '#B00D70',
-						tabBarInactiveTintColor: 'white',
-						tabBarStyle: {
-							position: 'absolute',
-							bottom: 0,
-							borderTopWidth: 0,
-							elevation: 0
-						},
-						tabBarBackground: () => (
-							<BlurView tint="dark" intensity={85} style={StyleSheet.absoluteFill}/>
-						),
-						headerShown: false,
-					})}>
-					<Tab.Screen name="Home" component={HomeStack}/>
-					<Tab.Screen name="Search" component={SearchStack}/>
-					<Tab.Screen name="Library" component={LibraryStack}/>
-				</Tab.Navigator>
-			</NavigationContainer>
-		);
-	}
 }
 
 const mapStateToProps = store => {
