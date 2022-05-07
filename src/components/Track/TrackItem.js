@@ -117,7 +117,7 @@ class TrackItem extends React.PureComponent {
 	render() {
 		return (
 			<View>
-				<Swipeable ref={this.swipeableRef} overshootLeft={true} renderLeftActions={this._renderLeftActions} renderRightActions={this._renderRightActions} onSwipeableLeftOpen={() => this._add_to_queue()}>
+				{/*<Swipeable ref={this.swipeableRef} overshootLeft={true} renderLeftActions={this._renderLeftActions} renderRightActions={this._renderRightActions} onSwipeableLeftOpen={() => this._add_to_queue()}>*/}
 					<TouchableOpacity
 						onLongPress={() => {
 							alert('on long press')
@@ -192,7 +192,7 @@ class TrackItem extends React.PureComponent {
 							</View>
 						</View>
 					</TouchableOpacity>
-				</Swipeable>
+				{/*</Swipeable>*/}
 			</View>
 		);
 	}
