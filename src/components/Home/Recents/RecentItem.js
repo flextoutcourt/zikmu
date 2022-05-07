@@ -56,14 +56,14 @@ class Recentitem extends React.PureComponent {
 							</View>
 							<View style={{marginLeft: 5}}>
 								<Text numberOfLines={1} style={{maxWidth: (Dimensions.get('screen').width / 2) - 73, color: 'white'}}>{this.props.recent?.track?.album?.name}</Text>
-								<Text>{this.props.recent?.track?.artists[0]?.name}</Text>
+								<Text style={{color: 'white', fontWeight: 'bold', opacity: .7}}>{this.props.recent?.track?.artists[0]?.name}</Text>
 							</View>
 						</TouchableOpacity>
 					</View>
 					<TouchableOpacity onPress={() => this._play(this.props.recent?.track?.uri)} style={{flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
-						<View style={{marginLeft: 0, backgroundColor: '#2c3e50', padding: 5, borderBottomRightRadius: 10, borderBottomLeftRadius: 10, flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
+						<View style={{marginLeft: 0, backgroundColor: '#9b59b6', padding: 5, borderBottomRightRadius: 10, borderBottomLeftRadius: 10, flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start'}}>
 							<FontAwesome5Icon name={'play-circle'} size={12} color='white' style={{marginRight: 10}}/>
-							<Text numberOfLines={1} style={{maxWidth: "90%"}}>{this.props.recent?.track?.name}</Text>
+							<Text numberOfLines={1} style={{maxWidth: "90%", color: 'white'}}>{this.props.recent?.track?.name}</Text>
 						</View>
 					</TouchableOpacity>
 				</View>
@@ -85,7 +85,7 @@ class Recentitem extends React.PureComponent {
 							</View>
 							<View style={{padding: 5}}>
 								<Text numberOfLines={1} style={{maxWidth: (Dimensions.get('screen').width / 2) - 73, color: 'white'}}>{this.props.recent?.track?.name}</Text>
-								<Text>{this.props.recent?.track?.artists[0]?.name}</Text>
+								<Text style={{color: '#8e44ad', fontWeight: 'bold'}}>{this.props.recent?.track?.artists[0]?.name}</Text>
 							</View>
 						</View>
 					</TouchableOpacity>

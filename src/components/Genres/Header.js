@@ -12,13 +12,13 @@ class Header extends React.PureComponent {
 	render() {
 		const opacity = this.props.y.interpolate({
 			inputRange: [0, 100],
-			outputRange: [0, 1],
+			outputRange: [1, 1],
 			extrapolate: Extrapolate.CLAMP,
 		});
 
 		const background = this.props.y.interpolate({
 			inputRange: [0, 100],
-			outputRange: [0, 0.5],
+			outputRange: [0.5, 0.5],
 			extrapolate: Extrapolate.CLAMP,
 		});
 

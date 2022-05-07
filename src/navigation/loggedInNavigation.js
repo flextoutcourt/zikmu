@@ -135,8 +135,12 @@ class libraryNavigationStack extends React.PureComponent {
 	render(){
 		return (
 			<Stack.Navigator
-				screenOptions={{
-				}}
+                screenOptions={{
+                    gestureEnabled: false,
+                    headerShown: false,
+                    cardOverlayEnabled: true,
+                    cardStyle: { backgroundColor: "transparent" },
+                }}
 				defaultScreenOptions={{
 					headerShown: false,
 				}}>
@@ -182,6 +186,10 @@ class libraryNavigationStack extends React.PureComponent {
 						headerTransparent: true,
 						title: '',
 					}}
+                    sharedElements={(route) => {
+                        const { playlist_id } = route.params;
+                        return [playlist_id];
+                    }}
 				/>
 				<Stack.Screen name="Genre" component={Genre}/>
 				<Stack.Screen name="Genre_Popular" component={PopularScreen} />

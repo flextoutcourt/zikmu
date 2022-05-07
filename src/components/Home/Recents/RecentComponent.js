@@ -66,7 +66,7 @@ class RecentComponent extends React.Component {
 						/>
 					:
 						<>
-							<Text style={{color: 'white', fontSize: 16, marginTop: 5, marginLeft: 10}}>Écouté recemment</Text>
+							<Text style={{color: 'white', fontSize: 20, marginTop: 5, marginLeft: 10, fontWeight: 'bold'}}>Écouté recemment</Text>
 							<FlatList
 								data={this.state.recent?.splice(8)}
 								scrollEnabled={true}

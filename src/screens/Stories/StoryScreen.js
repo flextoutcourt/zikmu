@@ -1,6 +1,6 @@
 import { NavigationProp, RouteProp } from "@react-navigation/native";
 import React from "react";
-import {StyleSheet, Dimensions, Text, View} from 'react-native';
+import {StyleSheet, Dimensions, Text, View, StatusBar} from 'react-native';
 import { PanGestureHandler } from "react-native-gesture-handler";
 import Animated, {
     Extrapolate,
@@ -69,18 +69,31 @@ const StoryScreen = ({ route, navigation }) => {
                     {
                         !story.video
                         ?
-                            <Animated.Image
-                                source={{uri: story.source}}
-                                style={[
-                                    {
-                                        ...StyleSheet.absoluteFillObject,
-                                        width: undefined,
-                                        height: undefined,
-                                        resizeMode: "cover",
-                                        borderRadius: 10
-                                    },
-                                ]}
-                            />
+                            <Animated.View style={[
+                                {
+                                    ...StyleSheet.absoluteFillObject,
+                                    width: undefined,
+                                    height: undefined,
+                                    resizeMode: "cover",
+                                    borderRadius: 10
+                                },
+                            ]}>
+                                <Animated.Image
+                                    source={{uri: story.source}}
+                                    style={[
+                                        {
+                                            ...StyleSheet.absoluteFillObject,
+                                            width: undefined,
+                                            height: undefined,
+                                            resizeMode: "cover",
+                                            borderRadius: 10
+                                        },
+                                    ]}
+                                />
+                                <View style={{padding: 10, paddingTop: StatusBar.currentHeight + 10, backgroundColor: 'rgba(0,0,0,0.5)'}}>
+                                    <Text style={{color: 'white'}}>{story?.user?.name}</Text>
+                                </View>
+                            </Animated.View>
                         :
                             <View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
                                 <Text style={{color: 'black'}}>Video exists</Text>

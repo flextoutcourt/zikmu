@@ -194,13 +194,13 @@ const HomeScreen = (props) =>  {
 
 	return (
 		<LinearGradient
-			colors={['#B00D72', '#5523BF']}
+			colors={['#2c3e50', '#2c3e50']}
 			style={{
-				marginTop: 0,
+				marginTop: -StatusBar.currentHeight,
 				...styles.container,
 			}}>
-			<ScrollView style={{ paddingTop: StatusBar.currentHeight + 10, paddingBottom: 10}} stickyHeaderIndices={[0]} stickyHeaderHiddenOnScroll={true}>
-				<ScrollView showsHorizontalScrollIndicator={false} horizontal={true} style={{flex: 1, backgroundColor: "#B00D72", paddingVertical: 10, elevation: 10, borderRadius: 10, marginHorizontal: 10}}>
+			<ScrollView style={{ paddingTop: StatusBar.currentHeight, paddingBottom: 10}} stickyHeaderIndices={[0]} stickyHeaderHiddenOnScroll={true}>
+				<ScrollView showsHorizontalScrollIndicator={false} horizontal={true} style={{flex: 1, backgroundColor: "#34495e", paddingVertical: 10, elevation: 10, width: Dimensions.get('screen').width, paddingTop: StatusBar.currentHeight + 10}}>
 					{stories.map((story, key) => (
 						<Pressable onPress={() => props.navigation.navigate('Story', { story })} style={{position: 'relative'}}>
 							<SharedElement id={story.id}>

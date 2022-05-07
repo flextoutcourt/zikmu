@@ -34,7 +34,7 @@ class RecentComponent extends React.PureComponent {
     render() {
         return (
             <View style={{flex: 1, paddingBottom: 155}}>
-                <Text style={{fontSize: 16, color: 'white', marginLeft: 10, marginBottom: 10}}>Vos artistes</Text>
+                <Text style={{fontSize: 20, color: 'white', marginLeft: 10, marginBottom: 10, fontWeight: 'bold'}}>Vos artistes</Text>
                 <FlatList
                     data={this.state.follows}
                     scrollEnabled={true}

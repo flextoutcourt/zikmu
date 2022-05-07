@@ -16,6 +16,7 @@ import Animated, {Extrapolate} from 'react-native-reanimated';
 import {connect} from 'react-redux';
 import TrackItem from '../../components/Track/TrackItem';
 import Header from '../../components/Playlist/Header';
+import {SharedElement} from "react-navigation-shared-element";
 
 class PlaylistScreen extends React.Component {
 	constructor(props) {
@@ -252,42 +253,22 @@ class PlaylistScreen extends React.Component {
 					...styles.container,
 					paddingTop: StatusBar.currentHeight,
 				}}>
-				<Header
-					y={this.state.scrollY}
-					playlist={this.state.playlist}
-					{...this.props}
-				/>
-				<Animated.ScrollView
-					style={{marginTop: -2.5 * StatusBar.currentHeight}}
-					onScroll={Animated.event(
-						[{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
-						{listener: '', useNativeDriver: true},
-					)}
-					scrollEventThrottle={16}>
-					<Animated.View
-						style={{
-							alignItems: 'flex-start',
-							justifyContent: 'flex-start',
-							margin: 0,
-							marginBottom: mb,
-							marginTop: mt,
-							marginLeft: ml,
-							transform: transform,
-							width: height,
-							height: height,
-							opacity: opacity,
-						}}>
-						<Animated.Image
-							source={{uri: this.state.playlist?.images[0]?.url}}
-							style={{
-								width: '100%',
-								height: '100%',
-								marginBottom: 15,
-								borderRadius: br,
-								elevation: 10,
-							}}
-						/>
-					</Animated.View>
+
+                        <SharedElement id={this.props.route.params.playlist_id} style={{flex: 1, width: Dimensions.get('screen').width - (StatusBar.currentHeight * 2)}}>
+                            <Animated.Image
+                                source={{uri: this.state.playlist?.images[0]?.url}}
+                                style={[
+                                    {
+                                        ...StyleSheet.absoluteFillObject,
+                                        width: undefined,
+                                        height: undefined,
+                                        resizeMode: "cover",
+                                        borderRadius: 10
+                                    },
+                                ]}
+                            />
+
+                        </SharedElement>
 					{this.state.playlist ? (
 						<FlatList
 							data={this.state.playlistItems}
@@ -485,7 +466,6 @@ class PlaylistScreen extends React.Component {
 							</View>
 						</View>
 					</LinearGradient>
-				</Animated.ScrollView>
 			</LinearGradient>
 		);
 	}

@@ -43,7 +43,7 @@ class ReleaseItem extends React.PureComponent{
                         <Image source={{uri: this.state.artist?.images[0]?.url}} style={{...StyleSheet.absoluteFill, borderRadius: 50}} />
                     </View>
                     <View style={{marginLeft: 10}}>
-                        <Text>Dernière sortie de :</Text>
+                        <Text style={{color: 'white'}}>Dernière sortie de :</Text>
                         <Text style={{fontWeight: 'bold', color: 'white', fontSize: 20}}>{this.state.artist?.name}</Text>
                     </View>
                 </TouchableOpacity>
@@ -57,16 +57,16 @@ class ReleaseItem extends React.PureComponent{
                         <View>
                             <Text style={{color: 'white', fontWeight: 'bold', fontSize: 18}}>{this.props.release?.name}</Text>
                             <View style={{flexDirection: 'row', flex: 1, alignItems: 'center'}}>
-                                <Text>{this.props.release?.type}</Text>
+                                <Text style={{color: 'white'}}>{this.props.release?.type}</Text>
                                 <FontAwesome name={"circle"} size={5} style={{marginHorizontal: 5}}/>
-                                <Text>{this.props?.release?.artists[0]?.name}</Text>
+                                <Text style={{color: 'white', fontWeight: '800'}}>{this.props?.release?.artists[0]?.name}</Text>
                             </View>
                         </View>
                         <View style={{flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                             {/*<LikedAlbum />*/}
                             <Liked />
-                            <TouchableOpacity onPress={() => alert('test')} style={{height: 36, width: 36, borderRadius: 36, backgroundColor: 'white', alignItems: 'center', justifyContent: 'center'}}>
-                                <FontAwesome name={'play'} size={14} color={"black"} style={{marginLeft: 2, marginTop: 2}} />
+                            <TouchableOpacity onPress={() => alert('test')} style={{height: 36, width: 36, borderRadius: 36, backgroundColor: '#8e44ad', alignItems: 'center', justifyContent: 'center'}}>
+                                <FontAwesome name={'play'} size={14} color={"white"} style={{marginLeft: 2, marginTop: 2}} />
                             </TouchableOpacity>
                         </View>
                     </View>
