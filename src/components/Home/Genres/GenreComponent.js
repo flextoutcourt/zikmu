@@ -36,13 +36,11 @@ class GenreComponent extends React.PureComponent {
 	render() {
 		return (
 			<View style={{flex: 1}}>
-				<Text style={{color: 'white', fontSize: 16, marginTop: 5, marginLeft: 10}}>Succeptible de vous plaire</Text>
+				<Text style={{color: 'white', fontSize: 20, fontWeight: 'bold', marginTop: 5, marginLeft: 10}}>Succeptible de vous plaire</Text>
 				<FlatList
 					data={this.state.genres?.categories?.items}
 					scrollEnabled={true}
 					horizontal={true}
-					snapToInterval={Dimensions.get('screen').width / 2 - 20}
-					decelerationRate={'normal'}
 					renderItem={({item, key}) => <GenreItem genre={item} {...this.props} />}
 				/>
 			</View>

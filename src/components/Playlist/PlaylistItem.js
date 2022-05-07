@@ -2,6 +2,8 @@ import {useNavigation} from '@react-navigation/core';
 import React from 'react';
 import {Dimensions, Image, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
+import Animated from 'react-native-reanimated';
+import {SharedElement} from 'react-navigation-shared-element'
 
 function PlaylistItem({playlist}) {
 	const navigation = useNavigation();
@@ -24,16 +26,18 @@ function PlaylistItem({playlist}) {
 				}}>
 				<View style={{flexDirection: 'row', alignItems: 'center'}}>
 					<View style={{backgroundColor: 'black', elevation: 10, borderRadius: 10}}>
-						<Image
-							source={{uri: playlist?.images[0]?.url}}
-							style={{width: 50, height: 50, margin: 'auto', borderRadius: 10}}
-						/>
+						<SharedElement id={playlist.id} style={{flex: 1}}>
+                            <Animated.Image
+                                source={{uri: playlist?.images[0]?.url}}
+                                style={{width: 50, height: 50, margin: 'auto', borderRadius: 10}}
+                            />
+                        </SharedElement>
 					</View>
 					<View style={{marginLeft: 10}}>
 						<Text style={{fontWeight: 'bold', color: 'white'}}>
 							{playlist?.name}
 						</Text>
-						<Text>{playlist?.tracks?.total} sons</Text>
+						<Text style={{color: 'white', opacity: 0.8}}>{playlist?.tracks?.total} sons</Text>
 					</View>
 				</View>
 				<TouchableOpacity>

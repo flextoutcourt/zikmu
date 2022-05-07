@@ -66,7 +66,7 @@ class SearchScreen extends React.PureComponent {
 	render() {
 		return (
 			<LinearGradient
-				colors={['#B00D72', '#5523BF']}
+				colors={['#34495e', '#34495e']}
 				style={({marginTop: -StatusBar.currentHeight}, styles.container)}>
 				<ScrollView
 					style={{
@@ -84,13 +84,15 @@ class SearchScreen extends React.PureComponent {
 							<TextInput
 								onChangeText={this._search}
 								placeholder={'Rechercher'}
+                                placeholderTextColor={"white"}
 								value={this.state.search}
 								style={{
 									width: Dimensions.get('screen').width - 20,
 									borderRadius: 10,
-									backgroundColor: 'rgba(176, 13, 114, 1)',
+									backgroundColor: '#2c3e50',
 									padding: 10,
 									elevation: 10,
+                                    color: 'white'
 								}}
 							/>
 						</View>

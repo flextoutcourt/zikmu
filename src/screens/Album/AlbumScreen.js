@@ -108,71 +108,56 @@ class AlbumScreen extends React.PureComponent {
 	}
 
 	render() {
-		// const scale = this.state.scrollY.interpolate({
-		//   inputRange: [-Dimensions.get('screen').height, 325],
-		//   outputRange: [3, 0.1],
-		//   extrapolateRight: Extrapolate.CLAMP,
-		// });
-		// const opacity = this.state.scrollY.interpolate({
-		//   inputRange: [0, 325],
-		//   outputRange: [1, 0],
-		//   extrapolate: Extrapolate.CLAMP,
-		// });
-		// const mt = this.state.scrollY.interpolate({
-		//   inputRange: [0, 325],
-		//   outputRange: [10, -100],
-		//   extrapolate: Extrapolate.CLAMP,
-		// });
-		// const br = this.state.scrollY.interpolate({
-		//   inputRange: [-10, 10],
-		//   outputRange: [0, 10],
-		//   extrapolate: Extrapolate.CLAMP,
-		// });
-		// const transform = [{scale}];
-		const scale = this.state.scrollY.interpolate({
-			inputRange: [-Dimensions.get('screen').height, 0, 125],
-			outputRange: [2, 1, 0.5],
-			extrapolateRight: Extrapolate.CLAMP,
-		});
-		const opacity = this.state.scrollY.interpolate({
-			inputRange: [0, 200],
-			outputRange: [1, 1],
-			extrapolate: Extrapolate.CLAMP,
-		});
-		const mb = this.state.scrollY.interpolate({
-			inputRange: [0, 125],
-			outputRange: [10, -75],
-			extrapolate: Extrapolate.CLAMP,
-		});
+        const scale = this.state.scrollY.interpolate({
+            inputRange: [-Dimensions.get('screen').height, 0, 125],
+            outputRange: [2, 1, 0.5],
+            extrapolateRight: Extrapolate.CLAMP,
+        });
+        const opacity = this.state.scrollY.interpolate({
+            inputRange: [0, 200],
+            outputRange: [0, 1],
+            extrapolate: Extrapolate.CLAMP,
+        });
+        const mb = this.state.scrollY.interpolate({
+            inputRange: [0, 125],
+            outputRange: [10, -75],
+            extrapolate: Extrapolate.CLAMP,
+        });
 
-		const height = this.state.scrollY.interpolate({
-			inputRange: [0, 125],
-			outputRange: [Dimensions.get('screen').width - (StatusBar.currentHeight * 2), Dimensions.get('screen').width],
-			extrapolate: Extrapolate.CLAMP
-		});
+        const br = this.state.scrollY.interpolate({
+            inputRange: [0, 10],
+            outputRange: [0, 10],
+            extrapolate: Extrapolate.CLAMP,
+        });
 
-		const mt = this.state.scrollY.interpolate({
-			inputRange: [0, 125],
-			outputRange: [StatusBar.currentHeight + 10, StatusBar.currentHeight + 30],
-			extrapolate: Extrapolate.CLAMP
-		});
+        const height = this.state.scrollY.interpolate({
+            inputRange: [0, 125],
+            outputRange: [Dimensions.get('screen').width, Dimensions.get('screen').width],
+            extrapolate: Extrapolate.CLAMP
+        });
 
-		const ml = this.state.scrollY.interpolate({
-			inputRange: [0, 125],
-			outputRange: [StatusBar.currentHeight, 0],
-			extrapolate: Extrapolate.CLAMP
-		});
+        const mt = this.state.scrollY.interpolate({
+            inputRange: [0, Dimensions.get('window').height * 10],
+            outputRange: [Dimensions.get('screen').width, 0],
+            extrapolate: Extrapolate.CLAMP
+        });
 
-		const br = this.state.scrollY.interpolate({
-			inputRange: [0, 125],
-			outputRange: [10, 25],
-			extrapolate: Extrapolate.CLAMP
-		})
+        const borderRadius = this.state.scrollY.interpolate({
+            inputRange: [0, 125],
+            outputRange: [0, 350],
+            extrapolate: Extrapolate.CLAMP
+        });
 
-		const transform = [{scale}];
+        const transform = [{scale}];
+
+        const ml = this.state.scrollY.interpolate({
+            inputRange: [0, 125],
+            outputRange: [StatusBar.currentHeight, 0],
+            extrapolate: Extrapolate.CLAMP
+        });
 		return (
 			<LinearGradient
-				colors={['#B00D72', '#5523BF']}
+				colors={['#34495e', '#34495e']}
 				style={({marginTop: 0}, styles.container)}>
 				<Header
 					y={this.state.scrollY}
@@ -180,7 +165,7 @@ class AlbumScreen extends React.PureComponent {
 					album={this.state.album}
 				/>
 				<Animated.ScrollView
-					style={{marginTop: -2.5 * StatusBar.currentHeight}}
+					style={{marginTop: -2.5 * StatusBar.currentHeight, zIndex: 98}}
 					onScroll={Animated.event(
 						[{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
 						{listener: '', useNativeDriver: true},
@@ -188,103 +173,74 @@ class AlbumScreen extends React.PureComponent {
 					showsVerticalScrollIndicator={false}
 					scrollEventThrottle={400}
 					overScrollMode={'always'}>
-					<Animated.View
-						style={{
-							alignItems: 'flex-start',
-							justifyContent: 'flex-start',
-							margin: 0,
-							marginBottom: mb,
-							marginTop: mt,
-							marginLeft: ml,
-							transform: transform,
-							width: height,
-							height: height,
-							opacity: opacity,
-						}}>
-						<Animated.Image
-							source={{uri: this.state.album?.images[0]?.url}}
-							style={{
-								width: '100%',
-								height: '100%',
-								marginBottom: 15,
-								borderRadius: br,
-								elevation: 10,
-							}}
-						/>
-					</Animated.View>
-					<Animated.Text
-						style={{
-							fontSize: 24,
-							color: 'white',
-							textAlign: 'center',
-							opacity: opacity,
-						}}>
-						{this.state.album?.name}
-					</Animated.Text>
-					{this.state.disks && this.state.test ? (
-						<SectionList
-							scrollEnabled={false}
-							sections={this.state.disks.splice(1)}
-							keyExtractor={({item, index}) => item * index}
-							renderItem={({item, section}) => (
-								<TrackItem
-									track={item}
-									album={this.state.album}
-									disks={this.state.test}
-									type={'album'}
-								/>
-							)}
-							ListFooterComponent={() => (
-								<View style={{padding: 15}}>
-									<View>
-										<Text>{moment(this.state.album?.release_date).format('DD MMMM YYYY')}</Text>
-										<Text>{this.state.album?.total_tracks} titres
-											- {moment.duration(this.state.album?.full_duration).hours() !== 0 ? moment.duration(this.state.album?.full_duration).hours() + ' h ' : null}{moment.duration(this.state.album?.full_duration).minutes() + ' min '}{moment.duration(this.state.album?.full_duration).seconds() + ' s'}</Text>
-										<FlatList
-											data={this.state.album?.artists}
-											keyExtractor={(item, index) => index.toString()}
-											renderItem={({item}) => (
-												<ArtistItem artist_id={item?.id} {...this.props} />
-											)}
-										/>
-									</View>
-									<FlatList
-										data={this.state.album?.copyrights}
-										keyExtractor={(item, index) => index.toString()}
-										renderItem={({item}) => {
-											return (
-												<View style={{flexDirection: 'row', marginVertical: 5}}>
-													<Icon name={'copyright'} size={18} color='white'/>
-													<Text style={{marginLeft: 10}}>{item?.text}</Text>
-												</View>
-											)
-										}}
-									/>
-									<Text>{this.state.album?.copyrights[0].text}</Text>
-								</View>
-							)}
-							renderSectionHeader={({section: {title}}) => (
-								<View
-									style={{
-										flexDirection: 'row',
-										alignItems: 'center',
-										justifyContent: 'flex-start',
-										marginLeft: 5,
-									}}>
-									<Icon name="disc" size={24}/>
-									<Text
-										style={{
-											fontSize: 18,
-											marginLeft: 10,
-											color: 'white',
-											marginVertical: 15,
-										}}>
-										{title}
-									</Text>
-								</View>
-							)}
-						/>
-					) : null}
+                    <Text>test</Text>
+					<Animated.View style={{marginTop: mt}}>
+                        {this.state.disks && this.state.test ? (
+                            <SectionList
+                                scrollEnabled={false}
+                                sections={this.state.disks.splice(1)}
+                                keyExtractor={({item, index}) => item * index}
+                                style={{backgroundColor: '#34495e'}}
+                                renderItem={({item, section}) => (
+                                    <TrackItem
+                                        track={item}
+                                        album={this.state.album}
+                                        disks={this.state.test}
+                                        type={'album'}
+                                    />
+                                )}
+                                ListFooterComponent={() => (
+                                    <View style={{padding: 15}}>
+                                        <View>
+                                            <Text>{moment(this.state.album?.release_date).format('DD MMMM YYYY')}</Text>
+                                            <Text>{this.state.album?.total_tracks} titres
+                                                - {moment.duration(this.state.album?.full_duration).hours() !== 0 ? moment.duration(this.state.album?.full_duration).hours() + ' h ' : null}{moment.duration(this.state.album?.full_duration).minutes() + ' min '}{moment.duration(this.state.album?.full_duration).seconds() + ' s'}</Text>
+                                            <FlatList
+                                                data={this.state.album?.artists}
+                                                keyExtractor={(item, index) => index.toString()}
+                                                renderItem={({item}) => (
+                                                    <ArtistItem artist_id={item?.id} {...this.props} />
+                                                )}
+                                            />
+                                        </View>
+                                        <FlatList
+                                            data={this.state.album?.copyrights}
+                                            keyExtractor={(item, index) => index.toString()}
+                                            renderItem={({item}) => {
+                                                return (
+                                                    <View style={{flexDirection: 'row', marginVertical: 5}}>
+                                                        <Icon name={'copyright'} size={18} color='white'/>
+                                                        <Text style={{marginLeft: 10}}>{item?.text}</Text>
+                                                    </View>
+                                                )
+                                            }}
+                                        />
+                                        <Text>{this.state.album?.copyrights[0].text}</Text>
+                                    </View>
+                                )}
+                                renderSectionHeader={({section: {title}}) => (
+                                    <View
+                                        style={{
+                                            flexDirection: 'row',
+                                            alignItems: 'center',
+                                            justifyContent: 'flex-start',
+                                            marginLeft: 5,
+                                        }}>
+                                        <Icon name="disc" size={24}/>
+                                        <Text
+                                            style={{
+                                                fontSize: 18,
+                                                marginLeft: 10,
+                                                color: 'white',
+                                                marginVertical: 15,
+                                            }}>
+                                            {title}
+                                        </Text>
+                                    </View>
+                                )}
+                            />
+                        ) : null}
+                    </Animated.View>
 				</Animated.ScrollView>
 			</LinearGradient>
 		);

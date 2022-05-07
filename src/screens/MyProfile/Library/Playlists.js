@@ -1,12 +1,13 @@
 //import liraries
 import axios from 'axios';
 import React from 'react';
-import {FlatList, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {FlatList, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View, Dimensions} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {connect} from 'react-redux';
 import PlaylistItem from '../../../components/Playlist/PlaylistItem';
 import * as rootNavigation from './../../../utils/RootNavigation';
 
+const {width} = Dimensions.get('screen');
 
 // create a component
 class Playlists extends React.PureComponent {
@@ -39,21 +40,26 @@ class Playlists extends React.PureComponent {
 	render() {
 		return (
 			<LinearGradient
-				colors={['#B00D72', '#5523BF']}
+				colors={['#34495e', '#34495e']}
 				style={({marginTop: -StatusBar.currentHeight}, styles.container)}>
 				<FlatList
+                    stickyHeaderIndices={[0]}
+                    stickyHeaderHiddenOnScroll={true}
 					ListHeaderComponent={() => (
-						<TouchableOpacity
-							onPress={() => {
-								rootNavigation.push('MyTracks');
-							}}>
-							<View style={{flex: 1, flexDirection: 'row', alignItems: 'center', justifyContent: 'flex-start', paddingHorizontal: 5, marginTop: 10, marginBottom: 5}}>
-								<View style={{backgroundColor: 'black', borderRadius: 10, width: 48, height: 48, elevation: 10}}>
-									<Image source={{uri: 'https://picsum.photos/150'}} style={{height: 48, width: 48, borderRadius: 10}} />
-								</View>
-								<Text style={{marginLeft: 15, fontWeight: 'bold', color: 'white'}}>Mes titres likés</Text>
-							</View>
-						</TouchableOpacity>
+						<LinearGradient colors={['#34495e','#34495e', "transparent"]} style={{elevation: 10}}>
+                            <TouchableOpacity onPress={() => alert('test')}>
+                                <LinearGradient colors={['#ff00cc', '#333399']} useAngle={true} angle={145} style={{flex: 1, height: 50, width: width - 10, margin: 5, borderRadius: 10, justifyContent: 'center', alignItems: 'center'}}>
+                                    <Text style={{color: "white", fontSize: 18, fontWeight: 'bold'}}>Ajouter une playlist</Text>
+                                </LinearGradient>
+                            </TouchableOpacity>
+                            <TouchableOpacity onPress={() => {
+                                this.props.navigation.navigate('MyTracks')
+                            }}>
+                                <LinearGradient colors={['#403A3E', '#BE5869']} useAngle={true} angle={270} style={{flex: 1, height: 50, width: width - 10, margin: 5, borderRadius: 10, justifyContent: 'center', alignItems: 'center'}}>
+                                    <Text style={{color: "white", fontSize: 18, fontWeight: 'bold'}}>Mes titres likés</Text>
+                                </LinearGradient>
+                            </TouchableOpacity>
+                        </LinearGradient>
 					)}
 					data={this.state.playlists}
 					scrollEnabled={true}

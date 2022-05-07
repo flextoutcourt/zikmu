@@ -129,7 +129,7 @@ class UserScreen extends React.PureComponent{
                     {listener: '', useNativeDriver: true},
                 )}>
                     <Animated.View style={{marginTop: mt, backgroundColor: '#8e44ad'}}>
-                        <View style={{flex: 1,flexDirection: 'row', justifyContent: 'space-around', alignItems: 'center', width: Dimensions.get('screen').width * 0.75, marginHorizontal: Dimensions.get('screen').width * 0.125}}>
+                        <View style={{flex: 1,flexDirection: 'row', marginTop: 10, justifyContent: 'space-around', alignItems: 'center', width: Dimensions.get('screen').width * 0.75, marginHorizontal: Dimensions.get('screen').width * 0.125}}>
                             <View>
                                 <Text style={{textAlign: 'center', fontWeight: 'bold', color: 'white'}}>7</Text>
                                 <Text style={{textAlign: 'center'}}>Playlists</Text>

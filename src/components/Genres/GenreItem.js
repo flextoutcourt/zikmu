@@ -17,9 +17,9 @@ class GenreItem extends React.PureComponent {
 		return (
 			<TouchableOpacity onPress={() => this.props.navigation.push('Genre', {
 				genre_id: this.props.genre.item.id
-			})} style={{marginHorizontal: 10}}>
+			})} style={{marginHorizontal: 10, marginVertical: 10}}>
 				<Image source={{uri: this.props.genre.item.icons[0].url}} style={styles.image}/>
-				<Text style={{textAlign: 'center'}}>{this.props.genre?.item?.name}</Text>
+				<Text style={{textAlign: 'center', color: 'white'}}>{this.props.genre?.item?.name}</Text>
 			</TouchableOpacity>
 		);
 	}

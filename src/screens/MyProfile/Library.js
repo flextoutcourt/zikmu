@@ -14,13 +14,16 @@ const Library = () => {
 	const navigation = useNavigation();
 
 	return (
-		<SafeAreaView style={{flex: 1}}>
+		<SafeAreaView style={{flex: 1, backgroundColor: "#9b59b6"}}>
 			<Tab.Navigator
 				screenOptions={{
 					tabBarContentContainerStyle: {
-						backgroundColor: 'transparent',
+						backgroundColor: '#9b59b6',
 					},
-				}}>
+                    tabBarActiveTintColor: 'white',
+                    tabBarInactiveTintColor: '#2c3e50',
+				}}
+            >
 				<Tab.Screen name="Playlists" component={Playlists} navigation={navigation}/>
 				<Tab.Screen name="Albums" component={Albums}/>
 				<Tab.Screen name="Artists" component={Artists}/>

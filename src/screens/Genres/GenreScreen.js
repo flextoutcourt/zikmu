@@ -83,7 +83,7 @@ class GenreScreen extends React.PureComponent{
     render(){
         return(
             <LinearGradient
-                colors={['#B00D72', '#5523BF']}
+                colors={['#34495e', '#34495e']}
                 style={{
                     marginTop: -StatusBar.currentHeight,
                     ...styles.container,
@@ -114,8 +114,8 @@ class GenreScreen extends React.PureComponent{
                                 <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', padding: 10}}>
                                     <TouchableOpacity onPress={() => this.props.navigation.push('Genre_Popular', {
                                         genre: this.state.genre
-                                    })} style={{borderRadius: 10, borderWidth: 1, borderColor: '#353b48', backgroundColor: '#353b48', paddingHorizontal: 10, paddingVertical: 5, elevation: 3}}>
-                                        <Text style={{textAlign: 'center'}}>Plus</Text>
+                                    })} style={{borderRadius: 10, borderWidth: 1, borderColor: '#8e44ad', backgroundColor: '#8e44ad', paddingHorizontal: 10, paddingVertical: 5, elevation: 3}}>
+                                        <Text style={{textAlign: 'center', color: 'white'}}>Plus</Text>
                                     </TouchableOpacity>
                                 </View>
                             )}
@@ -133,8 +133,8 @@ class GenreScreen extends React.PureComponent{
                                 <View style={{flex: 1, alignItems: 'center', justifyContent: 'center', padding: 10}}>
                                     <TouchableOpacity onPress={() => this.props.navigation.push('Genre_News', {
                                         genre: this.state.genre
-                                    })} style={{borderRadius: 10, borderWidth: 1, borderColor: '#353b48', backgroundColor: '#353b48', paddingHorizontal: 10, paddingVertical: 5, elevation: 3}}>
-                                        <Text style={{textAlign: 'center'}}>Plus</Text>
+                                    })} style={{borderRadius: 10, borderWidth: 1, borderColor: '#8e44ad', backgroundColor: '#8e44ad', paddingHorizontal: 10, paddingVertical: 5, elevation: 3}}>
+                                        <Text style={{textAlign: 'center', color: 'white'}}>Plus</Text>
                                     </TouchableOpacity>
                                 </View>
                             )}
