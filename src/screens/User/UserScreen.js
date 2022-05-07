@@ -118,7 +118,7 @@ class UserScreen extends React.PureComponent{
         const transform = [{scale}];
         return(
             <LinearGradient
-                colors={['#8e44ad', '#8e44ad']}
+                colors={['#34495e', '#34495e']}
                 style={{
                     marginTop: 0,
                     ...styles.container,
@@ -128,19 +128,19 @@ class UserScreen extends React.PureComponent{
                     [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
                     {listener: '', useNativeDriver: true},
                 )}>
-                    <Animated.View style={{marginTop: mt, backgroundColor: '#8e44ad'}}>
+                    <Animated.View style={{marginTop: mt, backgroundColor: '#34495e'}}>
                         <View style={{flex: 1,flexDirection: 'row', marginTop: 10, justifyContent: 'space-around', alignItems: 'center', width: Dimensions.get('screen').width * 0.75, marginHorizontal: Dimensions.get('screen').width * 0.125}}>
                             <View>
                                 <Text style={{textAlign: 'center', fontWeight: 'bold', color: 'white'}}>7</Text>
-                                <Text style={{textAlign: 'center'}}>Playlists</Text>
+                                <Text style={{textAlign: 'center', color: 'white'}}>Playlists</Text>
                             </View>
                             <View>
                                 <Text style={{textAlign: 'center', fontWeight: 'bold', color: 'white'}}>{this.state.user?.followers?.total}</Text>
-                                <Text style={{textAlign: 'center'}}>Abonnés</Text>
+                                <Text style={{textAlign: 'center', color: 'white'}}>Abonnés</Text>
                             </View>
                             <View>
                                 <Text style={{textAlign: 'center', fontWeight: 'bold', color: 'white'}}>85</Text>
-                                <Text style={{textAlign: 'center'}}>Abonnements</Text>
+                                <Text style={{textAlign: 'center', color: 'white'}}>Abonnements</Text>
                             </View>
                         </View>
                         <View style={{marginTop: 25, flex: 1, padding: 10}}>

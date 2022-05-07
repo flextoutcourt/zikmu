@@ -110,7 +110,7 @@ class ArtistScreen extends React.PureComponent {
 
 		return (
 			<LinearGradient
-				colors={['#B00D72', '#5523BF']}
+				colors={['#34495e', '#34495e']}
 				style={({marginTop: -2.5 * StatusBar.currentHeight}, styles.container)}>
 				<Header
 					y={this.state.scrollY}

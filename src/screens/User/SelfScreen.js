@@ -36,7 +36,7 @@ class SelfScreen extends PureComponent{
     render(){
         return(
             <LinearGradient
-                colors={['#8e44ad', '#2f3640']}
+                colors={['#34495e', '#34495e']}
                 style={{
                     marginTop: 0,
                     ...styles.container,

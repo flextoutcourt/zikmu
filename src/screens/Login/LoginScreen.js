@@ -62,7 +62,7 @@ class LoginScreen extends React.PureComponent {
 		return (
 			<SafeAreaView style={{flex: 1, marginTop: -StatusBar.currentHeight}}>
 				<LinearGradient
-					colors={['#B00D72', '#5523BF']}
+					colors={['#34495e', '#34495e']}
 					start={{x: 1, y: 0}}
 					end={{x: 0, y: 1}}
 					style={{flex: 1, width: Dimensions.get('screen').width}}>

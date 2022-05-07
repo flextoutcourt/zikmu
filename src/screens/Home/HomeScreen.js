@@ -194,7 +194,7 @@ const HomeScreen = (props) =>  {
 
 	return (
 		<LinearGradient
-			colors={['#2c3e50', '#2c3e50']}
+			colors={['#34495e', '#34495e']}
 			style={{
 				marginTop: -StatusBar.currentHeight,
 				...styles.container,

@@ -48,14 +48,14 @@ class Playlists extends React.PureComponent {
 					ListHeaderComponent={() => (
 						<LinearGradient colors={['#34495e','#34495e', "transparent"]} style={{elevation: 10}}>
                             <TouchableOpacity onPress={() => alert('test')}>
-                                <LinearGradient colors={['#ff00cc', '#333399']} useAngle={true} angle={145} style={{flex: 1, height: 50, width: width - 10, margin: 5, borderRadius: 10, justifyContent: 'center', alignItems: 'center'}}>
+                                <LinearGradient colors={['#391a6c', '#b21f1f']} useAngle={true} angle={180} style={{flex: 1, height: 50, width: width - 10, margin: 5, borderRadius: 10, justifyContent: 'center', alignItems: 'center'}}>
                                     <Text style={{color: "white", fontSize: 18, fontWeight: 'bold'}}>Ajouter une playlist</Text>
                                 </LinearGradient>
                             </TouchableOpacity>
                             <TouchableOpacity onPress={() => {
                                 this.props.navigation.navigate('MyTracks')
                             }}>
-                                <LinearGradient colors={['#403A3E', '#BE5869']} useAngle={true} angle={270} style={{flex: 1, height: 50, width: width - 10, margin: 5, borderRadius: 10, justifyContent: 'center', alignItems: 'center'}}>
+                                <LinearGradient colors={['#b21f1f', '#fdbb2d']} useAngle={true} angle={180} style={{flex: 1, height: 50, width: width - 10, margin: 5, borderRadius: 10, justifyContent: 'center', alignItems: 'center'}}>
                                     <Text style={{color: "white", fontSize: 18, fontWeight: 'bold'}}>Mes titres likés</Text>
                                 </LinearGradient>
                             </TouchableOpacity>

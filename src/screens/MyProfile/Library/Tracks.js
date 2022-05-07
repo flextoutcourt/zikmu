@@ -40,7 +40,7 @@ class Tracks extends React.PureComponent {
 	render() {
 		return (
 			<LinearGradient
-				colors={['#B00D72', '#5523BF']}
+				colors={['#34495e', '#34495e']}
 				style={{...styles.container}}>
 				<FlatList
 					data={this.state.tracks}

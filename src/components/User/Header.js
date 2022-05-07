@@ -101,7 +101,7 @@ class SelfHeader extends React.PureComponent{
                     }}
                 >
                     <LinearGradient
-                        colors={['rgba(142,68,173,0)','rgba(142,68,173,0.5)', 'rgba(142,68,173,1)', 'rgba(142,68,173,1)']}
+                        colors={['rgba(142,68,173,0)','rgba(142,68,173,0.5)', 'rgba(52, 73, 94,1.0)', 'rgba(52, 73, 94,1.0)']}
                         style={{width: Dimensions.get('screen').width, height: Dimensions.get('screen').width}}>
                     </LinearGradient>
                 </Animated.View>
