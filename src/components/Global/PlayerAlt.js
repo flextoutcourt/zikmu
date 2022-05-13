@@ -567,11 +567,11 @@ class PlayerAlt extends React.Component {
                     left: this.state.player.left,
                     right: this.state.player.right,
                     top: this.state.player.top,
-                    backgroundColor: '#B00D72',
+                    backgroundColor: '#6C4DE6',
                     borderRadius: 10,
                     paddingTop: this.state.player.padding,
                 }}>
-                    <LinearGradient colors={['#B00D72', '#5523BF']} style={{borderRadius: 10}}>
+                    <LinearGradient colors={['#6C4DE6', '#6C4DE6']} style={{borderRadius: 10}}>
                         <TouchableOpacity onPress={() => this.state.big ? null : this._deploy_big_player()}
                                           disabled={this.state.big}>
                             <View style={{margin: 10}}>
