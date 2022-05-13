@@ -1,16 +1,16 @@
-import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, FlatList, Dimensions} from 'react-native';
+import React from 'react';
+import {FlatList, View} from 'react-native';
 import {connect} from 'react-redux';
 import ReleaseItem from './ReleaseItem';
 import axios from 'axios';
 
-class ReleaseComponent extends React.PureComponent{
+class ReleaseComponent extends React.PureComponent {
 
     constructor(props) {
         super(props);
         this.state = {
-            releases: null
-        }
+            releases: null,
+        };
     }
 
     _get_last_releases = () => {
@@ -27,14 +27,14 @@ class ReleaseComponent extends React.PureComponent{
             },
         );
         return promise.then(data => data.data);
-    }
+    };
 
-    componentDidMount(){
+    componentDidMount() {
         this._get_last_releases().then(json => this.setState({releases: json.albums.items}));
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <View>
                 <FlatList
                     data={this.state.releases}
@@ -44,15 +44,15 @@ class ReleaseComponent extends React.PureComponent{
                     )}
                 />
             </View>
-        )
+        );
     }
 
 }
 
 const mapStateToProps = store => {
     return {
-        store: store
-    }
-}
+        store: store,
+    };
+};
 
 export default connect(mapStateToProps)(ReleaseComponent);

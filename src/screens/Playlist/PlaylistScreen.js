@@ -1,16 +1,7 @@
 import axios from 'axios';
 import React from 'react';
-import {
-    Dimensions,
-    FlatList,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native';
+import {Dimensions, FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
 import Animated, {Extrapolate} from 'react-native-reanimated';
 import {connect} from 'react-redux';
 import TrackItem from '../../components/Track/TrackItem';
@@ -174,7 +165,7 @@ class PlaylistScreen extends React.Component {
         const transform = [{scale}];
         return (
             <LinearGradient
-                colors={['#34495e', '#34495e']}
+                colors={['#15202B', '#15202B']}
                 style={{
                     ...styles.container,
                     paddingTop: StatusBar.currentHeight,
@@ -188,7 +179,7 @@ class PlaylistScreen extends React.Component {
                     [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
                     {listener: '', useNativeDriver: true},
                 )}>
-                    <Animated.View style={{marginTop: mt, backgroundColor: '#34495e'}}>
+                    <Animated.View style={{marginTop: mt, backgroundColor: '#15202B'}}>
                         {this.state.playlist ? (
                             <FlatList
                                 data={this.state.playlist?.tracks?.items}
@@ -217,7 +208,7 @@ class PlaylistScreen extends React.Component {
                         ) : null}
                     </Animated.View>
                     <LinearGradient
-                        colors={['#2c3e50', '#2c3e50']}
+                        colors={['#1E2732', '#1E2732']}
                         style={{marginTop: 0, padding: 10, paddingTop: 15}}>
                         <View
                             style={{
@@ -268,7 +259,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#2c3e50',
+        backgroundColor: '#1E2732',
     },
 });
 

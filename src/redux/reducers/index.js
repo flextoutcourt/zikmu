@@ -6,19 +6,19 @@ import {persistReducer} from 'redux-persist';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const authenticationConfig = {
-	key: 'authentication',
-	storage: AsyncStorage,
-	blacklist: ['accessToken'],
+    key: 'authentication',
+    storage: AsyncStorage,
+    blacklist: ['accessToken'],
 };
 
 const listeningConfig = {
-	key: 'listening',
-	storage: AsyncStorage,
-}
+    key: 'listening',
+    storage: AsyncStorage,
+};
 
 const rootReducer = combineReducers({
-	authentication: persistReducer(authenticationConfig, authenticationSlice),
-	listening: persistReducer(listeningConfig, listeningSlice),
+    authentication: persistReducer(authenticationConfig, authenticationSlice),
+    listening: persistReducer(listeningConfig, listeningSlice),
 });
 
 export default rootReducer;

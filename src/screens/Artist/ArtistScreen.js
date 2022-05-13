@@ -9,7 +9,6 @@ import Albums from '../../components/Artist/Albums';
 import Header from '../../components/Artist/Header';
 import RelatedArtists from '../../components/Artist/RelatedArtists';
 import TopTracks from '../../components/Artist/TopTracks';
-import SubHeader from '../../components/Artist/SubHeader';
 import YourLikes from '../../components/Artist/YourLikes';
 
 class ArtistScreen extends React.PureComponent {
@@ -113,7 +112,7 @@ class ArtistScreen extends React.PureComponent {
 
         return (
             <LinearGradient
-                colors={['#34495e', '#34495e']}
+                colors={['#15202B', '#15202B']}
                 style={({marginTop: -2.5 * StatusBar.currentHeight}, styles.container)}>
                 <Header
                     y={this.state.scrollY}
@@ -125,7 +124,7 @@ class ArtistScreen extends React.PureComponent {
                     [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
                     {listener: '', useNativeDriver: true},
                 )}>
-                    <Animated.View style={{marginTop: mt, backgroundColor: '#34495e'}}>
+                    <Animated.View style={{marginTop: mt, backgroundColor: '#15202B'}}>
                         {this.state.artist != null ? (
                             <>
                                 <Animated.View
@@ -178,7 +177,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#2c3e50',
+        backgroundColor: '#1E2732',
     },
 });
 

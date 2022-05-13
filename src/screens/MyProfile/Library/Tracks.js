@@ -1,11 +1,10 @@
 //import liraries
 import React from 'react';
-import {ActivityIndicator, Dimensions, FlatList, ScrollView, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {ActivityIndicator, Dimensions, FlatList, StatusBar, StyleSheet} from 'react-native';
 import {connect} from 'react-redux';
 import TrackItem from '../../../components/Track/TrackItem';
 import LinearGradient from 'react-native-linear-gradient';
 import LibraryHeader from '../../../components/User/Library/Header';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import axios from 'axios';
 import Animated, {Extrapolate} from 'react-native-reanimated';
 
@@ -88,14 +87,14 @@ class Tracks extends React.PureComponent {
 
         return (
             <LinearGradient
-                colors={['#34495e', '#34495e']}
+                colors={['#15202B', '#15202B']}
                 style={{...styles.container}}>
                 <LibraryHeader y={this.state.scrollY}/>
                 <Animated.ScrollView style={{zIndex: 98}} onScroll={Animated.event(
                     [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
                     {listener: '', useNativeDriver: true},
                 )}>
-                    <Animated.View style={{marginTop: mt, backgroundColor: '#34495e'}}>
+                    <Animated.View style={{marginTop: mt, backgroundColor: '#15202B'}}>
                         <FlatList
                             data={this.state.tracks}
                             scrollEnabled={true}
@@ -133,7 +132,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        backgroundColor: '#2c3e50',
+        backgroundColor: '#1E2732',
     },
 });
 

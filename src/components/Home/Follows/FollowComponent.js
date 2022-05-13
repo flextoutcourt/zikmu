@@ -1,6 +1,6 @@
 // import React, {useState, useEffect, useContext, Suspense} from 'react'
 import axios from 'axios';
-import React, {Component} from 'react';
+import React from 'react';
 import {FlatList, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import FollowItem from './FollowItem';
@@ -34,7 +34,8 @@ class RecentComponent extends React.PureComponent {
     render() {
         return (
             <View style={{flex: 1, paddingBottom: 155}}>
-                <Text style={{fontSize: 20, color: 'white', marginLeft: 10, marginBottom: 10, fontWeight: 'bold'}}>Vos artistes</Text>
+                <Text style={{fontSize: 20, color: 'white', marginLeft: 10, marginBottom: 10, fontWeight: 'bold'}}>Vos
+                    artistes</Text>
                 <FlatList
                     data={this.state.follows}
                     scrollEnabled={true}

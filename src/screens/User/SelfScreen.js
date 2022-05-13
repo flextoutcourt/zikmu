@@ -1,20 +1,19 @@
 import React, {PureComponent} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Image, StatusBar, ScrollView, Dimensions} from 'react-native';
+import {Image, ScrollView, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Feather';
 
 import {connect} from 'react-redux';
 import SelfHeader from '../../components/User/SelfHeader';
 import axios from 'axios';
-import PlayerAlt from '../../components/Global/PlayerAlt';
 
-class SelfScreen extends PureComponent{
+class SelfScreen extends PureComponent {
 
     constructor(props) {
         super(props);
         this.state = {
-            user: null
-        }
+            user: null,
+        };
     }
 
     _get_user = () => {
@@ -27,16 +26,16 @@ class SelfScreen extends PureComponent{
             },
         });
         return promise.then(data => data.data);
-    }
+    };
 
-    componentDidMount(){
+    componentDidMount() {
         this._get_user().then(json => this.setState({user: json}));
     }
 
-    render(){
-        return(
+    render() {
+        return (
             <LinearGradient
-                colors={['#34495e', '#34495e']}
+                colors={['#15202B', '#15202B']}
                 style={{
                     marginTop: 0,
                     ...styles.container,
@@ -44,48 +43,59 @@ class SelfScreen extends PureComponent{
                 <SelfHeader {...this.props} user={this.state.user}/>
                 <ScrollView style={{paddingTop: 2 * StatusBar.currentHeight}}>
                     <TouchableOpacity onPress={() => this.props.navigation.push('User', {
-                        user_id: this.state.user?.id
-                    })} style={{padding: 10, flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 10}}>
+                        user_id: this.state.user?.id,
+                    })} style={{
+                        padding: 10,
+                        flexDirection: 'row',
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                        marginTop: 10,
+                    }}>
                         <View style={{flexDirection: 'row', alignItems: 'center'}}>
                             <View style={{height: 100, width: 100, borderRadius: 100}}>
-                                <Image source={{uri: this.state.user?.images[0]?.url}} style={{...StyleSheet.absoluteFill, borderRadius: 100}} />
+                                <Image source={{uri: this.state.user?.images[0]?.url}}
+                                       style={{...StyleSheet.absoluteFill, borderRadius: 100}}/>
                             </View>
                             <View style={{marginLeft: 10}}>
-                                <Text style={{fontSize: 18, color: 'white', fontWeight: "bold"}}>{this.state.user?.display_name}</Text>
+                                <Text style={{
+                                    fontSize: 18,
+                                    color: 'white',
+                                    fontWeight: 'bold',
+                                }}>{this.state.user?.display_name}</Text>
                                 <Text>Voir le profil</Text>
                             </View>
                         </View>
                         <View style={{marginLeft: 20}}>
-                            <Icon name={'chevron-right'} solid={true} size={24} color={'white'} />
+                            <Icon name={'chevron-right'} solid={true} size={24} color={'white'}/>
                         </View>
                     </TouchableOpacity>
                     <View style={{padding: 10}}>
                         <Text style={{...styles.title}}>Compte</Text>
                     </View>
-                {/*    Profil utilisateur*/}
-                {/*    Differents settings */}
+                    {/*    Profil utilisateur*/}
+                    {/*    Differents settings */}
                 </ScrollView>
             </LinearGradient>
-        )
+        );
     }
 
 }
 
 const mapStateToProps = store => {
     return {
-        store: store
-    }
-}
+        store: store,
+    };
+};
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        flex: 1,
     },
     title: {
         fontSize: 18,
         fontWeight: 'bold',
-        color: 'white'
-    }
-})
+        color: 'white',
+    },
+});
 
 export default connect(mapStateToProps)(SelfScreen);

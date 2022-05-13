@@ -8,87 +8,87 @@ import AlbumItem from '../../../components/Album/AlbumItem';
 
 // create a component
 class Albums extends React.PureComponent {
-	constructor(props) {
-		super(props);
-		this.state = {
-			albums: null,
-		};
-	}
+    constructor(props) {
+        super(props);
+        this.state = {
+            albums: null,
+        };
+    }
 
-	_get_albums = (offset = 0) => {
-		const promise = axios.get(
-			`https://api.spotify.com/v1/me/albums?offset=${offset}`,
-			{
-				headers: {
-					Accept: 'application/json',
-					Authorization:
-						'Bearer ' + this.props.store.authentication.accessToken,
-					'Content-Type': 'application/json',
-				},
-			},
-		);
+    _get_albums = (offset = 0) => {
+        const promise = axios.get(
+            `https://api.spotify.com/v1/me/albums?offset=${offset}`,
+            {
+                headers: {
+                    Accept: 'application/json',
+                    Authorization:
+                        'Bearer ' + this.props.store.authentication.accessToken,
+                    'Content-Type': 'application/json',
+                },
+            },
+        );
         return promise.then(data => data.data);
-	};
+    };
 
-	_group_by_key = (array, f) => {
-		let groups = [];
-		array.map((item, key) => {
-			if (groups[item.disc_number]) {
-				groups[item.disc_number].data.push(item);
-			} else {
-				groups[item.disc_number] = {
-					title: 'Disque ' + item.disc_number,
-					data: [],
-				};
-				groups[item.disc_number].data.push(item);
-			}
-		});
+    _group_by_key = (array, f) => {
+        let groups = [];
+        array.map((item, key) => {
+            if (groups[item.disc_number]) {
+                groups[item.disc_number].data.push(item);
+            } else {
+                groups[item.disc_number] = {
+                    title: 'Disque ' + item.disc_number,
+                    data: [],
+                };
+                groups[item.disc_number].data.push(item);
+            }
+        });
 
-		this.setState({disks: groups});
-	};
+        this.setState({disks: groups});
+    };
 
-	componentDidMount() {
-		this._get_albums().then(data => this.setState({albums: data.items}));
-	}
+    componentDidMount() {
+        this._get_albums().then(data => this.setState({albums: data.items}));
+    }
 
-	render() {
-		return (
-			<LinearGradient
-                colors={['#34495e', '#34495e']}
-				style={({marginTop: -StatusBar.currentHeight}, styles.container)}>
-				<FlatList
-					data={this.state.albums}
-					scrollEnabled={true}
-					horizontal={false}
-					numColumns={2}
-					onEndReachedThreshold={0.1}
-					onEndReached={() => {
-						this._get_albums(this.state.albums.length - 1).then(data => {
-							this.setState({albums: [...this.state.albums, ...data.items]});
-						});
-					}}
-					contentContainerStyle={{paddingBottom: 120}}
-					renderItem={({item, key}) => <AlbumItem {...this.props} album={item?.album}/>}
-				/>
-			</LinearGradient>
-		);
-	}
+    render() {
+        return (
+            <LinearGradient
+                colors={['#15202B', '#15202B']}
+                style={({marginTop: -StatusBar.currentHeight}, styles.container)}>
+                <FlatList
+                    data={this.state.albums}
+                    scrollEnabled={true}
+                    horizontal={false}
+                    numColumns={2}
+                    onEndReachedThreshold={0.1}
+                    onEndReached={() => {
+                        this._get_albums(this.state.albums.length - 1).then(data => {
+                            this.setState({albums: [...this.state.albums, ...data.items]});
+                        });
+                    }}
+                    contentContainerStyle={{paddingBottom: 120}}
+                    renderItem={({item, key}) => <AlbumItem {...this.props} album={item?.album}/>}
+                />
+            </LinearGradient>
+        );
+    }
 }
 
 // define your styles
 const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center',
-		backgroundColor: '#2c3e50',
-	},
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#1E2732',
+    },
 });
 
 const mapStateToProps = store => {
-	return {
-		store: store,
-	};
+    return {
+        store: store,
+    };
 };
 
 export default connect(mapStateToProps)(Albums);

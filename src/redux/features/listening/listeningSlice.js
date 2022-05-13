@@ -3,21 +3,21 @@ import {createSlice} from '@reduxjs/toolkit';
 const listeningSlice = createSlice({
     name: 'listening',
     initialState: {
-        listening: null
+        listening: null,
     },
     reducers: {
-        setListening(state, action){
+        setListening(state, action) {
             state.listening = action.payload.listening;
         },
-        refreshListening(state, action){
-            if(
+        refreshListening(state, action) {
+            if (
                 state.listening.item.id !== action.payload.listening.item.id ||
                 state.listening.is_playing !== action.payload.listening.is_playing
-            ){
-                state.listening = action.payload.listening
+            ) {
+                state.listening = action.payload.listening;
             }
-        }
-    }
+        },
+    },
 });
 
 export const {

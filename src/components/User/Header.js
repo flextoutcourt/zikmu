@@ -1,19 +1,18 @@
-import React, {Component} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Image, StatusBar, ScrollView, Dimensions} from 'react-native';
+import React from 'react';
+import {Dimensions, Image, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Feather';
 
 import {connect} from 'react-redux';
 import Animated, {Extrapolate} from 'react-native-reanimated';
-import axios from 'axios';
 
-class SelfHeader extends React.PureComponent{
+class SelfHeader extends React.PureComponent {
 
     constructor(props) {
         super(props);
     }
 
-    componentDidMount(){
+    componentDidMount() {
     }
 
     render() {
@@ -32,38 +31,92 @@ class SelfHeader extends React.PureComponent{
         const mt = this.props.y.interpolate({
             inputRange: [0, Dimensions.get('window').height],
             outputRange: [0, -Dimensions.get('window').height - 140],
-            extrapolate: Extrapolate.CLAMP
-        })
+            extrapolate: Extrapolate.CLAMP,
+        });
 
         const maskOpacity = this.props.y.interpolate({
-            inputRange: [0, Dimensions.get('screen').width],
+            inputRange: [0, Dimensions.get('screen').width / 2],
             outputRange: [0.3, 1],
-            extrapolate: Extrapolate.CLAMP
+            extrapolate: Extrapolate.CLAMP,
         });
 
         const scale = this.props.y.interpolate({
-            inputRange: [-Dimensions.get('screen').width, 0, Dimensions.get('screen').width],
-            outputRange: [1.3, 1, 0.9],
-            extrapolate: Extrapolate.CLAMP
+            inputRange: [
+                -Dimensions.get('screen').width,
+                0,
+                Dimensions.get('screen').width,
+            ],
+            outputRange: [1.3, 1, 0.2],
+            extrapolate: Extrapolate.CLAMP,
         });
         const maskScale = this.props.y.interpolate({
-            inputRange: [-Dimensions.get('screen').width, 0, Dimensions.get('screen').width],
+            inputRange: [-Dimensions.get('screen').width, 0, Dimensions.get('screen').width,],
             outputRange: [1.3, 1, 1.1],
-            extrapolate: Extrapolate.CLAMP
+            extrapolate: Extrapolate.CLAMP,
+        });
+
+        const backgroundOpacity = this.props.y.interpolate({
+            inputRange: [0, 225],
+            outputRange: [1, 0],
+            extrapolate: Extrapolate.CLAMP,
         });
 
         const transform = [{scale}];
 
         return (
             <>
-                <View style={{flex: 1, flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center', backgroundColor: 'rgba(0,0,0,0.5)', position: 'absolute',
-                    left: 0, right: 0, top: StatusBar.currentHeight, height: 50, paddingHorizontal: 10, zIndex: 99
+                <Animated.View
+                    style={{
+                        position: 'absolute',
+                        top: StatusBar.currentHeight + 8,
+                        left: 10,
+                        zIndex: 100,
+                        backgroundColor: 'rgba(0,0,0,0.5)',
+                        borderRadius: 99,
+                        padding: 5,
+                        opacity: backgroundOpacity
+                    }}>
+                    <Icon
+                        name={'arrow-left'}
+                        size={24}
+                        color={'white'}
+                        style={{opacity: 0}}
+                    />
+                </Animated.View>
+                <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={{
+                    position: 'absolute',
+                    top: StatusBar.currentHeight + 8,
+                    left: 10,
+                    zIndex: 100,
+                    borderRadius: 99,
+                    padding: 5,
                 }}>
+                    <Icon
+                        name={'arrow-left'}
+                        size={24}
+                        color={'white'}
+                        style={{opacity: 1}}
+                    />
+                </TouchableOpacity>
+                <Animated.View
+                    style={{
+                        flex: 1,
+                        flexDirection: 'row',
+                        justifyContent: 'flex-start',
+                        alignItems: 'center',
+                        backgroundColor: 'rgba(120,86,255, 1)',
+                        position: 'absolute',
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        paddingTop: StatusBar.currentHeight,
+                        height: 50 + StatusBar.currentHeight,
+                        paddingHorizontal: 10,
+                        zIndex: 99,
+                        opacity: opacity,
+                    }}>
                     <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-                            <Icon name={"arrow-left"} size={24} color={'white'} />
-                        </TouchableOpacity>
-                        <View style={{flexDirection: 'row', marginLeft: 10, alignItems: 'center'}}>
+                        <View style={{flexDirection: 'row', marginLeft: 50, alignItems: 'center'}}>
                             {this.props.user?.images[0] ? (
                                 <Image
                                     source={{uri: this.props.user?.images[0]?.url}}
@@ -73,7 +126,7 @@ class SelfHeader extends React.PureComponent{
                             <Text style={{color: 'white', marginLeft: 10}}>{this.props.user?.display_name}</Text>
                         </View>
                     </View>
-                </View>
+                </Animated.View>
                 <Animated.Image
                     source={{uri: this.props.user?.images[0]?.url}}
                     style={{
@@ -85,7 +138,7 @@ class SelfHeader extends React.PureComponent{
                         left: 0,
                         right: 0,
                         transform: transform,
-                        borderRadius: 1500
+                        borderRadius: 1500,
                     }}
                 />
                 <Animated.View
@@ -97,11 +150,11 @@ class SelfHeader extends React.PureComponent{
                         height: Dimensions.get('screen').width,
                         marginTop: mt,
                         opacity: maskOpacity,
-                        transform: [{scale: maskScale}]
+                        transform: [{scale: maskScale}],
                     }}
                 >
                     <LinearGradient
-                        colors={['rgba(142,68,173,0)','rgba(142,68,173,0.5)', 'rgba(52, 73, 94,1.0)', 'rgba(52, 73, 94,1.0)']}
+                        colors={['rgba(120,86,255,0)', 'rgba(120,86,255,0.5)', 'rgba(21,32,43,1.0)', 'rgba(21,32,43,1.0)']}
                         style={{width: Dimensions.get('screen').width, height: Dimensions.get('screen').width}}>
                     </LinearGradient>
                 </Animated.View>
@@ -113,14 +166,14 @@ class SelfHeader extends React.PureComponent{
 
 const mapStateToProps = store => {
     return {
-        store: store
-    }
-}
+        store: store,
+    };
+};
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
-    }
-})
+        flex: 1,
+    },
+});
 
 export default connect(mapStateToProps)(SelfHeader);
