@@ -210,7 +210,7 @@ class AlbumScreen extends React.PureComponent {
                                             renderItem={({item}) => {
                                                 return (
                                                     <View style={{flexDirection: 'row', marginVertical: 5}}>
-                                                        <Icon name={'copyright'} size={18} color="white"/>
+                                                        <Icon name={'info'} size={18} color="white"/>
                                                         <Text style={{marginLeft: 10, color: "white"}}>{item?.text}</Text>
                                                     </View>
                                                 );

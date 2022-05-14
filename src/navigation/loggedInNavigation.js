@@ -25,6 +25,7 @@ import NewsScreen from '../screens/Genres/Items/NewsScreen';
 import SelfScreen from '../screens/User/SelfScreen';
 import UserScreen from '../screens/User/UserScreen';
 import StoryScreen from '../screens/Stories/StoryScreen';
+import BigPlayer from '../components/Global/Screens/BigPlayer';
 
 export const config = {
     screens: {
@@ -93,7 +94,12 @@ class HomeNavigationStack extends React.PureComponent {
                         return [story];
                     }}
                 />
-            </Stack.Navigator>
+                <Stack.Screen name="BigPlayer" component={BigPlayer}
+                              sharedElements={(route) => {
+                                  const {album_id} = route.params;
+                                  return [album_id];
+                              }}
+                />            </Stack.Navigator>
         );
     }
 }
@@ -124,7 +130,12 @@ class SearchNavigationStack extends React.PureComponent {
                 <Stack.Screen name="Genre" component={Genre}/>
                 <Stack.Screen name="Genre_Popular" component={PopularScreen}/>
                 <Stack.Screen name="Genre_News" component={NewsScreen}/>
-            </Stack.Navigator>
+                <Stack.Screen name="BigPlayer" component={BigPlayer}
+                              sharedElements={(route) => {
+                                  const {album_id} = route.params;
+                                  return [album_id];
+                              }}
+                />            </Stack.Navigator>
         );
     }
 }
@@ -192,6 +203,12 @@ class libraryNavigationStack extends React.PureComponent {
                 <Stack.Screen name="Genre" component={Genre}/>
                 <Stack.Screen name="Genre_Popular" component={PopularScreen}/>
                 <Stack.Screen name="Genre_News" component={NewsScreen}/>
+                <Stack.Screen name="BigPlayer" component={BigPlayer}
+                              sharedElements={(route) => {
+                                  const {album_id} = route.params;
+                                  return [album_id];
+                              }}
+                />
             </Stack.Navigator>
         );
     }

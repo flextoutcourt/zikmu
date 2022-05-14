@@ -21,7 +21,7 @@ class Tracks extends React.PureComponent {
     }
 
     _get_tracks = (offset = 0) => {
-        const promise = axios.get(`https://api.spotify.com/v1/me/tracks?offset=${offset}&limit=50`, {
+        const promise = axios.get(`https://api.spotify.com/v1/me/tracks?offset=${offset}&limit=30`, {
             headers: {
                 Accept: 'application/json',
                 Authorization: 'Bearer ' + this.props.store.authentication.accessToken,

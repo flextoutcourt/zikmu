@@ -13,10 +13,13 @@ import {
 	View,
 	StyleSheet,
 } from 'react-native';
+import Animated from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/Feather';
 import {connect} from 'react-redux';
-import listeningHandler from '../../utils/listeningHandler';
-import {refreshListening, setListening} from '../../redux/features/listening/listeningSlice';
+import listeningHandler from '../../../utils/listeningHandler';
+import {refreshListening, setListening} from '../../../redux/features/listening/listeningSlice';
+import * as rootNavigation from '../../../utils/RootNavigation';
+import {SharedElement} from 'react-navigation-shared-element';
 
 
 class Player extends React.PureComponent {
@@ -36,7 +39,7 @@ class Player extends React.PureComponent {
 	_start_interval = () => {
 		this.interval = setInterval(() => {
 			this._get_listening();
-		}, 1000);
+		}, 50000);
 	};
 
 	forceStateRefresh = async () => {
@@ -64,16 +67,6 @@ class Player extends React.PureComponent {
 			this.props.setListening({listening: listeningObject.data});
 		}
 	};
-
-	_determine_play_pause = async () => {
-		if (this.props.store.listening.listening) {
-			await listeningHandler.pause_listening(this.props.store.authentication.accessToken);
-			this.forceStateRefresh();
-		} else {
-			await listeningHandler.start_listening(this.props.store.authentication.accessToken);
-			this.forceStateRefresh();
-		}
-	}
 
 	_determine_play_pause = async () => {
 		if (this.state.is_playing) {
@@ -196,12 +189,14 @@ class Player extends React.PureComponent {
 
 	render() {
 		return (
-			<View style={styles.player.container}>
+			<TouchableOpacity onPress={() => rootNavigation.navigate('BigPlayer', {album_id: this.props.store.listening?.listening?.item?.album?.id})} style={styles.player.container}>
 				<View style={styles.player.album.container}>
-					<Image
-						source={{uri: this.props.store?.listening?.listening?.item?.album?.images?.[0]?.url}}
-						style={styles.player.album.image}
-					/>
+					<SharedElement id={this.props.store.listening?.listening?.item?.album?.id}>
+						<Animated.Image
+							source={{uri: this.props.store?.listening?.listening?.item?.album?.images?.[0]?.url}}
+							style={styles.player.album.image}
+						/>
+					</SharedElement>
 					<View style={styles.player.album.infos}>
 						<Text style={styles.player.album.infos.name}>{this.props.store.listening.listening?.item?.name}</Text>
 						<Text style={styles.player.album.infos.artist}>{this.props.store.listening.listening?.item?.artists[0]?.name}</Text>
@@ -216,7 +211,12 @@ class Player extends React.PureComponent {
 					</TouchableOpacity>
 					<this.PlayPauseButton />
 				</View>
-			</View>
+				<View style={{...styles.player.timebar.container, width: Dimensions.get('screen').width - 30,}}>
+					<View style={styles.player.timebar.outer}>
+						<View style={{...styles.player.timebar.inner, width: (this.props.store.listening.listening?.progress_ms) / (this.props.store.listening.listening?.item?.duration_ms) * 100 + '%'}}/>
+					</View>
+				</View>
+			</TouchableOpacity>
 		);
 	}
 }
@@ -287,6 +287,28 @@ const styles = StyleSheet.create({
 				},
 			},
 		},
+		timebar: {
+			container: {
+				flexDirection: 'row',
+				marginTop: 5,
+				position: 'absolute',
+				bottom: 0,
+				left: 10,
+				right: 10,
+			},
+			outer:{
+				height: 2,
+				backgroundColor: 'grey',
+				flex: 1,
+				alignSelf: 'center',
+				borderRadius: 5,
+			},
+			inner: {
+				height: 2,
+				backgroundColor: 'white',
+				borderRadius: 5,
+			}
+		}
 	},
 });
 

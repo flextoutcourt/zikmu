@@ -18,7 +18,6 @@ import {
 import LoggedinNavigation from '../../navigation/loggedInNavigation';
 import GuestNavigation from '../../navigation/guestNavigation';
 import PlayerAlt from '../../components/Global/PlayerAlt';
-import Player from '../../components/Global/Player';
 
 
 class EntryScreen extends PureComponent {
@@ -72,7 +71,7 @@ class EntryScreen extends PureComponent {
                             translucent={true}
                         />
                         <LoggedinNavigation/>
-                        <Player/>
+                        {/*<PlayerAlt/>*/}
                     </SafeAreaView>
                 </SafeAreaProvider>
             );
