@@ -65,7 +65,7 @@ class RegisterScreen extends React.PureComponent {
         return (
             <SafeAreaView style={{flex: 1, marginTop: -StatusBar.currentHeight}}>
                 <LinearGradient
-                    colors={['#B00D72', '#5523BF']}
+                    colors={['#15202B', '#15202B']}
                     start={{x: 1, y: 0}}
                     end={{x: 0, y: 1}}
                     style={{flex: 1, width: Dimensions.get('screen').width}}>
@@ -114,6 +114,7 @@ class RegisterScreen extends React.PureComponent {
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <CheckBox
                                     disabled={false}
+                                    tintColors={{true: '#7856FF', false: '#473B95'}}
                                     value={this.state.checkboxNotify}
                                     onValueChange={() =>
                                         this.setState({checkboxNotify: !this.state.checkboxNotify})
@@ -123,12 +124,13 @@ class RegisterScreen extends React.PureComponent {
                                     onPress={() => {
                                         this.setState({checkboxNotify: !this.state.checkboxNotify});
                                     }}>
-                                    <Text>Me notifier</Text>
+                                    <Text style={{color: this.state.checkboxNotify ? '#7856ff' : 'white'}}>Me notifier</Text>
                                 </TouchableOpacity>
                             </View>
                             <View style={{flexDirection: 'row', alignItems: 'center'}}>
                                 <CheckBox
                                     disabled={false}
+                                    tintColors={{true: '#7856FF', false: '#473B95'}}
                                     value={this.state.checkboxCGV}
                                     onValueChange={() =>
                                         this.setState({checkboxCGV: !this.state.checkboxCGV})
@@ -138,7 +140,7 @@ class RegisterScreen extends React.PureComponent {
                                     onPress={() => {
                                         this.setState({checkboxCGV: !this.state.checkboxCGV});
                                     }}>
-                                    <Text>Accepter les CGV</Text>
+                                    <Text style={{color: this.state.checkboxCGV ? '#7856ff' : 'white'}}>Accepter les CGV</Text>
                                 </TouchableOpacity>
                             </View>
                         </View>
@@ -150,13 +152,13 @@ class RegisterScreen extends React.PureComponent {
                             alignItems: 'center',
                             justifyContent: 'center',
                         }}>
-                        <Text style={{marginBottom: 15}}>J'ai déjà un compte</Text>
+                        <Text style={{marginBottom: 15, color: 'white'}}>J'ai déjà un compte</Text>
                         <Button
                             onPress={() => {
                                 this.props.navigation.navigate('Login');
                             }}
                             title={'Me connecter'}
-                            color={'#B00D70'}
+                            color={'#7856ff'}
                         />
                     </View>
                 </LinearGradient>

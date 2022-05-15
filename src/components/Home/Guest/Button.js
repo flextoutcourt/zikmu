@@ -8,7 +8,7 @@ function Button({onPress, title, color}) {
         <TouchableOpacity
             onPress={onPress}
             style={{backgroundColor: color, ...styles.button}}>
-            <Text>{title}</Text>
+            <Text style={{color: 'white'}}>{title}</Text>
         </TouchableOpacity>
     );
 }

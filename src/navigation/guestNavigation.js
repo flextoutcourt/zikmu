@@ -16,7 +16,7 @@ export default function GuestNavigation() {
         return (
             <View style={{flex: 1}}>
                 <LinearGradient
-                    colors={['#B00D72', '#5523BF']}
+                    colors={['#15202B', '#15202B']}
                     start={{x: 1, y: 0}}
                     end={{x: 0, y: 1}}
                     style={{
@@ -24,7 +24,7 @@ export default function GuestNavigation() {
                         width: Dimensions.get('screen').width,
                         paddingTop: StatusBar.currentHeight * 2,
                     }}>
-                    <Text>Reset password</Text>
+                    <Text style={{color: 'white'}}>Reset password</Text>
                 </LinearGradient>
             </View>
         );
@@ -32,7 +32,13 @@ export default function GuestNavigation() {
 
     return (
         <NavigationContainer>
-            <Stack.Navigator>
+            <Stack.Navigator screenOptions={{
+                headerTintColor: 'white',
+                headerStyle: {
+                    backgroundColor: '#7856FF',
+                    borderBottomWidth: 0,
+                },
+            }}>
                 <Stack.Screen
                     name="Guest"
                     component={GuestScreen}
@@ -45,8 +51,6 @@ export default function GuestNavigation() {
                     component={LoginScreen}
                     options={{
                         headerShown: true,
-                        headerTransparent: true,
-                        headerTintColor: 'white',
                         headerShadowVisible: false,
                         title: 'Connexion',
                     }}
@@ -56,8 +60,6 @@ export default function GuestNavigation() {
                     component={RegisterScreen}
                     options={{
                         headerShown: true,
-                        headerTransparent: true,
-                        headerTintColor: 'white',
                         headerShadowVisible: false,
                         title: 'Inscription',
                     }}
@@ -67,8 +69,6 @@ export default function GuestNavigation() {
                     component={Test}
                     options={{
                         headerShown: true,
-                        headerTransparent: true,
-                        headerTintColor: 'white',
                         headerShadowVisible: false,
                         title: 'Réinitialisation du mot de passe',
                     }}

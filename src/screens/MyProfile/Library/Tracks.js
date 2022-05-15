@@ -64,16 +64,13 @@ class Tracks extends React.PureComponent {
 
         const height = this.state.scrollY.interpolate({
             inputRange: [0, 125],
-            outputRange: [
-                Dimensions.get('screen').width,
-                Dimensions.get('screen').width,
-            ],
+            outputRange: [Dimensions.get('screen').width, Dimensions.get('screen').width],
             extrapolate: Extrapolate.CLAMP,
         });
 
         const mt = this.state.scrollY.interpolate({
             inputRange: [0, Dimensions.get('window').height * 10],
-            outputRange: [StatusBar.currentHeight, StatusBar.currentHeight],
+            outputRange: [Dimensions.get('screen').width, 0],
             extrapolate: Extrapolate.CLAMP,
         });
 
@@ -85,11 +82,17 @@ class Tracks extends React.PureComponent {
 
         const transform = [{scale}];
 
+        const ml = this.state.scrollY.interpolate({
+            inputRange: [0, 125],
+            outputRange: [StatusBar.currentHeight, 0],
+            extrapolate: Extrapolate.CLAMP,
+        });
+
         return (
             <LinearGradient
                 colors={['#15202B', '#15202B']}
                 style={{...styles.container}}>
-                <LibraryHeader y={this.state.scrollY}/>
+                <LibraryHeader y={this.state.scrollY} />
                 <Animated.ScrollView style={{zIndex: 98}} onScroll={Animated.event(
                     [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
                     {listener: '', useNativeDriver: true},
@@ -101,7 +104,7 @@ class Tracks extends React.PureComponent {
                             horizontal={false}
                             style={{paddingTop: StatusBar.currentHeight}}
                             contentContainerStyle={{paddingBottom: 150}}
-                            onEndReachedThreshold={0.5}
+                            onEndReachedThreshold={0.9}
                             onEndReached={() => {
                                 this._get_tracks(this.state.tracks.length - 1).then(data => {
                                     this.setState({
@@ -112,7 +115,8 @@ class Tracks extends React.PureComponent {
                             ListFooterComponent={() => (
                                 <ActivityIndicator size={'large'}/>
                             )}
-                            renderItem={({item, key}) => (
+                            keyExtractor={(item) => item.track?.id}
+                            renderItem={({item}) => (
                                 <TrackItem
                                     track={item.track}
                                     album={item?.track?.album}

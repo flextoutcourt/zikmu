@@ -17,21 +17,21 @@ const Footer = () => {
                     onPress={() => {
                         navigation.navigate('MTS');
                     }}>
-                    <Text>Mentions légales</Text>
+                    <Text style={{color: 'white'}}>Mentions légales</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{color: 'white'}}
                     onPress={() => {
                         navigation.navigate('CGV');
                     }}>
-                    <Text>CGV</Text>
+                    <Text style={{color: 'white'}}>CGV</Text>
                 </TouchableOpacity>
                 <TouchableOpacity
                     style={{color: 'white'}}
                     onPress={() => {
                         navigation.navigate('Contact');
                     }}>
-                    <Text>Contact</Text>
+                    <Text style={{color: 'white'}}>Contact</Text>
                 </TouchableOpacity>
             </View>
             <View style={{flex: 1, flexDirection: 'row', justifyContent: 'center'}}>
@@ -79,7 +79,7 @@ const styles = StyleSheet.create({
         justifyItems: 'space-around',
         alignItems: 'center',
         padding: 10,
-        backgroundColor: '#5D3194',
+        backgroundColor: '#7856ff',
         flexDirection: 'row',
     },
 });
