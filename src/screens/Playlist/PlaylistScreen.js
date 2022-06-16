@@ -200,49 +200,49 @@ class PlaylistScreen extends React.Component {
         });
     }
 
-    render() {
-        const scale = this.state.scrollY.interpolate({
-            inputRange: [-Dimensions.get('screen').height, 0, 125],
-            outputRange: [2, 1, 0.5],
-            extrapolateRight: Extrapolate.CLAMP,
-        });
-        const opacity = this.state.scrollY.interpolate({
-            inputRange: [0, 200],
-            outputRange: [0, 1],
-            extrapolate: Extrapolate.CLAMP,
-        });
-        const mb = this.state.scrollY.interpolate({
-            inputRange: [0, 125],
-            outputRange: [10, -75],
-            extrapolate: Extrapolate.CLAMP,
-        });
+  render() {
+    const scale = this.state.scrollY.interpolate({
+      inputRange: [-Dimensions.get('screen').height, 0, 125],
+      outputRange: [2, 1, 0.5],
+      extrapolateRight: Extrapolate.CLAMP,
+    });
+    const opacity = this.state.scrollY.interpolate({
+      inputRange: [0, 200],
+      outputRange: [0, 1],
+      extrapolate: Extrapolate.CLAMP,
+    });
+    const mb = this.state.scrollY.interpolate({
+      inputRange: [0, 125],
+      outputRange: [10, -75],
+      extrapolate: Extrapolate.CLAMP,
+    });
 
-        const br = this.state.scrollY.interpolate({
-            inputRange: [0, 10],
-            outputRange: [0, 10],
-            extrapolate: Extrapolate.CLAMP,
-        });
+    const br = this.state.scrollY.interpolate({
+      inputRange: [0, 10],
+      outputRange: [0, 10],
+      extrapolate: Extrapolate.CLAMP,
+    });
 
-        const height = this.state.scrollY.interpolate({
-            inputRange: [0, 125],
-            outputRange: [
-                Dimensions.get('screen').width,
-                Dimensions.get('screen').width,
-            ],
-            extrapolate: Extrapolate.CLAMP,
-        });
+    const height = this.state.scrollY.interpolate({
+      inputRange: [0, 125],
+      outputRange: [
+        Dimensions.get('screen').width,
+        Dimensions.get('screen').width,
+      ],
+      extrapolate: Extrapolate.CLAMP,
+    });
 
-        const mt = this.state.scrollY.interpolate({
-            inputRange: [0, Dimensions.get('window').height * 10],
-            outputRange: [Dimensions.get('screen').width - 20, 0],
-            extrapolate: Extrapolate.CLAMP,
-        });
+    const mt = this.state.scrollY.interpolate({
+      inputRange: [0, Dimensions.get('window').height * 10],
+      outputRange: [Dimensions.get('screen').width - 20, 0],
+      extrapolate: Extrapolate.CLAMP,
+    });
 
-        const borderRadius = this.state.scrollY.interpolate({
-            inputRange: [0, 125],
-            outputRange: [0, 350],
-            extrapolate: Extrapolate.CLAMP,
-        });
+    const borderRadius = this.state.scrollY.interpolate({
+      inputRange: [0, 125],
+      outputRange: [0, 350],
+      extrapolate: Extrapolate.CLAMP,
+    });
 
         const transform = [{scale}];
         return (
@@ -324,18 +324,18 @@ class PlaylistScreen extends React.Component {
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#1E2732',
-    },
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#1E2732',
+  },
 });
 
 const mapStateToProps = store => {
-    return {
-        store: store,
-    };
+  return {
+    store: store,
+  };
 };
 
 export default connect(mapStateToProps)(PlaylistScreen);

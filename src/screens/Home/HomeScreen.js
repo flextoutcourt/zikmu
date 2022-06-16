@@ -1,14 +1,14 @@
 import React from 'react';
 import {
-    Dimensions,
-    Image,
-    Pressable,
-    ScrollView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  Image,
+  Pressable,
+  ScrollView,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -21,173 +21,173 @@ import FollowComponent from '../../components/Home/Follows/FollowComponent';
 import {SharedElement} from 'react-navigation-shared-element';
 
 const HomeScreen = (props) => {
-    const navigation = useNavigation();
-    const [opacity, setOpacity] = React.useState(1);
-    useFocusEffect(() => {
-        if (navigation.isFocused()) {
-            setOpacity(1);
-        }
-    });
+  const navigation = useNavigation();
+  const [opacity, setOpacity] = React.useState(1);
+  useFocusEffect(() => {
+    if (navigation.isFocused()) {
+      setOpacity(1);
+    }
+  });
 
-    const _display_message = () => {
-        let now = parseInt(new Date().getHours());
-        let message = null;
-        switch (true) {
-            case (now < 2):
-                message = 'Faut dormir';
-                break;
-            case (now < 8):
-                message = 'Bien matinal';
-                break;
-            case (now < 10):
-                message = 'Bien dormi ?';
-                break;
-            case (now < 12):
-                message = 'Bonjour';
-                break;
-            case (now < 14 || (now >= 19 && now <= 21)):
-                message = 'Bon appétit';
-                break;
-            case (now < 18):
-                message = 'Bonjour';
-                break;
-            case (now < 24):
-                message = 'Bonsoir';
-                break;
-        }
-        return message;
-    };
+  const _display_message = () => {
+    let now = parseInt(new Date().getHours());
+    let message = null;
+    switch (true) {
+      case (now < 2):
+        message = 'Faut dormir';
+        break;
+      case (now < 8):
+        message = 'Bien matinal';
+        break;
+      case (now < 10):
+        message = 'Bien dormi ?';
+        break;
+      case (now < 12):
+        message = 'Bonjour';
+        break;
+      case (now < 14 || (now >= 19 && now < 21)):
+        message = 'Bon appétit';
+        break;
+      case (now < 18):
+        message = 'Bonjour';
+        break;
+      case (now < 24):
+        message = 'Bonsoir';
+        break;
+    }
+    return message;
+  };
 
-    const stories = [
-        {
-            id: 1,
-            user: {
-                name: 'Vald',
-                picture: 'https://picsum.photos/48',
-            },
-            source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg',
-            video: 'https://www.youtube.com/embed/xPbRsca_l7c',
-        },
-        {
-            id: 2,
+  const stories = [
+    {
+      id: 1,
+      user: {
+        name: 'Vald',
+        picture: 'https://picsum.photos/48',
+      },
+      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg',
+      video: 'https://www.youtube.com/embed/xPbRsca_l7c',
+    },
+    {
+      id: 2,
 
-            user: {
-                name: 'Sch',
-                source: 'https://picsum.photos/48',
-            },
-            source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/1.jpg',
-        },
-        {
-            id: 3,
+      user: {
+        name: 'Sch',
+        source: 'https://picsum.photos/48',
+      },
+      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/1.jpg',
+    },
+    {
+      id: 3,
 
-            user: {
-                name: 'Capri',
-                source: 'https://picsum.photos/48',
-            },
-            source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/2.jpg',
-        },
-        {
-            id: 4,
+      user: {
+        name: 'Capri',
+        source: 'https://picsum.photos/48',
+      },
+      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/2.jpg',
+    },
+    {
+      id: 4,
 
-            user: {
-                name: 'Bu$hi',
-                source: 'https://picsum.photos/48',
-            },
-            source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/3.jpg',
-        },
-        {
-            id: 5,
+      user: {
+        name: 'Bu$hi',
+        source: 'https://picsum.photos/48',
+      },
+      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/3.jpg',
+    },
+    {
+      id: 5,
 
-            user: {
-                name: 'Fianso',
-                source: 'https://picsum.photos/48',
-            },
-            source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/5.jpg',
-        },
-        {
-            id: 6,
+      user: {
+        name: 'Fianso',
+        source: 'https://picsum.photos/48',
+      },
+      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/5.jpg',
+    },
+    {
+      id: 6,
 
-            user: {
-                name: 'ZKR',
-                source: 'https://picsum.photos/48',
-            },
-            source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/6.jpg',
-        },
-        {
-            id: 7,
+      user: {
+        name: 'ZKR',
+        source: 'https://picsum.photos/48',
+      },
+      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/6.jpg',
+    },
+    {
+      id: 7,
 
-            user: {
-                name: 'Vald',
-                source: 'https://picsum.photos/48',
-            },
-            source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/7.jpg',
-            video: 'https://www.youtube.com/embed/xPbRsca_l7c',
-        },
-        {
-            id: 11,
+      user: {
+        name: 'Vald',
+        source: 'https://picsum.photos/48',
+      },
+      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/7.jpg',
+      video: 'https://www.youtube.com/embed/xPbRsca_l7c',
+    },
+    {
+      id: 11,
 
-            user: {
-                name: 'Damso',
-                source: 'https://picsum.photos/48',
-            },
-            source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg',
-        },
-        {
-            id: 12,
+      user: {
+        name: 'Damso',
+        source: 'https://picsum.photos/48',
+      },
+      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg',
+    },
+    {
+      id: 12,
 
-            user: {
-                name: 'Seezy',
-                source: 'https://picsum.photos/48',
-            },
-            source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/1.jpg',
-        },
-        {
-            id: 13,
+      user: {
+        name: 'Seezy',
+        source: 'https://picsum.photos/48',
+      },
+      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/1.jpg',
+    },
+    {
+      id: 13,
 
-            user: {
-                name: 'Kalash Criminel',
-                source: 'https://picsum.photos/48',
-            },
-            source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/2.jpg',
-        },
-        {
-            id: 14,
+      user: {
+        name: 'Kalash Criminel',
+        source: 'https://picsum.photos/48',
+      },
+      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/2.jpg',
+    },
+    {
+      id: 14,
 
-            user: {
-                name: 'Freeze Corleone',
-                source: 'https://picsum.photos/48',
-            },
-            source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/3.jpg',
-        },
-        {
-            id: 15,
+      user: {
+        name: 'Freeze Corleone',
+        source: 'https://picsum.photos/48',
+      },
+      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/3.jpg',
+    },
+    {
+      id: 15,
 
-            user: {
-                name: 'Kaaris',
-                source: 'https://picsum.photos/48',
-            },
-            source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/5.jpg',
-        },
-        {
-            id: 16,
+      user: {
+        name: 'Kaaris',
+        source: 'https://picsum.photos/48',
+      },
+      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/5.jpg',
+    },
+    {
+      id: 16,
 
-            user: {
-                name: 'Ninho',
-                source: 'https://picsum.photos/48',
-            },
-            source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/6.jpg',
-        },
-        {
-            id: 17,
+      user: {
+        name: 'Ninho',
+        source: 'https://picsum.photos/48',
+      },
+      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/6.jpg',
+    },
+    {
+      id: 17,
 
-            user: {
-                name: 'Rim\'k',
-                source: 'https://picsum.photos/48',
-            },
-            source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/7.jpg',
-            video: 'https://www.youtube.com/embed/xPbRsca_l7c',
-        },
-    ];
+      user: {
+        name: 'Rim\'k',
+        source: 'https://picsum.photos/48',
+      },
+      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/7.jpg',
+      video: 'https://www.youtube.com/embed/xPbRsca_l7c',
+    },
+  ];
 
 
     return (
@@ -257,9 +257,9 @@ const HomeScreen = (props) => {
 };
 
 const mapStateToProps = store => {
-    return {
-        store: store,
-    };
+  return {
+    store: store,
+  };
 };
 
 const borderRadius = 10;
@@ -268,35 +268,35 @@ const width = Dimensions.get('screen').width / 4 - margin * 2;
 
 // define your styles
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#1E2732',
+  },
+  stories: {
     container: {
-        flex: 1,
-        backgroundColor: '#1E2732',
+      width,
+      height: width * 1.77,
+      marginTop: 16,
+      borderRadius,
+      backgroundColor: 'red',
     },
-    stories: {
-        container: {
-            width,
-            height: width * 1.77,
-            marginTop: 16,
-            borderRadius,
-            backgroundColor: 'red',
-        },
-        imageContainer: {
-            borderRadius: 10,
-            width: 64,
-            height: 64 * 1.77,
-            elevation: 10,
-            marginHorizontal: 10,
-            borderColor: 'white',
-            borderWidth: 2,
-        },
-        image: {
-            ...StyleSheet.absoluteFill,
-            width: undefined,
-            height: undefined,
-            resizeMode: 'cover',
-            borderRadius,
-        },
+    imageContainer: {
+      borderRadius: 10,
+      width: 64,
+      height: 64 * 1.77,
+      elevation: 10,
+      marginHorizontal: 10,
+      borderColor: 'white',
+      borderWidth: 2,
     },
+    image: {
+      ...StyleSheet.absoluteFill,
+      width: undefined,
+      height: undefined,
+      resizeMode: 'cover',
+      borderRadius,
+    },
+  },
 });
 
 export default connect(mapStateToProps)(HomeScreen);
