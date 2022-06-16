@@ -12,6 +12,7 @@ class TrackItem extends React.PureComponent {
             track: props.track,
             isCollab: false,
             added_to_queue: false,
+            added_to_playlist: false,
         };
         this.swipeableRef = React.createRef();
     }
@@ -127,8 +128,24 @@ class TrackItem extends React.PureComponent {
         return <></>;
     };
 
+    add_to_playlist = (playlist_id, uri) => {
+        fetch(`https://api.spotify.com/v1/playlists/${playlist_id}/tracks?uris=${uri}`, {
+            headers: {
+                Accept: 'application/json',
+                Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
+                'Content-Type': 'application/json',
+            },
+            method: 'POST',
+        }).then((data) => this.setState({added_to_playlist: data.ok}));
+
+    }
+
     render() {
         return (
+            this.state.added_to_playlist
+            ?
+                null
+            :
             <View>
                 {/*<Swipeable ref={this.swipeableRef} overshootLeft={true} renderLeftActions={this._renderLeftActions} renderRightActions={this._renderRightActions} onSwipeableLeftOpen={() => this._add_to_queue()}>*/}
                 <TouchableOpacity
@@ -140,7 +157,7 @@ class TrackItem extends React.PureComponent {
                         this._play(
                             this.props.type === 'album'
                                 ? this.props.album?.uri
-                                : this.props.type === 'playlist'
+                                : (this.props.type === 'playlist' || this.props.type === 'playlist_recommendation')
                                     ? this.state.track?.uri
                                     : this.state.track?.uri,
                             this.state.track?.track_number,
@@ -218,7 +235,32 @@ class TrackItem extends React.PureComponent {
                                     alignItems: 'center',
                                 }}>
                                 <Collab collab={this._find_user(this.props.added_by?.id)}/>
-                                <Liked track={this.state.track}/>
+                                {
+                                    this.props.type === 'playlist_recommendation'
+                                    ?
+                                        <TouchableOpacity onPress={() => this.add_to_playlist(this.props.playlist_id, this.props.track.uri)}>
+                                            {
+                                                this.state.added_to_playlist
+                                                ?
+                                                    <Icon
+                                                        name="plus"
+                                                        size={this.props.iconSize ?? 24}
+                                                        color={'green'}
+                                                        style={'green'}
+                                                    />
+                                                :
+                                                    <Icon
+                                                        name="plus"
+                                                        size={this.props.iconSize ?? 24}
+                                                        solid={!!this.state.liked}
+                                                        color={this.state.liked ? '#B00D70' : 'white'}
+                                                        style={{color: this.state.liked ? '#B00D70' : 'white'}}
+                                                    />
+                                            }
+                                        </TouchableOpacity>
+                                    :
+                                        <Liked track={this.state.track}/>
+                                }
                             </View>
                         </View>
                     </View>

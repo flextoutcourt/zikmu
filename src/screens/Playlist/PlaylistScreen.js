@@ -14,9 +14,15 @@ class PlaylistScreen extends React.Component {
             playlist: null,
             scrollY: new Animated.Value(0),
             englithment: null,
+            recommendations: null
         };
     }
 
+    /**
+     *
+     * @returns {Promise<AxiosResponse<any>>}
+     * @private
+     */
     _get_playlist = () => {
         const promise = axios.get(
             'https://api.spotify.com/v1/playlists/' +
@@ -33,6 +39,61 @@ class PlaylistScreen extends React.Component {
         return promise.then(data => data.data);
     };
 
+    /**
+     *
+     * @param {array} arr
+     * @private
+     */
+    _remove_duplicated = (arr) => arr.filter((i) => arr.indexOf(i) === arr.lastIndexOf(i));
+
+    /**
+     *
+     * @param {Object} json
+     * @param {string} type
+     * @private
+     */
+    _format_ids = (json, type) => {
+        let arr = [];
+        if(type === 'artists'){
+            json.tracks.items.map((item, key) => item.track.artists.map((item, index) => arr.push(item.id)));
+            //
+            arr = this._remove_duplicated(artistsId);
+            arr = artistsId.splice(0,2).join(',');
+        }else if(type === 'tracks'){
+            json.tracks.items.map((item, key) => arr.push(item.id));
+            arr = this._remove_duplicated(arr)
+            arr = tracksId.splice(0,2).join(',');
+
+        }
+    }
+    /**
+     *
+     * @param {Object} json
+     * @private
+     */
+    _get_recommended_playlists = (json) => {
+
+        let tracksId = this._format_ids(json, 'tracks');
+        let artistsId = this._format_ids(json, 'artists');
+        const promise = axios.get(
+            `https://api.spotify.com/v1/recommendations?limit=10&seed_artists=${artistsId}&seed_genres=*&seed_tracks=${tracksId}`,
+            {
+                headers: {
+                    Accept: 'application/json',
+                    Authorization:
+                        'Bearer ' + this.props.store.authentication.accessToken,
+                    'Content-Type': 'application/json',
+                },
+            },
+        );
+        promise.then(data => this.setState({recommendations: data.data}));
+    }
+
+    /**
+     *
+     * @returns {string}
+     * @private
+     */
     _to_array_tracks = () => {
         let tracks_array = [];
         this.state.playlist?.tracks.items.map(item => {
@@ -40,6 +101,11 @@ class PlaylistScreen extends React.Component {
         });
         return tracks_array.toString();
     };
+    /**
+     *
+     * @returns {string}
+     * @private
+     */
     _to_array_genres = () => {
         let genre_array = [];
         this.state.playlist?.tracks.items.map(item => {
@@ -47,6 +113,11 @@ class PlaylistScreen extends React.Component {
         });
         return genre_array.toString();
     };
+    /**
+     *
+     * @returns {string}
+     * @private
+     */
     _to_array_artists = () => {
         let artist_array = [];
         this.state.playlist?.tracks.items.map(item => {
@@ -56,7 +127,11 @@ class PlaylistScreen extends React.Component {
         });
         return artist_array.toString();
     };
-
+    /**
+     *
+     * @returns {Promise<AxiosResponse<any>>}
+     * @private
+     */
     _enlight_playlist = () => {
         console.log(this._to_array_artists());
         const promise = axios.get(
@@ -70,9 +145,15 @@ class PlaylistScreen extends React.Component {
                 },
             },
         );
-        return promise.then(data => alert(JSON.stringify(data)));
+        return promise.then(data => data.data);
     };
 
+    /**
+     *
+     * @param {string} href
+     * @returns {Promise<AxiosResponse<any>>}
+     * @private
+     */
     _get_user = href => {
         const promise = axios.get(`${href}`, {
             headers: {
@@ -92,6 +173,7 @@ class PlaylistScreen extends React.Component {
         });
         this._get_playlist().then(json => {
             this.setState({playlist: json});
+            this._get_recommended_playlists(json);
             if (json.collaborative) {
                 let users = [];
                 json.tracks?.items?.map((item, key) => {
@@ -209,10 +291,10 @@ class PlaylistScreen extends React.Component {
                     </Animated.View>
                     <LinearGradient
                         colors={['#1E2732', '#1E2732']}
-                        style={{marginTop: 0, padding: 10, paddingTop: 15}}>
+                        style={{marginTop: 0, padding: 0, paddingTop: 15, paddingBottom: 50}}>
                         <View
                             style={{
-                                padding: 10,
+                                padding: 0,
                                 alignItems: 'center',
                                 justifyContent: 'flex-start',
                                 flex: 1,
@@ -222,29 +304,16 @@ class PlaylistScreen extends React.Component {
                                     this._enlight_playlist().then(json =>
                                         alert(JSON.stringify(json)),
                                     )
-                                }
-                                style={{
-                                    paddingHorizontal: 10,
-                                    paddingVertical: 5,
-                                    flexDirection: 'row',
-                                    alignItems: 'center',
-                                    justifyContent: 'center',
-                                }}>
+                                }>
                                 <Text
                                     style={{color: 'white', textAlign: 'center', fontSize: 24}}>
                                     Nos Suggestions
                                 </Text>
                             </TouchableOpacity>
                             <FlatList
-                                data={this.state.suggested?.tracks?.items}
+                                data={this.state.recommendations?.tracks}
                                 keyExtractor={(item, index) => index.toString()}
-                                renderItem={(item, key) => <TrackItem track={item.track}/>}
-                            />
-                            <View
-                                style={{
-                                    height: 800,
-                                    width: Dimensions.get('screen').width - 20,
-                                }}
+                                renderItem={(item, key) => <TrackItem track={item.item} album={item.item.album} type={'playlist_recommendation'} playlist_id={this.state.playlist?.id}/>}
                             />
                         </View>
                     </LinearGradient>

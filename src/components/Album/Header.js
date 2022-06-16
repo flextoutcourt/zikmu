@@ -50,7 +50,7 @@ class Header extends React.PureComponent {
 				0,
 				Dimensions.get('screen').width,
 			],
-			outputRange: [1.3, 1, 0.2],
+			outputRange: [1.3, 1, 0],
 			extrapolate: Extrapolate.CLAMP,
 		});
 		const maskScale = this.props.y.interpolate({

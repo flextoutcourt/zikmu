@@ -20,12 +20,21 @@ class SearchScreen extends React.PureComponent {
         };
     }
 
+    /**
+     * Perform a research
+     * @param e
+     * @private
+     */
     _search = e => {
+        // set variable search to to user request in order to control the text input
         this.setState({search: e});
+        // set loading to display the activity indicator
         this.setState({loading: true});
+        // reset results to null in order to display the genreComponent
         if (e === '') {
             this.setState({results: null});
         }
+        // fetch data from spotify api using /search endpoint
         axios
             .get(
                 `https://api.spotify.com/v1/search?q=${e}&limit=24&type=track,artist,album`,
@@ -38,7 +47,9 @@ class SearchScreen extends React.PureComponent {
                     },
                 },
             )
+            // store data into local state
             .then(data => this.setState({results: data.data}))
+            // remove the activity indicator
             .finally(() => {
                 this.setState({loading: false});
             });
@@ -97,7 +108,17 @@ class SearchScreen extends React.PureComponent {
                             />
                         </View>
                     </LinearGradient>
-                    {this.state.results === null ? <GenreList {...this.props} /> : null}
+
+
+
+                    {
+                        this.state.results === null
+                            ? <GenreList {...this.props} />
+                            : null
+                    }
+
+
+
                     <View>
                         <View>
                             {this._renderHeaderComponent(

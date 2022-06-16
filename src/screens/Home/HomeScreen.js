@@ -240,11 +240,17 @@ const HomeScreen = (props) => {
                         </TouchableOpacity>
                     </View>
                 </View>
+
+
+
                 <RecentComponent {...props} isTop={true}/>
                 <ReleaseComponent {...props} />
                 <GenreComponent {...props} />
                 <RecentComponent {...props} isTop={false}/>
                 <FollowComponent {...props} />
+
+
+
             </ScrollView>
         </LinearGradient>
     );

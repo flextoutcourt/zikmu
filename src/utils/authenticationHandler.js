@@ -2,6 +2,7 @@ import {authorize, refresh} from 'react-native-app-auth';
 
 class AuthenticationHandler {
     constructor() {
+        // necessary configuration to use the API
         this.spotifyAuthConfig = {
             clientId: '8bf1e0110ef845e294f1f7b8a898483a',
             clientSecret: '5bf46323f90249b3ba1417df139b5c4c',
@@ -31,6 +32,10 @@ class AuthenticationHandler {
         };
     }
 
+    /**
+     * Log the user
+     * @returns {Promise<AuthorizeResult>}
+     */
     async onLogin() {
         try {
             return await authorize(this.spotifyAuthConfig);
@@ -40,6 +45,11 @@ class AuthenticationHandler {
         }
     }
 
+    /**
+     * Refresh authentication token
+     * @param refreshToken
+     * @returns {Promise<RefreshResult>}
+     */
     async refreshLogin(refreshToken) {
         return await refresh(this.spotifyAuthConfig, {
             refreshToken: refreshToken,

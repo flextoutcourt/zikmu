@@ -13,6 +13,12 @@ class RecentComponent extends React.PureComponent {
         };
     }
 
+    /**
+     * axios request to store results
+     * @param {int|null} after
+     * @returns {Promise<AxiosResponse<any>>}
+     * @private
+     */
     _get_recent = async (after = null) => {
         let limit = this.props.isTop ? 12 : 50;
         let url = `https://api.spotify.com/v1/me/player/recently-played?limit=${limit}`;
@@ -27,10 +33,22 @@ class RecentComponent extends React.PureComponent {
         return promise.then(data => data.data);
     };
 
+    /**
+     * sort the array after being grouped by album
+     * @param {array} json
+     * @returns {*}
+     * @private
+     */
     _sort_array = (json) => {
         return this._group_by_album(json);
     };
 
+    /**
+     * group a given array
+     * @param {array} json
+     * @returns {*}
+     * @private
+     */
     _group_by_album = (json) => {
         let array = {};
         json.items = json.items.filter((value, index, self) => (

@@ -18,6 +18,7 @@ class AlbumScreen extends React.PureComponent {
             disks: null,
             test: null,
             scrollY: new Animated.Value(0),
+            recommendations: null
         };
     }
 
@@ -66,6 +67,7 @@ class AlbumScreen extends React.PureComponent {
             this.setState({
                 test: this._group_by_key(json.tracks.items, 'disc_number'),
             });
+
             this.props.navigation.setOptions({
                 headerTransparent: true,
                 headerTintColor: 'white',
@@ -242,6 +244,7 @@ class AlbumScreen extends React.PureComponent {
                             />
                         ) : null}
                     </Animated.View>
+                    {/* Ajouter le bloc "album que vous pourriez aimer" */}
                 </Animated.ScrollView>
             </LinearGradient>
         );
