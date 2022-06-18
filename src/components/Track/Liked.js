@@ -2,6 +2,8 @@ import Icon from 'react-native-vector-icons/Feather';
 import {TouchableOpacity, Vibration} from 'react-native';
 import React from 'react';
 import {connect} from 'react-redux';
+import likedSongHandler from '../../utils/likedSongHandler';
+import {refreshLiked, setLiked} from '../../redux/features/liked/likedSlice';
 
 class Liked extends React.PureComponent {
 
@@ -11,29 +13,6 @@ class Liked extends React.PureComponent {
             liked: false,
         };
     }
-
-    _check_like = (track_id) => {
-        // if(track_id){
-        // 	axios.get(`https://api.spotify.com/v1/me/tracks/contains?ids=${track_id}`, {
-        // 		headers: {
-        // 			Accept: 'application/json',
-        // 			Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
-        // 			'Content-Type': 'application/json',
-        // 		},
-        // 		method: 'PUT',
-        // 	})
-        // 		.then(data => data.data)
-        // 		.then(json => {
-        // 			this.setState({
-        // 				liked: json[0],
-        // 			})
-        // 		})
-        // 		.catch(e => {
-        // 			// alert(JSON.stringify(e));
-        // 		});
-        // }
-        return false;
-    };
 
     _like = (track_id) => {
         Vibration.vibrate(10);
@@ -76,7 +55,7 @@ class Liked extends React.PureComponent {
     };
 
     componentDidMount() {
-        this._check_like(this.props.track?.id);
+
     }
 
     render() {
@@ -85,9 +64,9 @@ class Liked extends React.PureComponent {
                 <Icon
                     name="heart"
                     size={this.props.iconSize ?? 24}
-                    solid={!!this.state.liked}
-                    color={this.state.liked ? '#B00D70' : 'white'}
-                    style={{color: this.state.liked ? '#B00D70' : 'white'}}
+                    solid={!!this.props.liked_tracks?.id?.liked}
+                    color={this.props.liked_tracks?.id?.liked ? '#7856FF' : 'white'}
+                    style={{color: this.state.liked ? '#7856FF' : 'white'}}
                 />
             </TouchableOpacity>
         );
@@ -99,6 +78,11 @@ const mapStateToProps = store => {
     return {
         store: store,
     };
+};
+
+const mapDispatchToProps = {
+	setLiked,
+	refreshLiked,
 };
 
 export default connect(mapStateToProps)(Liked);

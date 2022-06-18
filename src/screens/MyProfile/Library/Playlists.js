@@ -73,7 +73,7 @@ class Playlists extends React.PureComponent {
                                     alignItems: 'center',
                                 }}>
                                     <Text style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>Mes titres
-                                        likés</Text>
+                                        likés ({this.props.store.liked?.liked?.total})</Text>
                                 </LinearGradient>
                             </TouchableOpacity>
                         </LinearGradient>

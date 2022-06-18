@@ -11,8 +11,8 @@ const listeningSlice = createSlice({
     },
     refreshListening(state, action) {
       if (
-        state.listening.item.id !== action.payload.listening.item.id ||
-        state.listening.is_playing !== action.payload.listening.is_playing
+        state.listening?.item?.id !== action.payload?.listening?.item?.id ||
+        state.listening?.is_playing !== action.payload.listening?.is_playing
       ) {
         state.listening = action.payload.listening;
       }

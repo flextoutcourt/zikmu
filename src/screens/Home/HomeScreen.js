@@ -34,22 +34,19 @@ const HomeScreen = (props) => {
     let message = null;
     switch (true) {
       case (now < 2):
-        message = 'Faut dormir';
+        message = 'Bonne nuit';
         break;
       case (now < 8):
-        message = 'Bien matinal';
+        message = 'Bien matinal !';
         break;
       case (now < 10):
         message = 'Bien dormi ?';
         break;
-      case (now < 12):
+      case (now < 12 || (now > 14 && now < 18)):
         message = 'Bonjour';
         break;
       case (now < 14 || (now >= 19 && now < 21)):
         message = 'Bon appétit';
-        break;
-      case (now < 18):
-        message = 'Bonjour';
         break;
       case (now < 24):
         message = 'Bonsoir';

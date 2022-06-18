@@ -299,7 +299,7 @@ class PlayerAlt extends React.Component {
   };
 
   /**
-   *
+   * Pause the player
    * @private
    */
   _pause = () => {
@@ -316,7 +316,7 @@ class PlayerAlt extends React.Component {
   };
 
   /**
-   *
+   * Resume the player
    * @private
    */
   _play = () => {
@@ -338,7 +338,7 @@ class PlayerAlt extends React.Component {
   };
 
   /**
-   *
+   * Skip to next track
    * @private
    */
   _next = () => {
@@ -354,7 +354,7 @@ class PlayerAlt extends React.Component {
   };
 
   /**
-   *
+   * Skip to previous track
    * @private
    */
   _prev = () => {
@@ -375,7 +375,7 @@ class PlayerAlt extends React.Component {
   };
 
   /**
-   *
+   * Seek the player to a position or to the start of the track
    * @param position
    * @private
    */
@@ -400,7 +400,7 @@ class PlayerAlt extends React.Component {
   };
 
   /**
-   *
+   * Enable the shuffling state
    * @private
    */
   _shuffle = () => {
@@ -421,7 +421,7 @@ class PlayerAlt extends React.Component {
   };
 
   /**
-   *
+   * Enable the repeat state
    * @private
    */
   _repeat = () => {
@@ -446,7 +446,7 @@ class PlayerAlt extends React.Component {
   };
 
   /**
-   *
+   * Display the icon for the current device used by the player
    * @param device_type
    * @returns {string}
    * @private
@@ -463,8 +463,9 @@ class PlayerAlt extends React.Component {
       return 'smartphone';
     }
   };
+
   /**
-   *
+   * Deploy the device menu
    * @private
    */
   _deploy_devices_menu = () => {
@@ -497,7 +498,7 @@ class PlayerAlt extends React.Component {
     }));
   };
   /**
-   *
+   * Deploy the waiting menu
    * @private
    */
   _deploy_waiting_list = () => {
@@ -531,7 +532,7 @@ class PlayerAlt extends React.Component {
     this._start_interval();
   };
   /**
-   *
+   * Deploy the share menu
    * @private
    */
   _deploy_share_menu = () => {
@@ -564,7 +565,7 @@ class PlayerAlt extends React.Component {
     this._start_interval();
   };
   /**
-   *
+   * Deploy the track info menu
    * @private
    */
   _deploy_track_infos = () => {
@@ -597,7 +598,7 @@ class PlayerAlt extends React.Component {
     this._start_interval();
   };
   /**
-   *
+   * Fetch all available devices
    * @private
    */
   _get_available_devices = () => {
@@ -620,7 +621,7 @@ class PlayerAlt extends React.Component {
       });
   };
   /**
-   *
+   * Check if the current device is in the list of available devices
    * @param devices
    * @returns {{active: {}, list: []}}
    * @private
@@ -640,7 +641,7 @@ class PlayerAlt extends React.Component {
     return to_return;
   };
   /**
-   *
+   * Switch the playing context to another device
    * @param device_id
    * @returns {Promise<void>}
    * @private
@@ -663,7 +664,7 @@ class PlayerAlt extends React.Component {
   };
 
   /**
-   *
+   * Deploy the external share menu
    * @param customOptions
    * @returns {Promise<void>}
    */
@@ -1237,10 +1238,27 @@ class PlayerAlt extends React.Component {
                   width: Dimensions.get('screen').width - 20,
                   marginTop: 10,
                   padding: 10,
-                  backgroundColor: 'red',
+                  backgroundColor: '#1E2732',
                   borderRadius: 10,
                 }}>
-                <Text style={{fontSize: 20, color: 'white'}}>Paroles</Text>
+	              <Text style={{fontSize: 30, color: 'white', marginBottom: 15}}>
+		              Lorem ipsum dolor sit amet.
+	              </Text>
+	              <Text style={{fontSize: 30, color: 'white', marginBottom: 15}}>
+		              consectetur adipisicing elit. Quas, quibusdam.
+	              </Text>
+	              <Text style={{fontSize: 30, color: 'white', marginBottom: 15}}>
+		              Lorem ipsum dolor sit amet.
+	              </Text>
+	              <Text style={{fontSize: 30, color: 'white', marginBottom: 15}}>
+		              consectetur adipisicing elit. Quas, quibusdam.
+	              </Text>
+	              <Text style={{fontSize: 30, color: 'white', marginBottom: 15}}>
+		              Lorem ipsum dolor sit amet.
+	              </Text>
+	              <Text style={{fontSize: 30, color: 'white', marginBottom: 15}}>
+		              consectetur adipisicing elit. Quas, quibusdam.
+	              </Text>
               </View>
               {/*	//paroles */}
             </ScrollView>
@@ -1898,12 +1916,12 @@ class PlayerAlt extends React.Component {
                   <View
                     style={{
                       width: Dimensions.get('screen').width / 2,
-                      backgroundColor: 'red',
+                      backgroundColor: '#7856FF',
                       padding: 10,
                       borderBottomLeftRadius: 10,
                       borderBottomRightRadius: 10,
                     }}>
-                    <Text>Partager</Text>
+                    <Text style={{color: 'white'}}>Partager</Text>
                   </View>
                 </View>
                 <View style={{marginTop: 5, flex: 1}}>
