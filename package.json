@@ -28,7 +28,6 @@
     "dominant-colors": "^1.0.5",
     "expo-blur": "^11.0.0",
     "express": "^4.17.1",
-    "i18next": "^21.8.10",
     "moment": "^2.29.1",
     "query-string": "^7.0.1",
     "react": "17.0.2",

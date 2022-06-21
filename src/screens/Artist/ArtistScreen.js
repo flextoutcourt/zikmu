@@ -155,7 +155,7 @@ class ArtistScreen extends React.PureComponent {
                                 <Animated.View style={{
                                     marginTop: 0,
                                 }}>
-                                    <YourLikes artist={this.state.artist} {...this.props}/>
+                                    <YourLikes artist={this.state.artist}/>
                                     <TopTracks artist={this.state.artist}/>
                                     <Albums {...this.props} artist={this.state.artist}/>
                                     <RelatedArtists {...this.props} artist={this.state.artist}/>

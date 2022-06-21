@@ -34,7 +34,7 @@ class RelatedArtists extends React.PureComponent {
     render() {
         return (
             <View style={{flex: 1}}>
-                <Text style={{fontSize: 20, fontWeight: 'bold', paddingHorizontal: 10, color: 'white'}}>Similaires
+                <Text style={{fontSize: 20, fontWeight: 'bold', paddingHorizontal: 10}}>Similaires
                     a {this.props.artist?.name}</Text>
                 <FlatList
                     data={this.state.related?.artists}

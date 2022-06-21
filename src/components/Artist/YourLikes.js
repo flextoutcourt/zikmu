@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, Image, Text, TouchableOpacity, View} from 'react-native';
+import {Dimensions, Image, Text, View} from 'react-native';
 import {connect} from 'react-redux';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 
@@ -15,9 +15,7 @@ class YourLikes extends React.PureComponent {
 
     render() {
         return (
-            <TouchableOpacity onPress={() => {
-							this.props.navigation.navigate('MyTracks')
-            }} style={{
+            <View style={{
                 flex: 1,
                 width: Dimensions.get('screen').width,
                 padding: 10,
@@ -33,7 +31,7 @@ class YourLikes extends React.PureComponent {
                         bottom: '-50%',
                         height: 18,
                         width: 18,
-                        backgroundColor: '#7856FF',
+                        backgroundColor: 'red',
                         transform: [{translateX: -26}, {translateY: -20}],
                         borderRadius: 100,
                         flex: 1,
@@ -45,10 +43,10 @@ class YourLikes extends React.PureComponent {
                     </View>
                 </View>
                 <View style={{marginLeft: 20}}>
-                    <Text style={{fontSize: 15, fontWeight: 'bold', color: 'white'}}>Titres likés</Text>
-                    <Text style={{color: 'white'}}><Text style={{color: '#7856FF'}}>{this.state.likes?.length}</Text> titres de {this.props.artist?.name}</Text>
+                    <Text style={{fontSize: 15, fontWeight: 'bold'}}>Titres likés</Text>
+                    <Text>{this.state.likes?.length} titres de {this.props.artist?.name}</Text>
                 </View>
-            </TouchableOpacity>
+            </View>
         );
     }
 }

@@ -80,11 +80,6 @@ class HomeNavigationStack extends React.PureComponent {
                 <Stack.Screen name="Album" component={Album}/>
                 <Stack.Screen name="Artist" component={Artist}/>
                 <Stack.Screen name="Track" component={Track}/>
-		            <Stack.Screen name="MyTracks" component={Tracks} options={{
-			            headerShown: false,
-			            headerTransparent: true,
-			            title: '',
-		            }}/>
                 <Stack.Screen name="Playlist" component={Playlist}/>
                 <Stack.Screen name="Genre" component={Genre}/>
                 <Stack.Screen name="Genre_Popular" component={PopularScreen}/>
