@@ -200,7 +200,7 @@ class TrackItem extends React.PureComponent {
 											color:
 												this.props.store.listening.listening?.item?.id ===
 												this.state.track?.id
-													? '#7856FF'
+													? this.props.colorAlt ? 'white' : '#7856FF'
 													: 'white',
 											maxWidth: (Dimensions.get('screen').width / 3) * 1.7,
 										}}
@@ -215,7 +215,7 @@ class TrackItem extends React.PureComponent {
 											color:
 												this.props.store.listening.listening?.item?.id ===
 												this.state.track?.id
-													? '#7856FF'
+													? this.props.colorAlt ? 'white' : '#7856FF'
 													: 'white',
 										}}>, </Text>}
 										renderItem={({item, key}) => (
@@ -224,7 +224,7 @@ class TrackItem extends React.PureComponent {
 													color:
 														this.props.store.listening.listening?.item?.id ===
 														this.state.track?.id
-															? '#7856FF'
+															? this.props.colorAlt ? 'white' : '#7856FF'
 															: 'white',
 												}}>
 												{item.name}

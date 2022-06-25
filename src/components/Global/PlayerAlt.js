@@ -1366,6 +1366,7 @@ class PlayerAlt extends React.Component {
                 <TrackItem
                   track={this.props.store.listening.listening?.item}
                   album={this.props.store.listening.listening?.item?.album}
+                  colorAlt={true}
                 />
                 {this.props.store.listening.listening?.context ? (
                   <Text
