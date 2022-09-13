@@ -34,26 +34,6 @@ export default function GuestScreen() {
                         <Text style={{color: 'white'}}>Écoutez votre musique favorite en un seul clic</Text>
                     </View>
                     <View style={{flex: 1, alignItems: 'center', padding: 10}}>
-                        <Text
-                            style={{
-                                marginBottom: 15,
-                                fontSize: 16,
-                                fontWeight: 'bold',
-                                textAlign: 'center',
-                                color: 'white'
-                            }}>
-                            Profiter gratuitement {'\n'} de toutes votre musique
-                        </Text>
-                        <Button
-                            onPress={() => navigation.navigate('Register')}
-                            title={'S\'inscrire'}
-                            color={'#7856FF'}
-                        />
-                    </View>
-                    <View style={{flex: 1, alignItems: 'center', padding: 10}}>
-                        <Text style={{marginBottom: 15, fontSize: 16, fontWeight: 'bold', color: 'white'}}>
-                            Vous avez déjà un compte ?
-                        </Text>
                         <Button
                             onPress={() => navigation.navigate('Login')}
                             title={'Se connecter'}
