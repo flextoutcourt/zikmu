@@ -647,7 +647,7 @@ class PlayerAlt extends React.Component {
    */
   _transfer_playback = async device_id => {
     let body = {
-      devices_ids: [device_id],
+      device_ids: [device_id],
     };
     await fetch('https://api.spotify.com/v1/me/player', {
       body: JSON.stringify(body),
@@ -658,7 +658,7 @@ class PlayerAlt extends React.Component {
       },
       method: 'PUT',
     }).finally(() => {
-      this._get_available_devices();
+      this._check_current_device();
     });
   };
 
@@ -1116,18 +1116,18 @@ class PlayerAlt extends React.Component {
                           alignItems: 'center',
                           marginRight: 15,
                         }}>
-                        <TouchableOpacity
-                          onPress={() => this._deploy_share_menu()}>
-                          <Icon
-                            name="share"
-                            size={this.state.big ? 24 : 24}
-                            style={{
-                              marginLeft: 20,
-                              marginRight: 20,
-                              color: 'white',
-                            }}
-                          />
-                        </TouchableOpacity>
+                        {/*<TouchableOpacity*/}
+                        {/*  onPress={() => this._deploy_share_menu()}>*/}
+                        {/*  <Icon*/}
+                        {/*    name="share"*/}
+                        {/*    size={this.state.big ? 24 : 24}*/}
+                        {/*    style={{*/}
+                        {/*      marginLeft: 20,*/}
+                        {/*      marginRight: 20,*/}
+                        {/*      color: 'white',*/}
+                        {/*    }}*/}
+                        {/*  />*/}
+                        {/*</TouchableOpacity>*/}
                         <TouchableOpacity
                           onPress={() => this._deploy_waiting_list()}>
                           <Icon
