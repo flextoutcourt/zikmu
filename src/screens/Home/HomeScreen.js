@@ -190,70 +190,68 @@ const HomeScreen = (props) => {
   ];
 
 
-    return (
-        <LinearGradient
-            colors={['#15202B', '#15202B']}
-            style={{
-                marginTop: -StatusBar.currentHeight,
-                ...styles.container,
-            }}>
-            <ScrollView style={{paddingTop: StatusBar.currentHeight, paddingBottom: 10}} stickyHeaderIndices={[0]}
-                        stickyHeaderHiddenOnScroll={true}>
-                <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} style={{
-                    flex: 1,
-                    backgroundColor: '#15202B',
-                    paddingVertical: 10,
-                    elevation: 10,
-                    width: Dimensions.get('screen').width,
-                    paddingTop: StatusBar.currentHeight + 10,
-                }}>
-                    {stories.map((story, key) => (
-                        <Pressable onPress={() => props.navigation.navigate('Story', {story})}
-                                   style={{position: 'relative'}}>
-                            <SharedElement id={story.id}>
-                                <View style={styles.stories.imageContainer}>
-                                    <Image source={{uri: story.source}} style={styles.stories.image}/>
-                                </View>
-                            </SharedElement>
-                            <Pressable onPress={() => {
-                                //fetch artist_id from database ticket #FLEX-38
-                                // navigation.push('Artist', {});
-                            }} style={{flex: 1, flexDirection: 'row', justifyContent: 'center', maxWidth: '99%'}}>
-                                <Text style={{textAlign: 'center', marginTop: 5, color: 'white'}}
-                                      numberOfLines={1}>{story.user.name}</Text>
-                            </Pressable>
-                        </Pressable>
-                    ))}
-                </ScrollView>
-                <View style={{
-                    flex: 1,
-                    paddingVertical: 20,
-                    paddingHorizontal: 10,
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                }}>
-                    <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>{_display_message()}</Text>
-                    <View style={{flexDirection: 'row'}}>
-                        <TouchableOpacity onPress={() => navigation.push('Self')} style={{marginLeft: 20}}>
-                            <Icon name={'settings'} solid={true} size={24} color={'white'}/>
-                        </TouchableOpacity>
-                    </View>
-                </View>
+  return (
+    <LinearGradient
+      colors={['#15202B', '#15202B']}
+      style={{
+        marginTop: -StatusBar.currentHeight,
+        ...styles.container,
+      }}>
+      <ScrollView style={{paddingTop: StatusBar.currentHeight, paddingBottom: 10}} stickyHeaderIndices={[0]}
+                  stickyHeaderHiddenOnScroll={true}>
+        <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} style={{
+          flex: 1,
+          backgroundColor: '#15202B',
+          paddingVertical: 10,
+          elevation: 0,
+          width: Dimensions.get('screen').width,
+          paddingTop: StatusBar.currentHeight + 10,
+        }}>
+          {/*{stories.map((story, key) => (*/}
+          {/*    <Pressable onPress={() => props.navigation.navigate('Story', {story})}*/}
+          {/*               style={{position: 'relative'}}>*/}
+          {/*        <SharedElement id={story.id}>*/}
+          {/*            <View style={styles.stories.imageContainer}>*/}
+          {/*                <Image source={{uri: story.source}} style={styles.stories.image}/>*/}
+          {/*            </View>*/}
+          {/*        </SharedElement>*/}
+          {/*        <Pressable onPress={() => {*/}
+          {/*            //fetch artist_id from database ticket #FLEX-38*/}
+          {/*            // navigation.push('Artist', {});*/}
+          {/*        }} style={{flex: 1, flexDirection: 'row', justifyContent: 'center', maxWidth: '99%'}}>*/}
+          {/*            <Text style={{textAlign: 'center', marginTop: 5, color: 'white'}}*/}
+          {/*                  numberOfLines={1}>{story.user.name}</Text>*/}
+          {/*        </Pressable>*/}
+          {/*    </Pressable>*/}
+          {/*))}*/}
+        </ScrollView>
+        <View style={{
+          flex: 1,
+          paddingVertical: 20,
+          paddingHorizontal: 10,
+          flexDirection: 'row',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+        }}>
+          <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>{_display_message()}</Text>
+          <View style={{flexDirection: 'row'}}>
+            <TouchableOpacity onPress={() => navigation.push('Self')} style={{marginLeft: 20}}>
+              <Icon name={'settings'} solid={true} size={24} color={'white'}/>
+            </TouchableOpacity>
+          </View>
+        </View>
 
 
-
-                <RecentComponent {...props} isTop={true}/>
-                <ReleaseComponent {...props} />
-                <GenreComponent {...props} />
-                <RecentComponent {...props} isTop={false}/>
-                <FollowComponent {...props} />
-
+        <RecentComponent {...props} isTop={true}/>
+        <ReleaseComponent {...props} />
+        <GenreComponent {...props} />
+        <RecentComponent {...props} isTop={false}/>
+        <FollowComponent {...props} />
 
 
-            </ScrollView>
-        </LinearGradient>
-    );
+      </ScrollView>
+    </LinearGradient>
+  );
 };
 
 const mapStateToProps = store => {
