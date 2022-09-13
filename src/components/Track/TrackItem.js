@@ -197,7 +197,7 @@ class TrackItem extends React.PureComponent {
                                     style={{
                                         fontWeight: 'bold',
                                         color:
-                                            this.props.store.listening.listening.item.id ===
+                                            this.props.store.listening?.listening?.item?.id ===
                                             this.state.track?.id
                                                 ? 'green'
                                                 : 'white',
@@ -215,7 +215,7 @@ class TrackItem extends React.PureComponent {
                                         <Text
                                             style={{
                                                 color:
-                                                    this.props.store.listening.listening.item.id ===
+                                                    this.props.store.listening?.listening?.item?.id ===
                                                     this.state.track?.id
                                                         ? 'green'
                                                         : 'white',
