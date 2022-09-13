@@ -23,6 +23,7 @@
     "@reduxjs/toolkit": "^1.6.2",
     "axios": "^0.24.0",
     "body-parse": "^0.1.0",
+    "caniuse-lite": "^1.0.30001370",
     "crypto-js": "^4.1.1",
     "dominant-color": "^0.0.1",
     "dominant-colors": "^1.0.5",
