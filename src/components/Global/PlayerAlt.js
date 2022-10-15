@@ -274,7 +274,6 @@ class PlayerAlt extends React.Component {
    */
   _create_interval = initialPosition => {
     this.setState({currentProgress: initialPosition});
-    alert(initialPosition);
     this.timer = setInterval(() => {
       this.setState({
         currentProgress: this.props.store.listening.current_progress + 1000,

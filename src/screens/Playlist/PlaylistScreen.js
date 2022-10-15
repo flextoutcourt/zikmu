@@ -286,21 +286,50 @@ class PlaylistScreen extends React.Component {
                   <View style={{marginHorizontal: 10}}>
                     <TouchableOpacity
                       onPress={() =>
-                        this._enlight_playlist().then(data =>
-                          this.setState({
-                            recommendations: data,
-                          }),
-                        )
+                        this.state.recommendations == false
+                          ? this._enlight_playlist().then(data =>
+                              this.setState({
+                                recommendations: data,
+                              }),
+                            )
+                          : this.setState({
+                              recommendations: false,
+                            })
                       }>
-                      <Icon
-                        name={'zap'}
-                        size={30}
-                        color={
-                          this.state.recommandations == false
-                            ? 'white'
-                            : 'green'
-                        }
-                      />
+                      <View
+                        style={{
+                          flexDirection: 'row',
+                          alignItems: 'center',
+                          backgroundColor: 'transparent',
+                          borderColor:
+                            this.state.recommendations === false
+                              ? 'white'
+                              : '#6C4DE6',
+                          borderWidth: 2,
+                          justifyContent: 'center',
+                          padding: 3,
+                          borderRadius: 100,
+                          marginBottom: 10,
+                        }}>
+                        <Icon
+                          name={'zap'}
+                          size={24}
+                          color={
+                            this.state.recommendations === false
+                              ? 'white'
+                              : '#6C4DE6'
+                          }
+                        />
+                        <Text
+                          style={{
+                            color:
+                              this.state.recommendations === false
+                                ? 'white'
+                                : '#6C4DE6',
+                          }}>
+                          Enrichir
+                        </Text>
+                      </View>
                     </TouchableOpacity>
                   </View>
                 )}
