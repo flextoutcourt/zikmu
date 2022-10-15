@@ -1,6 +1,15 @@
 import axios from 'axios';
 import React from 'react';
-import {Dimensions, FlatList, StatusBar, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import Icon from 'react-native-vector-icons/Feather';
 import LinearGradient from 'react-native-linear-gradient';
 import Animated, {Extrapolate} from 'react-native-reanimated';
 import {connect} from 'react-redux';
@@ -14,7 +23,7 @@ class PlaylistScreen extends React.Component {
       playlist: null,
       scrollY: new Animated.Value(0),
       englithment: null,
-      recommendations: null
+      recommendations: false,
     };
   }
 
@@ -26,7 +35,7 @@ class PlaylistScreen extends React.Component {
   _get_playlist = () => {
     const promise = axios.get(
       'https://api.spotify.com/v1/playlists/' +
-      this.props.route.params.playlist_id,
+        this.props.route.params.playlist_id,
       {
         headers: {
           Accept: 'application/json',
@@ -44,7 +53,8 @@ class PlaylistScreen extends React.Component {
    * @param {array} arr
    * @private
    */
-  _remove_duplicated = (arr) => arr.filter((i) => arr.indexOf(i) === arr.lastIndexOf(i));
+  _remove_duplicated = arr =>
+    arr.filter(i => arr.indexOf(i) === arr.lastIndexOf(i));
 
   /**
    *
@@ -55,24 +65,24 @@ class PlaylistScreen extends React.Component {
   _format_ids = (json, type) => {
     let arr = [];
     if (type === 'artists') {
-      json.tracks.items.map((item, key) => item.track.artists.map((item, index) => arr.push(item.id)));
+      json.tracks.items.map((item, key) =>
+        item.track.artists.map((item, index) => arr.push(item.id)),
+      );
       //
       arr = this._remove_duplicated(artistsId);
       arr = artistsId.splice(0, 2).join(',');
     } else if (type === 'tracks') {
       json.tracks.items.map((item, key) => arr.push(item.id));
-      arr = this._remove_duplicated(arr)
+      arr = this._remove_duplicated(arr);
       arr = tracksId.splice(0, 2).join(',');
-
     }
-  }
+  };
   /**
    *
    * @param {Object} json
    * @private
    */
-  _get_recommended_playlists = (json) => {
-
+  _get_recommended_playlists = json => {
     let tracksId = this._format_ids(json, 'tracks');
     let artistsId = this._format_ids(json, 'artists');
     const promise = axios.get(
@@ -87,7 +97,7 @@ class PlaylistScreen extends React.Component {
       },
     );
     promise.then(data => this.setState({recommendations: data.data}));
-  }
+  };
 
   /**
    *
@@ -133,7 +143,6 @@ class PlaylistScreen extends React.Component {
    * @private
    */
   _enlight_playlist = () => {
-    console.log(this._to_array_artists());
     const promise = axios.get(
       `https://api.spotify.com/v1/recommendations?seed_tracks=${this.state.playlist.tracks.items[0].track.id}&limit=10`,
       {
@@ -171,6 +180,10 @@ class PlaylistScreen extends React.Component {
       outputRange: [0, 0.5],
       extrapolate: Extrapolate.CLAMP,
     });
+    this._store_playlist();
+  }
+
+  _store_playlist = () => {
     this._get_playlist().then(json => {
       this.setState({playlist: json});
       this._get_recommended_playlists(json);
@@ -198,7 +211,7 @@ class PlaylistScreen extends React.Component {
         }));
       }
     });
-  }
+  };
 
   render() {
     const scale = this.state.scrollY.interpolate({
@@ -257,16 +270,40 @@ class PlaylistScreen extends React.Component {
           playlist={this.state.playlist}
           {...this.props}
         />
-        <Animated.ScrollView style={{zIndex: 98}} onScroll={Animated.event(
-          [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
-          {listener: '', useNativeDriver: true},
-        )}>
+        <Animated.ScrollView
+          style={{zIndex: 98}}
+          onScroll={Animated.event(
+            [{nativeEvent: {contentOffset: {y: this.state.scrollY}}}],
+            {listener: '', useNativeDriver: true},
+          )}>
           <Animated.View style={{marginTop: mt, backgroundColor: '#15202B'}}>
             {this.state.playlist ? (
               <FlatList
                 data={this.state.playlist?.tracks?.items}
                 scrollEnabled={false}
                 horizontal={false}
+                ListHeaderComponent={() => (
+                  <View style={{marginHorizontal: 10}}>
+                    <TouchableOpacity
+                      onPress={() =>
+                        this._enlight_playlist().then(data =>
+                          this.setState({
+                            recommendations: data,
+                          }),
+                        )
+                      }>
+                      <Icon
+                        name={'zap'}
+                        size={30}
+                        color={
+                          this.state.recommandations == false
+                            ? 'white'
+                            : 'green'
+                        }
+                      />
+                    </TouchableOpacity>
+                  </View>
+                )}
                 renderItem={({item, key, index}) => (
                   <TouchableOpacity
                     onPress={() =>
@@ -283,6 +320,7 @@ class PlaylistScreen extends React.Component {
                       type={'playlist'}
                       playlist_uri={this.state.playlist?.uri}
                       playlist_index={index}
+                      onReload={() => this._store_playlist()}
                     />
                   </TouchableOpacity>
                 )}
@@ -291,33 +329,39 @@ class PlaylistScreen extends React.Component {
           </Animated.View>
           <LinearGradient
             colors={['#1E2732', '#1E2732']}
-            style={{marginTop: 0, padding: 0, paddingTop: 15, paddingBottom: 50}}>
-            <View
-              style={{
-                padding: 0,
-                alignItems: 'center',
-                justifyContent: 'flex-start',
-                flex: 1,
-              }}>
-              <TouchableOpacity
-                onPress={() =>
-                  this._enlight_playlist().then(json =>
-                    alert(JSON.stringify(json)),
-                  )
-                }>
+            style={{
+              marginTop: 0,
+              padding: 0,
+              paddingTop: 15,
+              paddingBottom: 50,
+            }}>
+            {this.state.recommendations ? (
+              <View
+                style={{
+                  padding: 0,
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  flex: 1,
+                }}>
                 <Text
                   style={{color: 'white', textAlign: 'center', fontSize: 24}}>
                   Nos Suggestions
                 </Text>
-              </TouchableOpacity>
-              <FlatList
-                data={this.state.recommendations?.tracks}
-                keyExtractor={(item, index) => index.toString()}
-                renderItem={(item, key) => <TrackItem track={item.item} album={item.item.album}
-                                                      type={'playlist_recommendation'}
-                                                      playlist_id={this.state.playlist?.id}/>}
-              />
-            </View>
+                <FlatList
+                  data={this.state.recommendations?.tracks}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={(item, key) => (
+                    <TrackItem
+                      track={item.item}
+                      album={item.item.album}
+                      type={'playlist_recommendation'}
+                      playlist_id={this.state.playlist?.id}
+                      onReload={() => this._store_playlist()}
+                    />
+                  )}
+                />
+              </View>
+            ) : null}
           </LinearGradient>
         </Animated.ScrollView>
       </LinearGradient>
