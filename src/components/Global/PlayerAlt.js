@@ -1,43 +1,25 @@
-import React, {useState, useEffect, useCallback} from 'react';
+import React, {useState, useEffect} from 'react';
 import {
   Dimensions,
   Image,
   StatusBar,
   StyleSheet,
-  Text,
+  Text, TouchableHighlight,
   TouchableOpacity,
+  TouchableWithoutFeedback,
   View,
 } from 'react-native';
-import Animated, {
-  Value,
-  interpolate,
-  Extrapolate,
-} from 'react-native-reanimated';
-import {clamp, onGestureEvent, timing, withSpring} from 'react-native-redash';
+import Animated, {Value} from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/Feather';
-import {connect, useDispatch} from 'react-redux';
-import {PanGestureHandler, State} from 'react-native-gesture-handler';
+import {connect} from 'react-redux';
 import SpotifyWebApi from 'spotify-web-api-node';
+
 import {
   refreshListening,
   setListening,
 } from '../../redux/features/listening/listeningSlice';
 
 const spotifyApi = new SpotifyWebApi();
-
-const {height} = Dimensions.get('window');
-const TABBAR_HEIGHT = 50;
-const MINIMIZED_PLAYER_HEIGHT = 65;
-const SNAP_TOP = 0;
-const SNAP_BOTTOM = height - TABBAR_HEIGHT - MINIMIZED_PLAYER_HEIGHT;
-const config = {
-  damping: 15,
-  mass: 1,
-  stiffness: 150,
-  overshootClamping: false,
-  restSpeedThreshold: 0.1,
-  restDisplacementThreshold: 0.1,
-};
 
 const PlayerAlt = props => {
   const [listening, setListening] = useState(null);
@@ -46,6 +28,7 @@ const PlayerAlt = props => {
   const [play, setPlay] = useState(false);
   const [liked, setLiked] = useState(false);
   const [repeat, setRepeat] = useState('string');
+  const [big, setBig] = useState(false);
 
   spotifyApi.setAccessToken(props.store.authentication.accessToken);
 
@@ -204,133 +187,141 @@ const PlayerAlt = props => {
     );
   };
 
-  const PlayerContainer = ({children}) => {
+  const PlayerContainer = ({onPress, children}) => {
     return (
-      <View
+      <Animated.View
         style={{
           width: Dimensions.get('screen').width - 20,
           height: 65,
-          backgroundColor: 'grey',
+          backgroundColor: '#1E2732',
           position: 'absolute',
-          bottom: Dimensions.get('screen').height - 65,
+          bottom: -Dimensions.get('screen').height + 65,
           left: 10,
           right: 10,
           borderRadius: 10,
           overflow: 'hidden',
-          opacity: 0,
+          opacity: big ? 0 : 1,
         }}>
         {children}
-      </View>
+      </Animated.View>
     );
   };
 
-  const BigPlayer = () => {
+  const BigPlayer = ({onPress}) => {
+
     return (
-      <>
+      <Animated.View
+        style={{
+          position: 'absolute',
+          width: Dimensions.get('screen').width,
+          height: Dimensions.get('screen').height,
+          top: big ? 0 : Dimensions.get('screen').height,
+          paddingTop: StatusBar.currentHeight * 2,
+          backgroundColor: '#1E2732',
+          alignItems: 'center',
+        }}>
         <View
           style={{
-            width: Dimensions.get('screen').width,
-            height: Dimensions.get('screen').height,
-            paddingTop: StatusBar.currentHeight * 2,
-            backgroundColor: 'grey',
+            flexDirection: 'row',
             alignItems: 'center',
+            justifyContent: 'space-between',
+            width: Dimensions.get('screen').width - 40,
+            marginBottom: StatusBar.currentHeight,
           }}>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              width: Dimensions.get('screen').width - 40,
-              marginBottom: StatusBar.currentHeight,
-            }}>
+          <TouchableWithoutFeedback {...{onPress}}>
             <Icon name={'chevron-down'} size={30} color={'white'} />
-            <Text style={{color: 'white', fontSize: 20}}>
-              {listening?.item?.album?.name}
-            </Text>
-            <Icon name={'more-vertical'} size={30} color={'white'} />
-          </View>
-          <View
+          </TouchableWithoutFeedback>
+          <Text style={{color: 'white', fontSize: 20}}>
+            {listening?.item?.album?.name}
+          </Text>
+
+          <Icon name={'more-vertical'} size={30} color={'white'} />
+        </View>
+        <View
+          style={{
+            width: Dimensions.get('screen').width - 20,
+            height: Dimensions.get('screen').width - 20,
+            backgroundColor: 'black',
+            borderRadius: 10,
+            marginBottom: StatusBar.currentHeight,
+          }}>
+          <Image
+            source={{uri: listening?.item?.album?.images[0]?.url}}
             style={{
               width: Dimensions.get('screen').width - 20,
               height: Dimensions.get('screen').width - 20,
-              backgroundColor: 'black',
+              resizeMode: 'cover',
               borderRadius: 10,
-              marginBottom: StatusBar.currentHeight,
-            }}>
-            <Image
-              source={{uri: listening?.item?.album?.images[0]?.url}}
-              style={{
-                width: Dimensions.get('screen').width - 20,
-                height: Dimensions.get('screen').width - 20,
-                resizeMode: 'cover',
-                borderRadius: 10,
-              }}
-            />
-          </View>
-          <View
-            style={{
-              width: Dimensions.get('screen').width - 20,
-              backgroundColor: 'red',
-              marginBottom: StatusBar.currentHeight,
-            }}>
-            <Text style={{color: 'white', fontSize: 30}}>
-              {listening?.item?.name}
-            </Text>
-            <Text>
-              {listening?.item?.artists.map((artist, index) => {
-                return (
-                  <Text key={index} style={{color: 'white'}}>
-                    {artist.name}
-                    {index !== listening?.item?.artists.length - 1 ? ', ' : ''}
-                  </Text>
-                );
-              })}
-            </Text>
-          </View>
-          <View
-            style={{
-              flexDirection: 'row',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              width: Dimensions.get('screen').width / 1.2,
-            }}>
-            <TouchableOpacity onPress={() => _shuffle()}>
-              <Icon
-                name={'shuffle'}
-                color={shuffle ? 'white' : 'darkgrey'}
-                size={20}
-              />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => _prev()}>
-              <Icon name={'skip-back'} color={'white'} size={30} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => play ? _pause() : _play()}>
-              <Icon name={play ? 'pause' : 'play'} color={'white'} size={50} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => _next()}>
-              <Icon name={'skip-forward'} color={'white'} size={30} />
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => alert('repeat')}>
-              <Icon name={'repeat'} color={'darkgrey'} size={20} />
-            </TouchableOpacity>
-          </View>
+            }}
+          />
         </View>
-      </>
+        <View
+          style={{
+            width: Dimensions.get('screen').width - 20,
+            backgroundColor: 'red',
+            marginBottom: StatusBar.currentHeight,
+          }}>
+          <Text style={{color: 'white', fontSize: 30}}>
+            {listening?.item?.name}
+          </Text>
+          <Text>
+            {listening?.item?.artists.map((artist, index) => {
+              return (
+                <Text key={index} style={{color: 'white'}}>
+                  {artist.name}
+                  {index !== listening?.item?.artists.length - 1 ? ', ' : ''}
+                </Text>
+              );
+            })}
+          </Text>
+        </View>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            width: Dimensions.get('screen').width / 1.2,
+          }}>
+          <TouchableOpacity onPress={() => _shuffle()}>
+            <Icon
+              name={'shuffle'}
+              color={shuffle ? 'white' : 'darkgrey'}
+              size={20}
+            />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => _prev()}>
+            <Icon name={'skip-back'} color={'white'} size={30} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => (play ? _pause() : _play())}>
+            <Icon name={play ? 'pause' : 'play'} color={'white'} size={50} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => _next()}>
+            <Icon name={'skip-forward'} color={'white'} size={30} />
+          </TouchableOpacity>
+          <TouchableOpacity onPress={() => alert('repeat')}>
+            <Icon name={'repeat'} color={'darkgrey'} size={20} />
+          </TouchableOpacity>
+        </View>
+      </Animated.View>
     );
   };
 
-  const MiniPlayer = () => {
+  const MiniPlayer = ({onPress}) => {
+
     return (
-      <PlayerContainer>
-        <AlbumContainer />
-        <Progress />
-      </PlayerContainer>
+      <TouchableHighlight {...{onPress}} pointerEvents={big ? 'none' : ''}>
+        <PlayerContainer>
+          <AlbumContainer />
+          <Progress />
+        </PlayerContainer>
+      </TouchableHighlight>
     );
   };
 
   const AlbumContainer = () => {
     return (
-      <View style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
+      <Animated.View
+        style={{flex: 1, flexDirection: 'row', alignItems: 'center'}}>
         <View
           style={{
             flex: 2,
@@ -400,35 +391,15 @@ const PlayerAlt = props => {
             />
           </TouchableOpacity>
         </View>
-      </View>
+      </Animated.View>
     );
   };
 
-  const translationY = new Value(0);
-  const velocityY = new Value(0);
-  const state = new Value(State.UNDETERMINED);
-  const offset = new Value(SNAP_BOTTOM);
-  const goUp: Animated.Value<0 | 1> = new Value(0);
-  const goDown: Animated.Value<0 | 1> = new Value(0);
-  const gestureHandler = onGestureEvent({
-    state,
-    translationY,
-    velocityY,
-  });
-  const translateY = withSpring({
-    value: clamp(translationY, SNAP_TOP, SNAP_BOTTOM),
-    velocity: velocityY,
-    offset,
-    state,
-    snapPoints: [SNAP_TOP, SNAP_BOTTOM],
-    config,
-  });
-
   return (
-    <>
-      <BigPlayer onPress={() => goDown.setValue(1)} />
-      <MiniPlayer />
-    </>
+    <View style={{position: 'absolute'}}>
+      <BigPlayer onPress={() => setBig(!big)} />
+      <MiniPlayer onPress={() => setBig(!big)} />
+    </View>
   );
 };
 
