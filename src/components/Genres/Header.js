@@ -14,7 +14,6 @@ import Icon from 'react-native-vector-icons/Feather';
 class Header extends React.PureComponent {
   constructor(props) {
     super(props);
-    console.log(props);
   }
 
   render() {

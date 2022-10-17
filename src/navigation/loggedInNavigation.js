@@ -63,7 +63,6 @@ const Stack = createSharedElementStackNavigator();
 class HomeNavigationStack extends React.PureComponent {
   constructor(props) {
     super(props);
-    console.log(props.onLongPress);
   }
 
   render() {

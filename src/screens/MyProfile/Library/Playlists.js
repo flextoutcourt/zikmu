@@ -2,12 +2,16 @@
 import axios from 'axios';
 import React from 'react';
 import {
+  Alert,
   Dimensions,
   FlatList,
+  Modal,
   StatusBar,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
+  View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {connect} from 'react-redux';
@@ -21,6 +25,9 @@ class Playlists extends React.PureComponent {
     super(props);
     this.state = {
       playlists: null,
+      modalVisible: false,
+      playlist_name: 'Ma super playlist',
+      spotify_user_id: null,
     };
   }
 
@@ -41,13 +48,83 @@ class Playlists extends React.PureComponent {
 
   componentDidMount() {
     this._get_playlists().then(data => this.setState({playlists: data.items}));
+    this._get_my_id();
   }
+
+  //get my spotify id
+  _get_my_id = () => {
+    const promise = axios.get('https://api.spotify.com/v1/me', {
+      headers: {
+        Accept: 'application/json',
+        Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
+        'Content-Type': 'application/json',
+      },
+    });
+    return promise.then(data => this.setState({spotify_user_id: data.data.id}));
+  };
+
+  _create_playlist = () => {
+    fetch(
+      `https://api.spotify.com/v1/users/${this.state.spotify_user_id}/playlists`,
+      {
+        method: 'POST',
+        headers: {
+          Accept: 'application/json',
+          Authorization:
+            'Bearer ' + this.props.store.authentication.accessToken,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          name: this.state.playlist_name,
+          public: false,
+        }),
+      },
+    )
+      .then(response => response.json())
+      .then(data => {
+        this.setState({modalVisible: false});
+        this.props.navigation.push('Playlist', {
+          playlist_id: data.id,
+        });
+      })
+      .catch(error => {
+        Alert.alert('Erreur', error.message);
+      });
+  };
 
   render() {
     return (
       <LinearGradient
         colors={['#15202B', '#15202B']}
         style={({marginTop: -StatusBar.currentHeight}, styles.container)}>
+        <Modal
+          animationType="slide"
+          transparent={false}
+          visible={this.state.modalVisible}
+          statusBarTranslucent={true}
+          hardwareAccelerated={true}
+          onRequestClose={() => {
+            this.setState({modalVisible: false});
+          }}
+          style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          <View
+            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            <TextInput
+              style={{
+                width: Dimensions.get('screen').width - 20,
+                marginHorizontal: 10,
+                borderRadius: 10,
+                backgroundColor: '#1E2732',
+                padding: 10,
+                elevation: 10,
+                color: 'white',
+              }}
+              value={this.state.playlist_name}
+              onSubmitEditing={val => this._create_playlist()}
+              onChangeText={val => this.setState({playlist_name: val})}
+            />
+          </View>
+        </Modal>
         <FlatList
           stickyHeaderIndices={[0]}
           stickyHeaderHiddenOnScroll={true}
@@ -55,7 +132,8 @@ class Playlists extends React.PureComponent {
             <LinearGradient
               colors={['#15202B', '#15202B', 'transparent']}
               style={{elevation: 10}}>
-              <TouchableOpacity onPress={() => alert('test')}>
+              <TouchableOpacity
+                onPress={() => this.setState({modalVisible: true})}>
                 <LinearGradient
                   colors={['#391a6c', '#b21f1f']}
                   useAngle={true}
