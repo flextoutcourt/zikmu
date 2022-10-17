@@ -42,7 +42,7 @@ class TrackItem extends React.PureComponent {
 
   _play = (uri, track_number, disc_number = 1) => {
     Vibration.vibrate(10);
-    let offset = 0,
+    let offset = 1,
       body = {};
     if (this.props.type === 'album') {
       offset = this._set_offset(disc_number, track_number);
@@ -235,12 +235,11 @@ class TrackItem extends React.PureComponent {
                 ? this.props.album?.uri
                 : this.props.type === 'playlist' ||
                   this.props.type === 'playlist_recommendation'
-                ? this.state.track?.uri
+                ? this.props?.track?.uri
                 : this.state.track?.uri,
               this.state.track?.track_number,
               this.state.track?.disc_number,
             );
-            this.props.onPress();
           }}>
           <View
             style={{
