@@ -5,7 +5,6 @@ import Icon from 'react-native-vector-icons/FontAwesome5';
 
 function PlaylistItem({playlist}) {
 
-  console.log(playlist);
     const navigation = useNavigation();
 
     return (
