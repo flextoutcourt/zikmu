@@ -20,7 +20,7 @@ import ReleaseComponent from '../../components/Home/Release/ReleaseComponent';
 import FollowComponent from '../../components/Home/Follows/FollowComponent';
 import {SharedElement} from 'react-navigation-shared-element';
 
-const HomeScreen = (props) => {
+const HomeScreen = props => {
   const navigation = useNavigation();
   const [opacity, setOpacity] = React.useState(1);
   useFocusEffect(() => {
@@ -33,22 +33,22 @@ const HomeScreen = (props) => {
     let now = parseInt(new Date().getHours());
     let message = null;
     switch (true) {
-      case (now < 2):
+      case now < 2:
         message = 'Bonne nuit';
         break;
-      case (now < 8):
+      case now < 8:
         message = 'Bien matinal !';
         break;
-      case (now < 10):
+      case now < 10:
         message = 'Bien dormi ?';
         break;
-      case (now < 12 || (now > 14 && now < 18)):
+      case now < 12 || (now > 14 && now < 18):
         message = 'Bonjour';
         break;
-      case (now < 14 || (now >= 19 && now < 21)):
+      case now < 14 || (now >= 19 && now < 21):
         message = 'Bon appétit';
         break;
-      case (now < 24):
+      case now < 24:
         message = 'Bonsoir';
         break;
     }
@@ -62,7 +62,8 @@ const HomeScreen = (props) => {
         name: 'Vald',
         picture: 'https://picsum.photos/48',
       },
-      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg',
+      source:
+        'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg',
       video: 'https://www.youtube.com/embed/xPbRsca_l7c',
     },
     {
@@ -72,7 +73,8 @@ const HomeScreen = (props) => {
         name: 'Sch',
         source: 'https://picsum.photos/48',
       },
-      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/1.jpg',
+      source:
+        'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/1.jpg',
     },
     {
       id: 3,
@@ -81,7 +83,8 @@ const HomeScreen = (props) => {
         name: 'Capri',
         source: 'https://picsum.photos/48',
       },
-      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/2.jpg',
+      source:
+        'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/2.jpg',
     },
     {
       id: 4,
@@ -90,7 +93,8 @@ const HomeScreen = (props) => {
         name: 'Bu$hi',
         source: 'https://picsum.photos/48',
       },
-      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/3.jpg',
+      source:
+        'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/3.jpg',
     },
     {
       id: 5,
@@ -99,7 +103,8 @@ const HomeScreen = (props) => {
         name: 'Fianso',
         source: 'https://picsum.photos/48',
       },
-      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/5.jpg',
+      source:
+        'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/5.jpg',
     },
     {
       id: 6,
@@ -108,7 +113,8 @@ const HomeScreen = (props) => {
         name: 'ZKR',
         source: 'https://picsum.photos/48',
       },
-      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/6.jpg',
+      source:
+        'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/6.jpg',
     },
     {
       id: 7,
@@ -117,7 +123,8 @@ const HomeScreen = (props) => {
         name: 'Vald',
         source: 'https://picsum.photos/48',
       },
-      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/7.jpg',
+      source:
+        'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/7.jpg',
       video: 'https://www.youtube.com/embed/xPbRsca_l7c',
     },
     {
@@ -127,7 +134,8 @@ const HomeScreen = (props) => {
         name: 'Damso',
         source: 'https://picsum.photos/48',
       },
-      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg',
+      source:
+        'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/4.jpg',
     },
     {
       id: 12,
@@ -136,7 +144,8 @@ const HomeScreen = (props) => {
         name: 'Seezy',
         source: 'https://picsum.photos/48',
       },
-      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/1.jpg',
+      source:
+        'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/1.jpg',
     },
     {
       id: 13,
@@ -145,7 +154,8 @@ const HomeScreen = (props) => {
         name: 'Kalash Criminel',
         source: 'https://picsum.photos/48',
       },
-      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/2.jpg',
+      source:
+        'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/2.jpg',
     },
     {
       id: 14,
@@ -154,7 +164,8 @@ const HomeScreen = (props) => {
         name: 'Freeze Corleone',
         source: 'https://picsum.photos/48',
       },
-      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/3.jpg',
+      source:
+        'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/3.jpg',
     },
     {
       id: 15,
@@ -163,7 +174,8 @@ const HomeScreen = (props) => {
         name: 'Kaaris',
         source: 'https://picsum.photos/48',
       },
-      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/5.jpg',
+      source:
+        'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/5.jpg',
     },
     {
       id: 16,
@@ -172,20 +184,21 @@ const HomeScreen = (props) => {
         name: 'Ninho',
         source: 'https://picsum.photos/48',
       },
-      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/6.jpg',
+      source:
+        'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/6.jpg',
     },
     {
       id: 17,
 
       user: {
-        name: 'Rim\'k',
+        name: "Rim'k",
         source: 'https://picsum.photos/48',
       },
-      source: 'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/7.jpg',
+      source:
+        'https://raw.githubusercontent.com/wcandillon/can-it-be-done-in-react-native/master/season4/src/Snapchat/assets/stories/7.jpg',
       video: 'https://www.youtube.com/embed/xPbRsca_l7c',
     },
   ];
-
 
   return (
     <LinearGradient
@@ -194,16 +207,21 @@ const HomeScreen = (props) => {
         marginTop: -StatusBar.currentHeight,
         ...styles.container,
       }}>
-      <ScrollView style={{paddingTop: StatusBar.currentHeight, paddingBottom: 10}} stickyHeaderIndices={[0]}
-                  stickyHeaderHiddenOnScroll={true}>
-        <ScrollView showsHorizontalScrollIndicator={false} horizontal={true} style={{
-          flex: 1,
-          backgroundColor: '#15202B',
-          paddingVertical: 10,
-          elevation: 0,
-          width: Dimensions.get('screen').width,
-          paddingTop: StatusBar.currentHeight + 10,
-        }}>
+      <ScrollView
+        style={{paddingTop: StatusBar.currentHeight, paddingBottom: 10}}
+        stickyHeaderIndices={[0]}
+        stickyHeaderHiddenOnScroll={true}>
+        <ScrollView
+          showsHorizontalScrollIndicator={false}
+          horizontal={true}
+          style={{
+            flex: 1,
+            backgroundColor: '#15202B',
+            paddingVertical: 10,
+            elevation: 0,
+            width: Dimensions.get('screen').width,
+            paddingTop: StatusBar.currentHeight + 10,
+          }}>
           {/*{stories.map((story, key) => (*/}
           {/*    <Pressable onPress={() => props.navigation.navigate('Story', {story})}*/}
           {/*               style={{position: 'relative'}}>*/}
@@ -222,30 +240,32 @@ const HomeScreen = (props) => {
           {/*    </Pressable>*/}
           {/*))}*/}
         </ScrollView>
-        <View style={{
-          flex: 1,
-          paddingVertical: 20,
-          paddingHorizontal: 10,
-          flexDirection: 'row',
-          justifyContent: 'space-between',
-          alignItems: 'center',
-        }}>
-          <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>{_display_message()}</Text>
+        <View
+          style={{
+            flex: 1,
+            paddingVertical: 20,
+            paddingHorizontal: 10,
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+          }}>
+          <Text style={{color: 'white', fontSize: 20, fontWeight: 'bold'}}>
+            {_display_message()}
+          </Text>
           <View style={{flexDirection: 'row'}}>
-            <TouchableOpacity onPress={() => navigation.push('Self')} style={{marginLeft: 20}}>
-              <Icon name={'settings'} solid={true} size={24} color={'white'}/>
+            <TouchableOpacity
+              onPress={() => navigation.push('Self')}
+              style={{marginLeft: 20}}>
+              <Icon name={'settings'} solid={true} size={24} color={'white'} />
             </TouchableOpacity>
           </View>
         </View>
 
-
-        <RecentComponent {...props} isTop={true}/>
+        <RecentComponent {...props} isTop={true} />
         <ReleaseComponent {...props} />
         <GenreComponent {...props} />
-        <RecentComponent {...props} isTop={false}/>
+        <RecentComponent {...props} isTop={false} />
         <FollowComponent {...props} />
-
-
       </ScrollView>
     </LinearGradient>
   );

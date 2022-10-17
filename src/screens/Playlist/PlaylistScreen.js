@@ -3,6 +3,7 @@ import React from 'react';
 import {
   Dimensions,
   FlatList,
+  Modal,
   StatusBar,
   StyleSheet,
   Text,
@@ -15,6 +16,10 @@ import Animated, {Extrapolate} from 'react-native-reanimated';
 import {connect} from 'react-redux';
 import TrackItem from '../../components/Track/TrackItem';
 import Header from '../../components/Playlist/Header';
+import Playlist from '../../components/Genres/Playlist';
+import SpotifyWebApi from 'spotify-web-api-node';
+
+const SpotifyApi = new SpotifyWebApi();
 
 class PlaylistScreen extends React.Component {
   constructor(props) {
@@ -24,7 +29,9 @@ class PlaylistScreen extends React.Component {
       scrollY: new Animated.Value(0),
       englithment: null,
       recommendations: false,
+      related_playlist: false,
     };
+    SpotifyApi.setAccessToken(this.props.store.authentication.accessToken);
   }
 
   /**
@@ -77,6 +84,29 @@ class PlaylistScreen extends React.Component {
       arr = tracksId.splice(0, 2).join(',');
     }
   };
+
+  /**
+   *
+   * @returns {Promise<AxiosResponse<any>>}
+   * @private
+   */
+  _get_related_playlists = () => {
+    const promise = axios.get(
+      'https://api.spotify.com/v1/browse/featured-playlists',
+      {
+        headers: {
+          Accept: 'application/json',
+          Authorization:
+            'Bearer ' + this.props.store.authentication.accessToken,
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    promise.then(data =>
+      this.setState({related_playlist: data.data.playlists}),
+    );
+  };
+
   /**
    *
    * @param {Object} json
@@ -181,8 +211,14 @@ class PlaylistScreen extends React.Component {
       extrapolate: Extrapolate.CLAMP,
     });
     this._store_playlist();
+    this._get_related_playlists();
   }
 
+  /**
+   * Store playlist into state
+   *
+   * @private
+   */
   _store_playlist = () => {
     this._get_playlist().then(json => {
       this.setState({playlist: json});
@@ -201,9 +237,7 @@ class PlaylistScreen extends React.Component {
           });
         });
         this.setState(prevState => ({
-          ...prevState,
           playlist: {
-            ...prevState.playlist,
             collab_users: {
               users_array,
             },
@@ -211,6 +245,30 @@ class PlaylistScreen extends React.Component {
         }));
       }
     });
+  };
+
+  _deploy_contextual_menu = item_id => {
+    fetch(
+      `https://api.spotify.com/v1/playlists/${this.state.playlist.id}/tracks`,
+      {
+        method: 'DELETE',
+        headers: {
+          Accept: 'application/json',
+          Authorization:
+            'Bearer ' + this.props.store.authentication.accessToken,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          tracks: [
+            {
+              uri: `${item_id}`,
+            },
+          ],
+        }),
+      },
+    )
+      .then(r => r.json())
+      .then(data => setTimeout(() => this._store_playlist(), 200));
   };
 
   render() {
@@ -350,21 +408,22 @@ class PlaylistScreen extends React.Component {
                       playlist_uri={this.state.playlist?.uri}
                       playlist_index={index}
                       onReload={() => this._store_playlist()}
+                      onLongPress={this.props.onLongPress}
                     />
                   </TouchableOpacity>
                 )}
               />
             ) : null}
           </Animated.View>
-          <LinearGradient
-            colors={['#1E2732', '#1E2732']}
-            style={{
-              marginTop: 0,
-              padding: 0,
-              paddingTop: 15,
-              paddingBottom: 50,
-            }}>
-            {this.state.recommendations ? (
+          {this.state.recommendations ? (
+            <LinearGradient
+              colors={['#1E2732', '#1E2732']}
+              style={{
+                marginTop: 0,
+                padding: 0,
+                paddingTop: 15,
+                paddingBottom: 50,
+              }}>
               <View
                 style={{
                   padding: 0,
@@ -386,12 +445,44 @@ class PlaylistScreen extends React.Component {
                       type={'playlist_recommendation'}
                       playlist_id={this.state.playlist?.id}
                       onReload={() => this._store_playlist()}
+                      onLongPress={() => {
+                        alert('test');
+                      }}
                     />
                   )}
                 />
               </View>
-            ) : null}
-          </LinearGradient>
+            </LinearGradient>
+          ) : null}
+          {this.state.related_playlist ? (
+            <LinearGradient
+              colors={['#1E2732', '#1E2732']}
+              style={{
+                marginTop: 0,
+                padding: 0,
+                paddingTop: 15,
+                paddingBottom: 120,
+              }}>
+              <View
+                style={{
+                  padding: 0,
+                  alignItems: 'center',
+                  justifyContent: 'flex-start',
+                  flex: 1,
+                }}>
+                <Text
+                  style={{color: 'white', textAlign: 'center', fontSize: 24}}>
+                  Nos Suggestions
+                </Text>
+                <FlatList
+                  data={this.state.related_playlist?.items}
+                  keyExtractor={(item, index) => index.toString()}
+                  horizontal={true}
+                  renderItem={(item, key) => <Playlist playlist={item.item} />}
+                />
+              </View>
+            </LinearGradient>
+          ) : null}
         </Animated.ScrollView>
       </LinearGradient>
     );

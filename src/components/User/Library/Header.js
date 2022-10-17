@@ -1,194 +1,201 @@
 import React from 'react';
 import {
-    Dimensions,
-    Image,
-    StatusBar,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
+  Dimensions,
+  Image,
+  StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import Animated, {Extrapolate} from 'react-native-reanimated';
 import Icon from 'react-native-vector-icons/Feather';
 import LinearGradient from 'react-native-linear-gradient';
 
 class LibraryHeader extends React.PureComponent {
+  constructor(props) {
+    super(props);
+  }
 
-    constructor(props) {
-        super(props);
-    }
+  componentDidMount() {}
 
-    componentDidMount() {
-    }
+  render() {
+    const opacity = this.props.y.interpolate({
+      inputRange: [125, 200],
+      outputRange: [0, 1],
+      extrapolate: Extrapolate.CLAMP,
+    });
 
-    render() {
-        const opacity = this.props.y.interpolate({
-            inputRange: [125, 200],
-            outputRange: [0, 1],
-            extrapolate: Extrapolate.CLAMP,
-        });
+    const background = this.props.y.interpolate({
+      inputRange: [0, 125, 200],
+      outputRange: [0, 0, 0.5],
+      extrapolate: Extrapolate.CLAMP,
+    });
 
-        const background = this.props.y.interpolate({
-            inputRange: [0, 125, 200],
-            outputRange: [0, 0, 0.5],
-            extrapolate: Extrapolate.CLAMP,
-        });
+    const mt = this.props.y.interpolate({
+      inputRange: [0, Dimensions.get('window').height],
+      outputRange: [0, -Dimensions.get('window').height - 140],
+      extrapolate: Extrapolate.CLAMP,
+    });
 
-        const mt = this.props.y.interpolate({
-            inputRange: [0, Dimensions.get('window').height],
-            outputRange: [0, -Dimensions.get('window').height - 140],
-            extrapolate: Extrapolate.CLAMP,
-        });
+    const maskOpacity = this.props.y.interpolate({
+      inputRange: [0, Dimensions.get('screen').width / 2],
+      outputRange: [0.3, 1],
+      extrapolate: Extrapolate.CLAMP,
+    });
 
-        const maskOpacity = this.props.y.interpolate({
-            inputRange: [0, Dimensions.get('screen').width / 2],
-            outputRange: [0.3, 1],
-            extrapolate: Extrapolate.CLAMP,
-        });
+    const scale = this.props.y.interpolate({
+      inputRange: [
+        -Dimensions.get('screen').width,
+        0,
+        Dimensions.get('screen').width,
+      ],
+      outputRange: [1.3, 1, 0.2],
+      extrapolate: Extrapolate.CLAMP,
+    });
+    const maskScale = this.props.y.interpolate({
+      inputRange: [
+        -Dimensions.get('screen').width,
+        0,
+        Dimensions.get('screen').width,
+      ],
+      outputRange: [1.3, 1, 1.1],
+      extrapolate: Extrapolate.CLAMP,
+    });
 
-        const scale = this.props.y.interpolate({
-            inputRange: [
-                -Dimensions.get('screen').width,
-                0,
-                Dimensions.get('screen').width,
-            ],
-            outputRange: [1.3, 1, 0.2],
-            extrapolate: Extrapolate.CLAMP,
-        });
-        const maskScale = this.props.y.interpolate({
-            inputRange: [-Dimensions.get('screen').width, 0, Dimensions.get('screen').width,],
-            outputRange: [1.3, 1, 1.1],
-            extrapolate: Extrapolate.CLAMP,
-        });
+    const backgroundOpacity = this.props.y.interpolate({
+      inputRange: [0, 225],
+      outputRange: [1, 0],
+      extrapolate: Extrapolate.CLAMP,
+    });
 
-        const backgroundOpacity = this.props.y.interpolate({
-            inputRange: [0, 225],
-            outputRange: [1, 0],
-            extrapolate: Extrapolate.CLAMP,
-        });
+    const transform = [{scale}];
 
-        const transform = [{scale}];
-
-        return (
-            <>
-                <Animated.View
-                    style={{
-                        position: 'absolute',
-                        top: StatusBar.currentHeight + 8,
-                        left: 10,
-                        zIndex: 100,
-                        backgroundColor: 'rgba(0,0,0,0.5)',
-                        borderRadius: 99,
-                        padding: 5,
-                        opacity: backgroundOpacity
-                    }}>
-                    <Icon
-                        name={'arrow-left'}
-                        size={24}
-                        color={'white'}
-                        style={{opacity: 0}}
-                    />
-                </Animated.View>
-                <TouchableOpacity onPress={() => this.props.navigation.goBack()} style={{
-                    position: 'absolute',
-                    top: StatusBar.currentHeight + 8,
-                    left: 10,
-                    zIndex: 100,
-                    borderRadius: 99,
-                    padding: 5,
-                }}>
-                    <Icon
-                        name={'arrow-left'}
-                        size={24}
-                        color={'white'}
-                        style={{opacity: 1}}
-                    />
-                </TouchableOpacity>
-                <Animated.View
-                    style={{
-                        flex: 1,
-                        flexDirection: 'row',
-                        justifyContent: 'flex-start',
-                        alignItems: 'center',
-                        backgroundColor: 'rgba(120,86,255, 1)',
-                        position: 'absolute',
-                        left: 0,
-                        right: 0,
-                        top: 0,
-                        paddingTop: StatusBar.currentHeight,
-                        height: 50 + StatusBar.currentHeight,
-                        paddingHorizontal: 10,
-                        zIndex: 99,
-                        opacity: opacity,
-                    }}>
-                    <View style={{flexDirection: 'row', alignItems: 'center'}}>
-                        <View
-                            style={{
-                                flexDirection: 'row',
-                                marginLeft: 50,
-                                alignItems: 'center',
-                            }}>
-                            {this.props.album?.images[0] ? (
-                                <Image
-                                    source={{uri: "https://static.bimago.pl/mediacache/catalog/product/cache/4/2/117624/image/750x1120/7c0505584f03c89c005bad1e2b9708a6/117624_1.jpg"}}
-                                    style={{height: 40, width: 40, borderRadius: 10}}
-                                />
-                            ) : null}
-                            <Text style={{color: 'white', marginLeft: 10}}>
-                                {this.props.album?.name}
-                            </Text>
-                        </View>
-                    </View>
-                </Animated.View>
-
-                <Animated.Image
-                    source={{uri: "https://static.bimago.pl/mediacache/catalog/product/cache/4/2/117624/image/750x1120/7c0505584f03c89c005bad1e2b9708a6/117624_1.jpg"}}
-                    style={{
-                        width: Dimensions.get('screen').width,
-                        height: Dimensions.get('screen').width,
-                        margin: 0,
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        transform: transform,
-                        borderRadius: 0,
-                    }}
+    return (
+      <>
+        <Animated.View
+          style={{
+            position: 'absolute',
+            top: StatusBar.currentHeight + 8,
+            left: 10,
+            zIndex: 100,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            borderRadius: 99,
+            padding: 5,
+            opacity: backgroundOpacity,
+          }}>
+          <Icon
+            name={'arrow-left'}
+            size={24}
+            color={'white'}
+            style={{opacity: 0}}
+          />
+        </Animated.View>
+        <TouchableOpacity
+          onPress={() => this.props.navigation.goBack()}
+          style={{
+            position: 'absolute',
+            top: StatusBar.currentHeight + 8,
+            left: 10,
+            zIndex: 100,
+            borderRadius: 99,
+            padding: 5,
+          }}>
+          <Icon
+            name={'arrow-left'}
+            size={24}
+            color={'white'}
+            style={{opacity: 1}}
+          />
+        </TouchableOpacity>
+        <Animated.View
+          style={{
+            flex: 1,
+            flexDirection: 'row',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            backgroundColor: 'rgba(120,86,255, 1)',
+            position: 'absolute',
+            left: 0,
+            right: 0,
+            top: 0,
+            paddingTop: StatusBar.currentHeight,
+            height: 50 + StatusBar.currentHeight,
+            paddingHorizontal: 10,
+            zIndex: 99,
+            opacity: opacity,
+          }}>
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginLeft: 50,
+                alignItems: 'center',
+              }}>
+              {this.props.album?.images[0] ? (
+                <Image
+                  source={{
+                    uri: 'https://static.bimago.pl/mediacache/catalog/product/cache/4/2/117624/image/750x1120/7c0505584f03c89c005bad1e2b9708a6/117624_1.jpg',
+                  }}
+                  style={{height: 40, width: 40, borderRadius: 10}}
                 />
-                <Animated.View
-                    style={{
-                        position: 'absolute',
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        height: Dimensions.get('screen').width,
-                        marginTop: mt,
-                        opacity: maskOpacity,
-                        transform: [{scale: maskScale}],
-                    }}>
-                    <LinearGradient
-                        colors={[
-                            'rgba(120,86,255,1)',
-                            'rgba(120,86,255,0.8)',
-                            'rgba(21,32,43,1.0)',
-                            'rgba(21,32,43,1.0)',
-                        ]}
-                        style={{
-                            width: Dimensions.get('screen').width,
-                            height: Dimensions.get('screen').width * 1.5,
-                        }}
-                    />
-                </Animated.View>
-            </>
-        );
-    }
+              ) : null}
+              <Text style={{color: 'white', marginLeft: 10}}>
+                {this.props.album?.name}
+              </Text>
+            </View>
+          </View>
+        </Animated.View>
 
+        <Animated.Image
+          source={{
+            uri: 'https://static.bimago.pl/mediacache/catalog/product/cache/4/2/117624/image/750x1120/7c0505584f03c89c005bad1e2b9708a6/117624_1.jpg',
+          }}
+          style={{
+            width: Dimensions.get('screen').width,
+            height: Dimensions.get('screen').width,
+            margin: 0,
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            transform: transform,
+            borderRadius: 0,
+          }}
+        />
+        <Animated.View
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: Dimensions.get('screen').width,
+            marginTop: mt,
+            opacity: maskOpacity,
+            transform: [{scale: maskScale}],
+          }}>
+          <LinearGradient
+            colors={[
+              'rgba(120,86,255,1)',
+              'rgba(120,86,255,0.8)',
+              'rgba(21,32,43,1.0)',
+              'rgba(21,32,43,1.0)',
+            ]}
+            style={{
+              width: Dimensions.get('screen').width,
+              height: Dimensions.get('screen').width * 1.5,
+            }}
+          />
+        </Animated.View>
+      </>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
+  container: {
+    flex: 1,
+  },
 });
 
 export default LibraryHeader;

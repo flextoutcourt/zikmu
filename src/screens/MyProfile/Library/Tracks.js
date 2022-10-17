@@ -116,6 +116,7 @@ class Tracks extends React.PureComponent {
 									track={item.track}
 									album={item?.track?.album}
 									favorites={true}
+                  type={'favorites'}
 								/>
 							)}
 						/>

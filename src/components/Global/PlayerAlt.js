@@ -9,7 +9,8 @@ import {
   Share,
   StatusBar,
   StyleSheet,
-  Text, TouchableHighlight,
+  Text,
+  TouchableHighlight,
   TouchableOpacity,
   UIManager,
   View,
@@ -404,7 +405,8 @@ class PlayerAlt extends React.Component {
    */
   _shuffle = () => {
     fetch(
-      `https://api.spotify.com/v1/me/player/shuffle?state=${!this.state.shuffle}`,
+      `https://api.spotify.com/v1/me/player/shuffle?state=${!this.state
+        .shuffle}`,
       {
         headers: {
           Accept: 'application/json',
@@ -1240,24 +1242,24 @@ class PlayerAlt extends React.Component {
                   backgroundColor: '#1E2732',
                   borderRadius: 10,
                 }}>
-	              <Text style={{fontSize: 30, color: 'white', marginBottom: 15}}>
-		              Lorem ipsum dolor sit amet.
-	              </Text>
-	              <Text style={{fontSize: 30, color: 'white', marginBottom: 15}}>
-		              consectetur adipisicing elit. Quas, quibusdam.
-	              </Text>
-	              <Text style={{fontSize: 30, color: 'white', marginBottom: 15}}>
-		              Lorem ipsum dolor sit amet.
-	              </Text>
-	              <Text style={{fontSize: 30, color: 'white', marginBottom: 15}}>
-		              consectetur adipisicing elit. Quas, quibusdam.
-	              </Text>
-	              <Text style={{fontSize: 30, color: 'white', marginBottom: 15}}>
-		              Lorem ipsum dolor sit amet.
-	              </Text>
-	              <Text style={{fontSize: 30, color: 'white', marginBottom: 15}}>
-		              consectetur adipisicing elit. Quas, quibusdam.
-	              </Text>
+                <Text style={{fontSize: 30, color: 'white', marginBottom: 15}}>
+                  Lorem ipsum dolor sit amet.
+                </Text>
+                <Text style={{fontSize: 30, color: 'white', marginBottom: 15}}>
+                  consectetur adipisicing elit. Quas, quibusdam.
+                </Text>
+                <Text style={{fontSize: 30, color: 'white', marginBottom: 15}}>
+                  Lorem ipsum dolor sit amet.
+                </Text>
+                <Text style={{fontSize: 30, color: 'white', marginBottom: 15}}>
+                  consectetur adipisicing elit. Quas, quibusdam.
+                </Text>
+                <Text style={{fontSize: 30, color: 'white', marginBottom: 15}}>
+                  Lorem ipsum dolor sit amet.
+                </Text>
+                <Text style={{fontSize: 30, color: 'white', marginBottom: 15}}>
+                  consectetur adipisicing elit. Quas, quibusdam.
+                </Text>
               </View>
               {/*	//paroles */}
             </ScrollView>

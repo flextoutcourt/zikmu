@@ -13,6 +13,10 @@ import Liked from './Liked';
 import Collab from './Collab';
 import {Swipeable} from 'react-native-gesture-handler';
 import Icon from 'react-native-vector-icons/Feather';
+import SpotifyWebApi from 'spotify-web-api-node';
+import BottomDrawer from 'react-native-bottom-drawer-view';
+
+const spotifyApi = new SpotifyWebApi();
 
 class TrackItem extends React.PureComponent {
   constructor(props) {
@@ -23,8 +27,8 @@ class TrackItem extends React.PureComponent {
       added_to_queue: false,
       added_to_playlist: false,
     };
-    console.log(props.onReload);
     this.swipeableRef = React.createRef();
+    spotifyApi.setAccessToken(props.store.authentication.accessToken);
   }
 
   _set_offset = (disc_number, track_number) => {
@@ -52,7 +56,6 @@ class TrackItem extends React.PureComponent {
         position_ms: 0,
       };
     } else if (this.props.type === 'playlist') {
-      console.log(this.props.playlist_index);
       body = {
         context_uri: this.props.playlist_uri,
         offset: {
@@ -105,7 +108,7 @@ class TrackItem extends React.PureComponent {
           name={this.state.added_to_queue ? 'check' : 'list'}
           size={24}
           color="white"
-          style={{marginRight: 5, fontWeight: 'bold'}}
+          style={{marginRight: 0, fontWeight: 'bold'}}
         />
       </View>
     );
@@ -134,7 +137,50 @@ class TrackItem extends React.PureComponent {
   };
 
   _renderRightActions = (progress, dragX) => {
-    return <></>;
+    return (
+      <View
+        style={{
+          height: 48,
+          width: 48,
+          backgroundColor: 'transparent',
+          margin: 10,
+          borderRadius: 10,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Icon
+          name={'trash'}
+          size={24}
+          color="red"
+          style={{marginRight: 0, fontWeight: 'bold'}}
+        />
+      </View>
+    );
+  };
+
+  _renderRightLibraryActions = () => {
+    return (
+      <TouchableOpacity
+        onPress={() => {
+          this._renderMoreMenu();
+        }}
+        style={{
+          height: 48,
+          width: 48,
+          backgroundColor: 'transparent',
+          margin: 10,
+          borderRadius: 10,
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
+        <Icon
+          name={'more-vertical'}
+          size={24}
+          color="#7856FF"
+          style={{marginRight: 0, fontWeight: 'bold'}}
+        />
+      </TouchableOpacity>
+    );
   };
 
   add_to_playlist = (playlist_id, uri) => {
@@ -149,19 +195,41 @@ class TrackItem extends React.PureComponent {
         },
         method: 'POST',
       },
-    ).then(data => this.setState({added_to_playlist: data.ok}));
+    ).then(data => {
+      this.setState({added_to_playlist: data.ok});
+      this.props.onReload();
+    });
+  };
+
+  _onLongPressAction = () => {
+    this.props.onLongPress(this.state.track?.uri);
+    setTimeout(() => {
+      this.swipeableRef.current.close();
+    }, 200);
+  };
+
+  _renderMoreMenu = () => {
+    this.swipeableRef.current.close();
   };
 
   render() {
     return this.state.added_to_playlist ? null : (
       <View>
-        {/*<Swipeable ref={this.swipeableRef} failOffsetX={20} overshootLeft={false} overshootRight={false} overshootFriction={4} friction={4} renderLeftActions={this._renderLeftActions} renderRightActions={this._renderRightActions} onSwipeableLeftOpen={() => this._add_to_queue()}>*/}
+        {/*<Swipeable*/}
+        {/*  ref={this.swipeableRef}*/}
+        {/*  failOffsetX={20}*/}
+        {/*  overshootLeft={false}*/}
+        {/*  overshootRight={false}*/}
+        {/*  overshootFriction={4}*/}
+        {/*  friction={2}*/}
+        {/*  renderLeftActions={this._renderLeftActions}*/}
+        {/*  onSwipeableLeftOpen={() => this._add_to_queue()}*/}
+        {/*  onSwipeableRightOpen={() =>*/}
+        {/*    this.props.type === 'playlist' ? this._onLongPressAction() : null*/}
+        {/*  }>*/}
         <TouchableOpacity
-          onLongPress={() => {
-            alert('on long press');
-            Vibration.vibrate(10);
-          }}
-          onPress={() =>
+          onLongPress={() => this.props.onLongPress(this.state.track?.uri)}
+          onPress={() => {
             this._play(
               this.props.type === 'album'
                 ? this.props.album?.uri
@@ -171,8 +239,9 @@ class TrackItem extends React.PureComponent {
                 : this.state.track?.uri,
               this.state.track?.track_number,
               this.state.track?.disc_number,
-            )
-          }>
+            );
+            this.props.onPress();
+          }}>
           <View
             style={{
               padding: 0,
@@ -259,6 +328,7 @@ class TrackItem extends React.PureComponent {
                   flexDirection: 'row',
                   justifyContent: 'space-between',
                   alignItems: 'center',
+                  backgroundColor: 'transparent',
                 }}>
                 <Collab collab={this._find_user(this.props.added_by?.id)} />
                 {this.props.type === 'playlist_recommendation' ? (
@@ -268,9 +338,6 @@ class TrackItem extends React.PureComponent {
                         this.props.playlist_id,
                         this.props.track.uri,
                       );
-                      setTimeout(() => {
-                        this.props.onReload();
-                      }, 1000)
                     }}>
                     {this.state.added_to_playlist ? (
                       <Icon
@@ -284,8 +351,10 @@ class TrackItem extends React.PureComponent {
                         name="plus"
                         size={this.props.iconSize ?? 24}
                         solid={!!this.state.liked}
-                        color={this.state.liked ? '#B00D70' : 'white'}
-                        style={{color: this.state.liked ? '#B00D70' : 'white'}}
+                        color={this.state.liked ? '#7856FF' : 'white'}
+                        style={{
+                          color: this.state.liked ? '#7856FF' : 'white',
+                        }}
                       />
                     )}
                   </TouchableOpacity>

@@ -1,6 +1,15 @@
 import axios from 'axios';
 import React from 'react';
-import {Dimensions, FlatList, Image, SectionList, StatusBar, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  Image,
+  SectionList,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Icon from 'react-native-vector-icons/Feather';
 import {connect} from 'react-redux';
@@ -18,15 +27,21 @@ class AlbumScreen extends React.PureComponent {
       disks: null,
       test: null,
       scrollY: new Animated.Value(0),
-      recommendations: null
+      recommendations: null,
     };
   }
 
-  componentDidUpdate(prevProps: Readonly<P>, prevState: Readonly<S>, snapshot: SS) {
+  componentDidUpdate(
+    prevProps: Readonly<P>,
+    prevState: Readonly<S>,
+    snapshot: SS,
+  ) {}
 
-  }
-
-  shouldComponentUpdate(nextProps: Readonly<P>, nextState: Readonly<S>, nextContext: any): boolean {
+  shouldComponentUpdate(
+    nextProps: Readonly<P>,
+    nextState: Readonly<S>,
+    nextContext: any,
+  ): boolean {
     return false;
   }
 
@@ -105,12 +120,7 @@ class AlbumScreen extends React.PureComponent {
         ),
         headerRight: () => (
           <View>
-            <Icon
-              name="heart"
-              size={24}
-              color={'white'}
-              solid={true}
-            />
+            <Icon name="heart" size={24} color={'white'} solid={true} />
           </View>
         ),
       });
@@ -143,7 +153,10 @@ class AlbumScreen extends React.PureComponent {
 
     const height = this.state.scrollY.interpolate({
       inputRange: [0, 125],
-      outputRange: [Dimensions.get('screen').width, Dimensions.get('screen').width],
+      outputRange: [
+        Dimensions.get('screen').width,
+        Dimensions.get('screen').width,
+      ],
       extrapolate: Extrapolate.CLAMP,
     });
 
@@ -203,14 +216,33 @@ class AlbumScreen extends React.PureComponent {
                 ListFooterComponent={() => (
                   <View style={{padding: 15}}>
                     <View>
-                      <Text
-                        style={{color: 'white'}}>{moment(this.state.album?.release_date).format('DD MMMM YYYY')}</Text>
-                      <Text style={{color: 'white', marginBottom: 10}}>{this.state.album?.total_tracks} titres
-                        - {moment.duration(this.state.album?.full_duration).hours() !== 0 ? moment.duration(this.state.album?.full_duration).hours() + ' h ' : null}{moment.duration(this.state.album?.full_duration).minutes() + ' min '}{moment.duration(this.state.album?.full_duration).seconds() + ' s'}</Text>
+                      <Text style={{color: 'white'}}>
+                        {moment(this.state.album?.release_date).format(
+                          'DD MMMM YYYY',
+                        )}
+                      </Text>
+                      <Text style={{color: 'white', marginBottom: 10}}>
+                        {this.state.album?.total_tracks} titres -{' '}
+                        {moment
+                          .duration(this.state.album?.full_duration)
+                          .hours() !== 0
+                          ? moment
+                              .duration(this.state.album?.full_duration)
+                              .hours() + ' h '
+                          : null}
+                        {moment
+                          .duration(this.state.album?.full_duration)
+                          .minutes() + ' min '}
+                        {moment
+                          .duration(this.state.album?.full_duration)
+                          .seconds() + ' s'}
+                      </Text>
                       <FlatList
                         data={this.state.album?.artists}
                         keyExtractor={(item, index) => index.toString()}
-                        ItemSeparatorComponent={() => <View style={{height: 10, width: 10}}></View>}
+                        ItemSeparatorComponent={() => (
+                          <View style={{height: 10, width: 10}} />
+                        )}
                         renderItem={({item}) => (
                           <ArtistItem artist_id={item?.id} {...this.props} />
                         )}
@@ -221,14 +253,19 @@ class AlbumScreen extends React.PureComponent {
                       keyExtractor={(item, index) => index.toString()}
                       renderItem={({item}) => {
                         return (
-                          <View style={{flexDirection: 'row', marginVertical: 5}}>
-                            <Icon name={'info'} size={18} color="white"/>
-                            <Text style={{marginLeft: 10, color: "white"}}>{item?.text}</Text>
+                          <View
+                            style={{flexDirection: 'row', marginVertical: 5}}>
+                            <Icon name={'info'} size={18} color="white" />
+                            <Text style={{marginLeft: 10, color: 'white'}}>
+                              {item?.text}
+                            </Text>
                           </View>
                         );
                       }}
                     />
-                    <Text style={{color: 'white', marginTop: 10}}>{this.state.album?.copyrights[0].text}</Text>
+                    <Text style={{color: 'white', marginTop: 10}}>
+                      {this.state.album?.copyrights[0].text}
+                    </Text>
                   </View>
                 )}
                 renderSectionHeader={({section: {title}}) => (
@@ -239,7 +276,7 @@ class AlbumScreen extends React.PureComponent {
                       justifyContent: 'flex-start',
                       marginLeft: 5,
                     }}>
-                    <Icon name="disc" size={24} color={"white"}/>
+                    <Icon name="disc" size={24} color={'white'} />
                     <Text
                       style={{
                         fontSize: 18,
