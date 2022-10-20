@@ -44,7 +44,7 @@ class Artistitem extends React.PureComponent {
           style={{
             height: 48,
             width: 48,
-            borderRadius: this.state.artist?.images[2].height,
+            borderRadius: this.state.artist?.images[2]?.height,
             marginRight: 15,
           }}
         />

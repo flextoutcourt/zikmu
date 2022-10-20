@@ -17,10 +17,14 @@ import Header from '../../components/Artist/Header';
 import RelatedArtists from '../../components/Artist/RelatedArtists';
 import TopTracks from '../../components/Artist/TopTracks';
 import YourLikes from '../../components/Artist/YourLikes';
+import SpotifyWebApi from 'spotify-web-api-node';
+
+const SpotifyApi = new SpotifyWebApi();
 
 class ArtistScreen extends React.PureComponent {
   constructor(props) {
     super(props);
+    SpotifyApi.setAccessToken(this.props.store.authentication.accessToken);
     this.state = {
       artist: null,
       scrollY: new Animated.Value(0),
@@ -28,18 +32,8 @@ class ArtistScreen extends React.PureComponent {
   }
 
   _get_artist = () => {
-    const promise = axios.get(
-      `https://api.spotify.com/v1/artists/${this.props.route.params.artist_id}`,
-      {
-        headers: {
-          Accept: 'application/json',
-          Authorization:
-            'Bearer ' + this.props.store.authentication.accessToken,
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-    return promise.then(data => data.data);
+    const promise = SpotifyApi.getArtist(this.props.route.params.artist_id);
+    return promise.then(data => data.body);
   };
 
   componentDidMount() {
@@ -163,7 +157,7 @@ class ArtistScreen extends React.PureComponent {
                   style={{
                     marginTop: 0,
                   }}>
-                  <YourLikes artist={this.state.artist} />
+                  <YourLikes artist={this.state.artist} initialLikes={[]} />
                   <TopTracks artist={this.state.artist} />
                   <Albums {...this.props} artist={this.state.artist} />
                   <RelatedArtists {...this.props} artist={this.state.artist} />
