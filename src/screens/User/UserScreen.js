@@ -193,7 +193,7 @@ class UserScreen extends React.PureComponent {
                 Artistes écoutés récemment
               </Text>
               <FlatList
-                data={this.state.artists}
+                data={this.state?.artists}
                 renderItem={({item, key}) => <ArtistItem artist_id={item.id} />}
                 ListFooterComponent={() => (
                   <TouchableOpacity
@@ -215,7 +215,7 @@ class UserScreen extends React.PureComponent {
                 Playlists
               </Text>
               <FlatList
-                data={this.state.playlists}
+                data={this.state?.playlists}
                 renderItem={({item, key}) => <PlaylistItem playlist={item} />}
                 ListFooterComponent={() => (
                   <TouchableOpacity
