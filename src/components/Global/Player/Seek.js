@@ -35,7 +35,9 @@ export default function SeekBar({
         maximumValue={Math.max(trackLength, 1, currentPosition + 1) ?? 150}
         value={currentPosition ?? 0}
         onSlidingStart={onSlidingStart}
-        onSlidingComplete={onSeek}
+        onSlidingComplete={currentPosition => {
+          console.log(currentPosition);
+        }}
         style={styles.slider}
         minimumTrackTintColor="#fff"
         maximumTrackTintColor="rgba(255, 255, 255, 0.50)"
