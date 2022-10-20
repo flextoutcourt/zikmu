@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import {
   Animated,
   Dimensions,
@@ -13,6 +13,7 @@ import {
   TouchableHighlight,
   TouchableOpacity,
   UIManager,
+  Vibration,
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
@@ -30,10 +31,14 @@ import {
   refreshListening,
   setListening,
 } from '../../redux/features/listening/listeningSlice';
+import SpotifyWebApi from 'spotify-web-api-node';
+
+const SpotifyApi = new SpotifyWebApi();
 
 class PlayerAlt extends React.Component {
   constructor(props) {
     super(props);
+    SpotifyApi.setAccessToken(this.props.store.authentication.accessToken);
     this.state = {
       listening: null,
       devices: null,
@@ -103,6 +108,58 @@ class PlayerAlt extends React.Component {
       }
     }
   }
+
+  _get_listening = () => {
+    setInterval(() => {
+      SpotifyApi.getMyCurrentPlayingTrack().then(data => {
+        if (data.body) {
+          this.setState({
+            listening: data.body,
+            play: data.body.is_playing,
+            shuffle: data.body.shuffle_state,
+            repeat: data.body.repeat_state,
+          });
+        }
+        if (data.error) {
+          alert(data.error);
+        }
+      });
+    }, 1000);
+  };
+
+  componentWillUnmount() {
+    clearInterval(this._get_listening);
+  }
+
+  _like = () => {
+    Vibration.vibrate(10);
+    if (this.state.listening) {
+      if (this.state.listening.item) {
+        if (this.state.listening.item.is_liked) {
+          SpotifyApi.removeFromMySavedTracks([
+            this.state.listening.item.id,
+          ]).then(() =>
+            this.setState({
+              listening: {
+                ...this.state.listening,
+                item: {...this.state.listening.item, is_liked: false},
+              },
+            }),
+          );
+        } else {
+          SpotifyApi.addToMySavedTracks([this.state.listening.item.id]).then(
+            () =>
+              this.setState({
+                listening: {
+                  ...this.state.listening,
+                  item: {...this.state.listening.item, is_liked: true},
+                },
+              }),
+          );
+        }
+      }
+    }
+  };
 
   /**
    *
@@ -236,83 +293,24 @@ class PlayerAlt extends React.Component {
   };
 
   componentDidMount() {
-    this._start_interval();
+    this._get_listening();
   }
-
-  /**
-   *
-   * @private
-   */
-  _start_interval = () => {
-    this.interval = setInterval(() => {
-      this._get_listening();
-    }, 1000);
-  };
-
-  /**
-   *
-   * @returns {Promise<void>}
-   */
-  forceStateRefresh = async () => {
-    const listeningObject = await listeningHandler.get_listening_state(
-      this.props.store.authentication.accessToken,
-    );
-    this.props.setListening({listening: listeningObject.data});
-  };
-
-  /**
-   *
-   * @private
-   */
-  _clear_interval = () => {
-    clearInterval(this.timer);
-  };
-
-  /**
-   *
-   * @param initialPosition
-   * @private
-   */
-  _create_interval = initialPosition => {
-    this.setState({currentProgress: initialPosition});
-    this.timer = setInterval(() => {
-      this.setState({
-        currentProgress: this.props.store.listening.current_progress + 1000,
-      });
-    }, 1000);
-  };
-
-  /**
-   *
-   * @returns {Promise<void>}
-   * @private
-   */
-  _get_listening = async () => {
-    const listeningObject = await listeningHandler.get_listening_state(
-      this.props.store.authentication.accessToken,
-    );
-    if (this.props.store.listening.listening) {
-      this.props.refreshListening({listening: listeningObject.data});
-    } else {
-      this.props.setListening({listening: listeningObject.data});
-    }
-  };
 
   /**
    * Pause the player
    * @private
    */
   _pause = () => {
-    fetch('https://api.spotify.com/v1/me/player/pause', {
-      headers: {
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
-        'Content-Type': 'application/json',
-      },
-      method: 'PUT',
-    });
-    this.forceStateRefresh();
-    this.setState({play: false});
+    SpotifyApi.pause(() => this.setState({play: false}));
+    // fetch('https://api.spotify.com/v1/me/player/pause', {
+    //   headers: {
+    //     Accept: 'application/json',
+    //     Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
+    //     'Content-Type': 'application/json',
+    //   },
+    //   method: 'PUT',
+    // });
+    // this.setState({play: false});
   };
 
   /**
@@ -320,21 +318,7 @@ class PlayerAlt extends React.Component {
    * @private
    */
   _play = () => {
-    fetch('https://api.spotify.com/v1/me/player/play', {
-      headers: {
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
-        'Content-Type': 'application/json',
-      },
-      method: 'PUT',
-    });
-    if (this.state.play === null) {
-      this.setState({play: true});
-    } else {
-      this.setState({play: true});
-    }
-
-    this.forceStateRefresh();
+    SpotifyApi.play();
   };
 
   /**
@@ -342,15 +326,7 @@ class PlayerAlt extends React.Component {
    * @private
    */
   _next = () => {
-    fetch('https://api.spotify.com/v1/me/player/next', {
-      headers: {
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
-        'Content-Type': 'application/json',
-      },
-      method: 'POST',
-    });
-    this.forceStateRefresh();
+    SpotifyApi.skipToNext();
   };
 
   /**
@@ -358,20 +334,7 @@ class PlayerAlt extends React.Component {
    * @private
    */
   _prev = () => {
-    if (this.props.store.listening.current_progress > 10000) {
-      this._seek(0);
-    } else {
-      fetch('https://api.spotify.com/v1/me/player/previous', {
-        headers: {
-          Accept: 'application/json',
-          Authorization:
-            'Bearer ' + this.props.store.authentication.accessToken,
-          'Content-Type': 'application/json',
-        },
-        method: 'POST',
-      });
-    }
-    this.forceStateRefresh();
+    SpotifyApi.skipToPrevious();
   };
 
   /**
@@ -380,23 +343,7 @@ class PlayerAlt extends React.Component {
    * @private
    */
   _seek = position => {
-    fetch(
-      `https://api.spotify.com/v1/me/player/seek?position_ms=${Math.round(
-        position * 1000,
-      )}`,
-      {
-        headers: {
-          Accept: 'application/json',
-          Authorization:
-            'Bearer ' + this.props.store.authentication.accessToken,
-          'Content-Type': 'application/json',
-        },
-        method: 'PUT',
-      },
-    ).catch(e => {
-      console.log(e);
-    });
-    this.forceStateRefresh();
+    SpotifyApi.seek(position);
   };
 
   /**
@@ -404,20 +351,7 @@ class PlayerAlt extends React.Component {
    * @private
    */
   _shuffle = () => {
-    fetch(
-      `https://api.spotify.com/v1/me/player/shuffle?state=${!this.state
-        .shuffle}`,
-      {
-        headers: {
-          Accept: 'application/json',
-          Authorization:
-            'Bearer ' + this.props.store.authentication.accessToken,
-          'Content-Type': 'application/json',
-        },
-        method: 'PUT',
-      },
-    );
-    this.setState({shuffle: !this.state.shuffle});
+    SpotifyApi.setShuffle(!this.state.shuffle);
     this.forceStateRefresh();
   };
 
@@ -426,23 +360,15 @@ class PlayerAlt extends React.Component {
    * @private
    */
   _repeat = () => {
-    let state;
-    if (this.state.repeat == 'context') {
-      state = 'track';
-    } else if (this.state.repeat == 'track') {
-      state = 'off';
-    } else {
-      state = 'context';
-    }
-    this.setState({repeat: state});
-    fetch(`https://api.spotify.com/v1/me/player/repeat?state=${state}`, {
-      headers: {
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
-        'Content-Type': 'application/json',
-      },
-      method: 'PUT',
-    });
+    SpotifyApi.setRepeat(
+      this.state.repeat === 'context'
+        ? 'track'
+        : this.state.repeat === 'track'
+        ? 'off'
+        : this.state.repeat === 'off'
+        ? 'context'
+        : null,
+    );
     this.forceStateRefresh();
   };
 
@@ -530,7 +456,6 @@ class PlayerAlt extends React.Component {
         big: !this.state.waiting_list.big,
       },
     }));
-    this._start_interval();
   };
   /**
    * Deploy the share menu
@@ -563,7 +488,6 @@ class PlayerAlt extends React.Component {
         big: !this.state.share_menu.big,
       },
     }));
-    this._start_interval();
   };
   /**
    * Deploy the track info menu
@@ -596,30 +520,19 @@ class PlayerAlt extends React.Component {
         big: !this.state.track_infos.big,
       },
     }));
-    this._start_interval();
   };
   /**
    * Fetch all available devices
    * @private
    */
   _get_available_devices = () => {
-    axios
-      .get('https://api.spotify.com/v1/me/player/devices', {
-        headers: {
-          Accept: 'application/json',
-          Authorization:
-            'Bearer ' + this.props.store.authentication.accessToken,
-          'Content-Type': 'application/json',
-        },
-      })
-      .then(data => data.data)
-      .then(response => {
-        let devices = this._check_current_device(response.devices);
-        this.setState(prevState => ({
-          ...prevState,
-          devices: devices,
-        }));
-      });
+    SpotifyApi.getMyDevices().then(data => {
+      let devices = this._check_current_device(data.body.devices);
+      this.setState(prevState => ({
+        ...prevState,
+        devices: devices,
+      }));
+    });
   };
   /**
    * Check if the current device is in the list of available devices
@@ -648,19 +561,8 @@ class PlayerAlt extends React.Component {
    * @private
    */
   _transfer_playback = async device_id => {
-    let body = {
-      device_ids: [device_id],
-    };
-    await fetch('https://api.spotify.com/v1/me/player', {
-      body: JSON.stringify(body),
-      headers: {
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
-        'Content-Type': 'application/json',
-      },
-      method: 'PUT',
-    }).finally(() => {
-      this._check_current_device();
+    await SpotifyApi.transferMyPlayback([device_id]).finally(() => {
+      this._get_available_devices();
     });
   };
 
@@ -678,7 +580,7 @@ class PlayerAlt extends React.Component {
   };
 
   render() {
-    return this.props.store.listening.listening ? (
+    return this.state?.listening ? (
       <Animated.View
         style={{
           position: 'absolute',
@@ -746,8 +648,7 @@ class PlayerAlt extends React.Component {
                     }}>
                     <Animated.Image
                       source={{
-                        uri: this.props.store.listening.listening?.item?.album
-                          ?.images[0]?.url,
+                        uri: this.state?.listening?.item?.album?.images[0]?.url,
                       }}
                       style={{
                         minWidth: this.state.player.track_image.width ?? 40,
@@ -802,7 +703,7 @@ class PlayerAlt extends React.Component {
                             maxWidth: this.state.big ? '90%' : '100%',
                           }}
                           numberOfLines={1}>
-                          {this.props.store.listening.listening?.item?.name}
+                          {this.state?.listening?.item?.name}
                         </Text>
                         {!this.state.big ? (
                           <Icon
@@ -813,10 +714,7 @@ class PlayerAlt extends React.Component {
                         ) : null}
                         {this.state.big ? (
                           <FlatList
-                            data={
-                              this.props.store.listening.listening?.item
-                                ?.artists
-                            }
+                            data={this.state?.listening?.item?.artists}
                             horizontal={true}
                             contentContainerStyle={{maxWidth: '90%'}}
                             ItemSeparatorComponent={() => (
@@ -859,8 +757,7 @@ class PlayerAlt extends React.Component {
                             onPress={() => {
                               rootNavigation.navigate('Artist', {
                                 artist_id:
-                                  this.props.store.listening.listening?.item
-                                    ?.artists[0].id,
+                                  this.state?.listening?.item?.artists[0].id,
                               });
                               setTimeout(() => {
                                 this.state.big
@@ -876,10 +773,7 @@ class PlayerAlt extends React.Component {
                                   (this.state.big ? 4 : 0),
                               }}
                               numberOfLines={1}>
-                              {
-                                this.props.store.listening.listening?.item
-                                  ?.artists[0]?.name
-                              }
+                              {this.state?.listening?.item?.artists[0]?.name}
                             </Text>
                           </TouchableOpacity>
                         )}
@@ -890,12 +784,12 @@ class PlayerAlt extends React.Component {
                             track={this.state?.listening?.item}
                             iconSize={this.state.big ? 24 : 24}
                           />
-                          {this.props.store.listening.listening?.actions
-                            ?.disallows?.toggling_repeat_context &&
-                          this.props.store.listening.listening?.actions
-                            ?.disallows?.toggling_repeat_track &&
-                          this.props.store.listening.listening?.actions
-                            ?.disallows?.toggling_shuffle ? (
+                          {this.state?.listening?.actions?.disallows
+                            ?.toggling_repeat_context &&
+                          this.state?.listening?.actions?.disallows
+                            ?.toggling_repeat_track &&
+                          this.state?.listening?.actions?.disallows
+                            ?.toggling_shuffle ? (
                             <TouchableOpacity
                               onPress={() => alert('not liked')}
                               style={{marginLeft: 10}}>
@@ -915,7 +809,7 @@ class PlayerAlt extends React.Component {
                         }}>
                         <Icon
                           name={this._display_device_icon(
-                            this.props.store.listening.listening?.device?.type,
+                            this.state?.listening?.device?.type,
                           )}
                           size={16}
                           style={{color: 'white', fontWeight: 'bold'}}
@@ -926,7 +820,7 @@ class PlayerAlt extends React.Component {
                             color: 'white',
                             fontWeight: 'bold',
                           }}>
-                          {this.props.store.listening.listening?.device?.name}
+                          {this.state?.listening?.device?.name}
                         </Text>
                       </View>
                     ) : null}
@@ -949,18 +843,14 @@ class PlayerAlt extends React.Component {
                       <SeekBar
                         trackLength={
                           !isNaN(
-                            this.props.store.listening.listening?.item
-                              ?.duration_ms / 1000,
+                            this.state?.listening?.item?.duration_ms / 1000,
                           )
-                            ? this.props.store.listening.listening?.item
-                                ?.duration_ms / 1000
+                            ? this.state?.listening?.item?.duration_ms / 1000
                             : 10
                         }
                         currentPosition={
-                          !isNaN(
-                            this.props.store.listening.current_progress / 1000,
-                          )
-                            ? this.props.store.listening.current_progress / 1000
+                          !isNaN(this.state?.listening?.progress_ms / 1000)
+                            ? this.state?.listening?.progress_ms / 1000
                             : 0
                         }
                         onSeek={this._seek}
@@ -977,7 +867,7 @@ class PlayerAlt extends React.Component {
                       <TouchableOpacity
                         onPress={() => this._shuffle()}
                         disabled={
-                          this.props.store.listening.listening.actions.disallows
+                          this.state?.listening.actions.disallows
                             .toggling_shuffle
                         }>
                         <Icon
@@ -985,8 +875,8 @@ class PlayerAlt extends React.Component {
                           size={24}
                           style={{
                             color: this.state.shuffle ? 'green' : 'white',
-                            opacity: this.props.store.listening.listening
-                              .actions.disallows.toggling_shuffle
+                            opacity: this.state?.listening.actions.disallows
+                              .toggling_shuffle
                               ? 0.2
                               : 1,
                           }}
@@ -1048,9 +938,9 @@ class PlayerAlt extends React.Component {
                       <TouchableOpacity
                         onPress={() => this._repeat()}
                         disabled={
-                          this.props.store.listening.listening.actions.disallows
+                          this.state?.listening.actions.disallows
                             .toggling_repeat_track ||
-                          this.props.store.listening.listening.actions.disallows
+                          this.state?.listening.actions.disallows
                             .toggling_repeat_context
                         }>
                         <Icon
@@ -1064,10 +954,10 @@ class PlayerAlt extends React.Component {
                                 ? 'green'
                                 : 'white',
                             opacity:
-                              this.props.store.listening.listening.actions
-                                .disallows.toggling_repeat_track ||
-                              this.props.store.listening.listening.actions
-                                .disallows.toggling_repeat_context
+                              this.state?.listening.actions.disallows
+                                .toggling_repeat_track ||
+                              this.state?.listening.actions.disallows
+                                .toggling_repeat_context
                                 ? 0.2
                                 : 1,
                           }}
@@ -1092,7 +982,7 @@ class PlayerAlt extends React.Component {
                         }}>
                         <Icon
                           name={this._display_device_icon(
-                            this.props.store.listening.listening?.device?.type,
+                            this.state?.listening?.device?.type,
                           )}
                           size={24}
                           style={{
@@ -1107,7 +997,7 @@ class PlayerAlt extends React.Component {
                             color: 'white',
                             fontWeight: 'bold',
                           }}>
-                          {this.props.store.listening.listening?.device?.name}
+                          {this.state?.listening?.device?.name}
                         </Text>
                       </TouchableOpacity>
                       <View
@@ -1221,9 +1111,8 @@ class PlayerAlt extends React.Component {
                         height: 2,
                         backgroundColor: 'white',
                         width:
-                          (this.props.store.listening.listening?.progress_ms /
-                            this.props.store.listening.listening?.item
-                              ?.duration_ms) *
+                          (this.state?.listening?.progress_ms /
+                            this.state?.listening?.item?.duration_ms) *
                             100 +
                           '%',
                         borderRadius: 5,
@@ -1365,11 +1254,11 @@ class PlayerAlt extends React.Component {
                   En cours de lecture :
                 </Text>
                 <TrackItem
-                  track={this.props.store.listening.listening?.item}
-                  album={this.props.store.listening.listening?.item?.album}
+                  track={this.state?.listening?.item}
+                  album={this.state?.listening?.item?.album}
                   colorAlt={true}
                 />
-                {this.props.store.listening.listening?.context ? (
+                {this.state?.listening?.context ? (
                   <Text
                     style={{
                       marginLeft: 10,
@@ -1379,8 +1268,7 @@ class PlayerAlt extends React.Component {
                     }}>
                     Prochains titres{' '}
                     {this.state.context?.type == 'album'
-                      ? 'de ' +
-                        this.props.store.listening.listening?.item?.album?.name
+                      ? 'de ' + this.state?.listening?.item?.album?.name
                       : null}{' '}
                     :{' '}
                   </Text>
@@ -1391,10 +1279,10 @@ class PlayerAlt extends React.Component {
               {this.state.waiting_list.big ? (
                 <View
                   style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-                  {this.props.store.listening.listening.context ? (
+                  {this.state?.listening.context ? (
                     <AlbumItemWithOffset
-                      context={this.props.store.listening.listening?.context}
-                      listening={this.props.store.listening.listening}
+                      context={this.state?.listening?.context}
+                      listening={this.state?.listening}
                     />
                   ) : null}
                 </View>
@@ -1463,8 +1351,8 @@ class PlayerAlt extends React.Component {
                       }}>
                       <Image
                         source={{
-                          uri: this.props.store.listening.listening?.item?.album
-                            ?.images[1]?.url,
+                          uri: this.state?.listening?.item?.album?.images[1]
+                            ?.url,
                         }}
                         style={{...StyleSheet.absoluteFill, borderRadius: 10}}
                       />
@@ -1484,10 +1372,10 @@ class PlayerAlt extends React.Component {
                         fontSize: 14,
                         textAlign: 'center',
                       }}>
-                      {this.props.store.listening.listening?.item?.name}
+                      {this.state?.listening?.item?.name}
                     </Text>
                     <FlatList
-                      data={this.props.store.listening.listening?.item?.artists}
+                      data={this.state?.listening?.item?.artists}
                       renderItem={({item, key}) => (
                         <TouchableOpacity
                           onPress={() => {
@@ -1675,15 +1563,14 @@ class PlayerAlt extends React.Component {
                     onPress={() =>
                       Share.share(
                         {
-                          title: `${this.props.store.listening.listening?.item?.name} - ${this.props.store.listening.listening?.item?.artists[0]?.name}`,
-                          // message: `${this.props.store.listening.listening?.item?.external_urls?.spotify}`,
+                          title: `${this.state?.listening?.item?.name} - ${this.state?.listening?.item?.artists[0]?.name}`,
+                          // message: `${this.state?.listening?.item?.external_urls?.spotify}`,
                           message:
-                            'Zik_mu://track/' +
-                            this.props.store.listening.listening?.item?.id,
+                            'Zik_mu://track/' + this.state?.listening?.item?.id,
                           url: 'https://flexcorp-dev.fr',
                         },
                         {
-                          dialogTitle: `${this.props.store.listening.listening?.item?.name} - ${this.props.store.listening.listening?.item?.artists[0]?.name}`,
+                          dialogTitle: `${this.state?.listening?.item?.name} - ${this.state?.listening?.item?.artists[0]?.name}`,
                         },
                       )
                     }
@@ -1815,12 +1702,11 @@ class PlayerAlt extends React.Component {
                       name="shuffle"
                       size={36}
                       style={{
-                        color: this.props.store.listening.listening
-                          ?.shuffle_state
+                        color: this.state?.listening?.shuffle_state
                           ? 'green'
                           : 'white',
-                        opacity: this.props.store.listening.listening.actions
-                          .disallows.toggling_shuffle
+                        opacity: this.state?.listening.actions.disallows
+                          .toggling_shuffle
                           ? 0.2
                           : 1,
                       }}
@@ -1839,17 +1725,15 @@ class PlayerAlt extends React.Component {
                       size={36}
                       style={{
                         color:
-                          this.props.store.listening.listening?.repeat_state ==
-                          'context'
+                          this.state?.listening?.repeat_state == 'context'
                             ? 'green'
-                            : this.props.store.listening.listening
-                                ?.repeat_state == 'track'
+                            : this.state?.listening?.repeat_state == 'track'
                             ? '#B00D70'
                             : 'white',
                         opacity:
-                          this.props.store.listening.listening.actions.disallows
+                          this.state?.listening.actions.disallows
                             .toggling_repeat_track ||
-                          this.props.store.listening.listening.actions.disallows
+                          this.state?.listening.actions.disallows
                             .toggling_repeat_context
                             ? 0.2
                             : 1,
@@ -1905,8 +1789,7 @@ class PlayerAlt extends React.Component {
                     }}>
                     <Image
                       source={{
-                        uri: this.props.store.listening.listening?.item?.album
-                          ?.images[1]?.url,
+                        uri: this.state?.listening?.item?.album?.images[1]?.url,
                       }}
                       style={{
                         ...StyleSheet.absoluteFill,
@@ -1934,10 +1817,10 @@ class PlayerAlt extends React.Component {
                       marginTop: 5,
                       textAlign: 'center',
                     }}>
-                    {this.props.store.listening.listening?.item?.name}
+                    {this.state?.listening?.item?.name}
                   </Text>
                   <FlatList
-                    data={this.props.store.listening.listening?.item?.artists}
+                    data={this.state?.listening?.item?.artists}
                     horizontal={true}
                     style={{textAlign: 'center'}}
                     renderItem={({item, key}) => (
@@ -1956,226 +1839,212 @@ class PlayerAlt extends React.Component {
                   />
                 </View>
               </View>
-              <TouchableOpacity
-                onPress={() => alert('test')}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  flex: 1,
-                }}>
-                <Icon name={'heart'} size={24} color={'white'} />
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    color: 'white',
-                    marginVertical: 20,
-                    marginLeft: 10,
-                  }}>
-                  Liker
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => alert('test')}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  flex: 1,
-                }}>
-                <Icon name={'slash'} size={24} color={'white'} />
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    color: 'white',
-                    marginVertical: 20,
-                    marginLeft: 10,
-                  }}>
-                  Masquer ce titre
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => alert('test')}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  flex: 1,
-                }}>
-                <Icon name={'home'} size={24} color={'white'} />
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    color: 'white',
-                    marginVertical: 20,
-                    marginLeft: 10,
-                  }}>
-                  Ajouter à une playlist
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => alert('test')}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  flex: 1,
-                }}>
-                <Icon name={'plus'} size={24} color={'white'} />
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    color: 'white',
-                    marginVertical: 20,
-                    marginLeft: 10,
-                  }}>
-                  Ajouter à la file d'attente
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => alert('test')}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  flex: 1,
-                }}>
-                <Icon name="disc" color={'white'} size={24} />
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    color: 'white',
-                    marginVertical: 20,
-                    marginLeft: 10,
-                  }}>
-                  Voir l'album
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => alert('test')}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  flex: 1,
-                }}>
-                <Icon name="user" color={'white'} size={24} />
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    color: 'white',
-                    marginVertical: 20,
-                    marginLeft: 10,
-                  }}>
-                  Voir l'artiste
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => alert('test')}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  flex: 1,
-                }}>
-                <Icon name="share" color={'white'} size={24} />
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    color: 'white',
-                    marginVertical: 20,
-                    marginLeft: 10,
-                  }}>
-                  Partager
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => alert('test')}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  flex: 1,
-                }}>
-                <Icon name="clock" solid={false} color={'white'} size={24} />
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    color: 'white',
-                    marginVertical: 20,
-                    marginLeft: 10,
-                  }}>
-                  Minuteur de veille
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => alert('test')}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  flex: 1,
-                }}>
-                <Icon name="mic" color={'white'} size={24} />
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    color: 'white',
-                    marginVertical: 20,
-                    marginLeft: 10,
-                  }}>
-                  Radio liée au titre
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => alert('test')}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  flex: 1,
-                }}>
-                <Icon name={'info'} size={24} color={'white'} />
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    color: 'white',
-                    marginVertical: 20,
-                    marginLeft: 10,
-                  }}>
-                  Afficher les crédits
-                </Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => alert('test')}
-                style={{
-                  flexDirection: 'row',
-                  alignItems: 'center',
-                  justifyContent: 'flex-start',
-                  flex: 1,
-                }}>
-                <Icon name={'alert-triangle'} size={24} color={'white'} />
-                <Text
-                  style={{
-                    fontSize: 16,
-                    fontWeight: 'bold',
-                    color: 'white',
-                    marginVertical: 20,
-                    marginLeft: 10,
-                  }}>
-                  Signaler un abus
-                </Text>
-              </TouchableOpacity>
+              {/*<TouchableOpacity*/}
+              {/*  onPress={() => this._like()}*/}
+              {/*  style={{*/}
+              {/*    flexDirection: 'row',*/}
+              {/*    alignItems: 'center',*/}
+              {/*    justifyContent: 'flex-start',*/}
+              {/*    flex: 1,*/}
+              {/*  }}>*/}
+              {/*  <Icon*/}
+              {/*    name={'heart'}*/}
+              {/*    size={24}*/}
+              {/*    color={*/}
+              {/*      this.state.listening?.item?.is_liked ? 'purple' : 'white'*/}
+              {/*    }*/}
+              {/*  />*/}
+              {/*  <Text*/}
+              {/*    style={{*/}
+              {/*      fontSize: 16,*/}
+              {/*      fontWeight: 'bold',*/}
+              {/*      color: 'white',*/}
+              {/*      marginVertical: 20,*/}
+              {/*      marginLeft: 10,*/}
+              {/*    }}>*/}
+              {/*    Liker*/}
+              {/*  </Text>*/}
+              {/*</TouchableOpacity>*/}
+              {/*<TouchableOpacity*/}
+              {/*  onPress={() => alert('test')}*/}
+              {/*  style={{*/}
+              {/*    flexDirection: 'row',*/}
+              {/*    alignItems: 'center',*/}
+              {/*    justifyContent: 'flex-start',*/}
+              {/*    flex: 1,*/}
+              {/*  }}>*/}
+              {/*  <Icon name={'home'} size={24} color={'white'} />*/}
+              {/*  <Text*/}
+              {/*    style={{*/}
+              {/*      fontSize: 16,*/}
+              {/*      fontWeight: 'bold',*/}
+              {/*      color: 'white',*/}
+              {/*      marginVertical: 20,*/}
+              {/*      marginLeft: 10,*/}
+              {/*    }}>*/}
+              {/*    Ajouter à une playlist*/}
+              {/*  </Text>*/}
+              {/*</TouchableOpacity>*/}
+              {/*<TouchableOpacity*/}
+              {/*  onPress={() => alert('test')}*/}
+              {/*  style={{*/}
+              {/*    flexDirection: 'row',*/}
+              {/*    alignItems: 'center',*/}
+              {/*    justifyContent: 'flex-start',*/}
+              {/*    flex: 1,*/}
+              {/*  }}>*/}
+              {/*  <Icon name={'plus'} size={24} color={'white'} />*/}
+              {/*  <Text*/}
+              {/*    style={{*/}
+              {/*      fontSize: 16,*/}
+              {/*      fontWeight: 'bold',*/}
+              {/*      color: 'white',*/}
+              {/*      marginVertical: 20,*/}
+              {/*      marginLeft: 10,*/}
+              {/*    }}>*/}
+              {/*    Ajouter à la file d'attente*/}
+              {/*  </Text>*/}
+              {/*</TouchableOpacity>*/}
+              {/*<TouchableOpacity*/}
+              {/*  onPress={() => alert('test')}*/}
+              {/*  style={{*/}
+              {/*    flexDirection: 'row',*/}
+              {/*    alignItems: 'center',*/}
+              {/*    justifyContent: 'flex-start',*/}
+              {/*    flex: 1,*/}
+              {/*  }}>*/}
+              {/*  <Icon name="disc" color={'white'} size={24} />*/}
+              {/*  <Text*/}
+              {/*    style={{*/}
+              {/*      fontSize: 16,*/}
+              {/*      fontWeight: 'bold',*/}
+              {/*      color: 'white',*/}
+              {/*      marginVertical: 20,*/}
+              {/*      marginLeft: 10,*/}
+              {/*    }}>*/}
+              {/*    Voir l'album*/}
+              {/*  </Text>*/}
+              {/*</TouchableOpacity>*/}
+              {/*<TouchableOpacity*/}
+              {/*  onPress={() => alert('test')}*/}
+              {/*  style={{*/}
+              {/*    flexDirection: 'row',*/}
+              {/*    alignItems: 'center',*/}
+              {/*    justifyContent: 'flex-start',*/}
+              {/*    flex: 1,*/}
+              {/*  }}>*/}
+              {/*  <Icon name="user" color={'white'} size={24} />*/}
+              {/*  <Text*/}
+              {/*    style={{*/}
+              {/*      fontSize: 16,*/}
+              {/*      fontWeight: 'bold',*/}
+              {/*      color: 'white',*/}
+              {/*      marginVertical: 20,*/}
+              {/*      marginLeft: 10,*/}
+              {/*    }}>*/}
+              {/*    Voir l'artiste*/}
+              {/*  </Text>*/}
+              {/*</TouchableOpacity>*/}
+              {/*<TouchableOpacity*/}
+              {/*  onPress={() => alert('test')}*/}
+              {/*  style={{*/}
+              {/*    flexDirection: 'row',*/}
+              {/*    alignItems: 'center',*/}
+              {/*    justifyContent: 'flex-start',*/}
+              {/*    flex: 1,*/}
+              {/*  }}>*/}
+              {/*  <Icon name="share" color={'white'} size={24} />*/}
+              {/*  <Text*/}
+              {/*    style={{*/}
+              {/*      fontSize: 16,*/}
+              {/*      fontWeight: 'bold',*/}
+              {/*      color: 'white',*/}
+              {/*      marginVertical: 20,*/}
+              {/*      marginLeft: 10,*/}
+              {/*    }}>*/}
+              {/*    Partager*/}
+              {/*  </Text>*/}
+              {/*</TouchableOpacity>*/}
+              {/*<TouchableOpacity*/}
+              {/*  onPress={() => alert('test')}*/}
+              {/*  style={{*/}
+              {/*    flexDirection: 'row',*/}
+              {/*    alignItems: 'center',*/}
+              {/*    justifyContent: 'flex-start',*/}
+              {/*    flex: 1,*/}
+              {/*  }}>*/}
+              {/*  <Icon name="clock" solid={false} color={'white'} size={24} />*/}
+              {/*  <Text*/}
+              {/*    style={{*/}
+              {/*      fontSize: 16,*/}
+              {/*      fontWeight: 'bold',*/}
+              {/*      color: 'white',*/}
+              {/*      marginVertical: 20,*/}
+              {/*      marginLeft: 10,*/}
+              {/*    }}>*/}
+              {/*    Minuteur de veille*/}
+              {/*  </Text>*/}
+              {/*</TouchableOpacity>*/}
+              {/*<TouchableOpacity*/}
+              {/*  onPress={() => alert('test')}*/}
+              {/*  style={{*/}
+              {/*    flexDirection: 'row',*/}
+              {/*    alignItems: 'center',*/}
+              {/*    justifyContent: 'flex-start',*/}
+              {/*    flex: 1,*/}
+              {/*  }}>*/}
+              {/*  <Icon name="mic" color={'white'} size={24} />*/}
+              {/*  <Text*/}
+              {/*    style={{*/}
+              {/*      fontSize: 16,*/}
+              {/*      fontWeight: 'bold',*/}
+              {/*      color: 'white',*/}
+              {/*      marginVertical: 20,*/}
+              {/*      marginLeft: 10,*/}
+              {/*    }}>*/}
+              {/*    Radio liée au titre*/}
+              {/*  </Text>*/}
+              {/*</TouchableOpacity>*/}
+              {/*<TouchableOpacity*/}
+              {/*  onPress={() => alert('test')}*/}
+              {/*  style={{*/}
+              {/*    flexDirection: 'row',*/}
+              {/*    alignItems: 'center',*/}
+              {/*    justifyContent: 'flex-start',*/}
+              {/*    flex: 1,*/}
+              {/*  }}>*/}
+              {/*  <Icon name={'info'} size={24} color={'white'} />*/}
+              {/*  <Text*/}
+              {/*    style={{*/}
+              {/*      fontSize: 16,*/}
+              {/*      fontWeight: 'bold',*/}
+              {/*      color: 'white',*/}
+              {/*      marginVertical: 20,*/}
+              {/*      marginLeft: 10,*/}
+              {/*    }}>*/}
+              {/*    Afficher les crédits*/}
+              {/*  </Text>*/}
+              {/*</TouchableOpacity>*/}
+              {/*<TouchableOpacity*/}
+              {/*  onPress={() => alert('test')}*/}
+              {/*  style={{*/}
+              {/*    flexDirection: 'row',*/}
+              {/*    alignItems: 'center',*/}
+              {/*    justifyContent: 'flex-start',*/}
+              {/*    flex: 1,*/}
+              {/*  }}>*/}
+              {/*  <Icon name={'alert-triangle'} size={24} color={'white'} />*/}
+              {/*  <Text*/}
+              {/*    style={{*/}
+              {/*      fontSize: 16,*/}
+              {/*      fontWeight: 'bold',*/}
+              {/*      color: 'white',*/}
+              {/*      marginVertical: 20,*/}
+              {/*      marginLeft: 10,*/}
+              {/*    }}>*/}
+              {/*    Signaler un abus*/}
+              {/*  </Text>*/}
+              {/*</TouchableOpacity>*/}
             </ScrollView>
           </LinearGradient>
         </Animated.View>
