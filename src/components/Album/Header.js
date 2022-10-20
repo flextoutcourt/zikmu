@@ -16,7 +16,6 @@ import LinearGradient from 'react-native-linear-gradient';
 class Header extends React.PureComponent {
 	constructor(props) {
 		super(props);
-		console.log(props);
 	}
 
 	render() {

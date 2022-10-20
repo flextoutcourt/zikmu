@@ -7163,6 +7163,15 @@ prop-types@^15.5.6, prop-types@^15.7.2:
     object-assign "^4.1.1"
     react-is "^16.8.1"
 
+prop-types@^15.6.2:
+  version "15.8.1"
+  resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.1.tgz#67d87bf1a694f48435cf332c24af10214a3140b5"
+  integrity sha512-oj87CgZICdulUohogVAR7AjlC0327U4el4L6eAvOqCeudMDVU0NThNaV+b9Df4dXgSP1gXMTnPdhfe/2qDH5cg==
+  dependencies:
+    loose-envify "^1.4.0"
+    object-assign "^4.1.1"
+    react-is "^16.13.1"
+
 proxy-addr@~2.0.5:
   version "2.0.7"
   resolved "https://registry.npmjs.org/proxy-addr/-/proxy-addr-2.0.7.tgz"
@@ -7283,7 +7292,7 @@ react-freeze@^1.0.0:
   resolved "https://registry.npmjs.org/react-freeze/-/react-freeze-1.0.0.tgz"
   integrity sha512-yQaiOqDmoKqks56LN9MTgY06O0qQHgV4FUrikH357DydArSZHQhl0BJFqGKIZoTqi8JizF9Dxhuk1FIZD6qCaw==
 
-"react-is@^16.12.0 || ^17.0.0", react-is@^16.13.0, react-is@^16.7.0, react-is@^16.8.1:
+"react-is@^16.12.0 || ^17.0.0", react-is@^16.13.0, react-is@^16.13.1, react-is@^16.7.0, react-is@^16.8.1:
   version "16.13.1"
   resolved "https://registry.npmjs.org/react-is/-/react-is-16.13.1.tgz"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
@@ -7305,6 +7314,13 @@ react-native-base64@0.0.2:
   version "0.0.2"
   resolved "https://registry.npmjs.org/react-native-base64/-/react-native-base64-0.0.2.tgz"
   integrity sha512-Fu/J1a2y0X22EJDWqJR2oEa1fpP4gTFjYxk8ElJdt1Yak3HOXmFJ7EohLVHU2DaQkgmKfw8qb7u/48gpzveRbg==
+
+react-native-bottom-drawer-view@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-native-bottom-drawer-view/-/react-native-bottom-drawer-view-1.0.3.tgz#bc4af7691364fd1b1104eef18a019c9138b1a4ca"
+  integrity sha512-yPC0I6N02zSHB3wAUWAgs+wH53fwGCa7etho9se3ICBNNBnl9Y+53DKnNMdFKdUuLlF/N4shsmrVmPiNCLEscg==
+  dependencies:
+    prop-types "^15.6.2"
 
 react-native-codegen@^0.0.7:
   version "0.0.7"
@@ -7354,14 +7370,15 @@ react-native-reanimated@^2.1.0:
     react-native-screens "^3.4.0"
     string-hash-64 "^1.0.3"
 
-react-native-redash@^16.2.3:
-  version "16.2.3"
-  resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-16.2.3.tgz#ee63e100c60f83275116e57d4e8bc79f26349db9"
-  integrity sha512-vSjHA6/mBY3IpDYPish3DlG06PKNLkb/b89hw7nsDM3yxAJ7Db+yMnEL3pp2YsoYblDc3s+0+wBRlvxay4X4vQ==
+react-native-redash@8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-redash/-/react-native-redash-8.0.0.tgz#01576abc10c248f14f4438f54c01a4726e4110b1"
+  integrity sha512-bKjPjvzrv4o2m6oTr0zZ7l5zSKaX/QuHUDN2yNO/3bzNhBVMlZ+5CRT6tycR2NLOqopwHiJF/pO+EBQ/8y93Mg==
   dependencies:
     abs-svg-path "^0.1.1"
     normalize-svg-path "^1.0.1"
     parse-svg-path "^0.1.2"
+    use-memo-one "^1.1.1"
 
 react-native-rename@^2.9.0:
   version "2.9.0"
@@ -8986,6 +9003,11 @@ urix@^0.1.0:
   version "0.1.0"
   resolved "https://registry.npmjs.org/urix/-/urix-0.1.0.tgz"
   integrity sha1-2pN/emLiH+wf0Y1Js1wpNQZ6bHI=
+
+use-memo-one@^1.1.1:
+  version "1.1.3"
+  resolved "https://registry.yarnpkg.com/use-memo-one/-/use-memo-one-1.1.3.tgz#2fd2e43a2169eabc7496960ace8c79efef975e99"
+  integrity sha512-g66/K7ZQGYrI6dy8GLpVcMsBp4s17xNkYJVSMvTEevGy3nDxHOfE6z8BVE22+5G5x7t3+bhzrlTDB7ObrEE0cQ==
 
 use-subscription@^1.0.0:
   version "1.5.1"

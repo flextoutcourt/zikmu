@@ -1,5 +1,5 @@
 import React, {PureComponent} from 'react';
-import {StatusBar} from 'react-native';
+import {StatusBar, Text, Dimensions} from 'react-native';
 import {SafeAreaProvider, SafeAreaView} from 'react-native-safe-area-context';
 
 //Authentication handler
@@ -18,7 +18,7 @@ import {
 import LoggedinNavigation from '../../navigation/loggedInNavigation';
 import GuestNavigation from '../../navigation/guestNavigation';
 import PlayerAlt from '../../components/Global/PlayerAlt';
-
+import BottomDrawer from 'react-native-bottom-drawer-view';
 
 class EntryScreen extends PureComponent {
   state = {refreshToken: ''};
@@ -51,6 +51,10 @@ class EntryScreen extends PureComponent {
     this.props.setLoadingFalse();
   };
 
+  _openBottomDrawer = (_, ctx) => {
+    ctx.openDrawer();
+  };
+
   render() {
     const {accessToken, loading} = this.props.authentication;
 
@@ -70,8 +74,16 @@ class EntryScreen extends PureComponent {
               backgroundColor={'rgba(0,0,0, 0.5)'}
               translucent={true}
             />
-            <LoggedinNavigation/>
-            <PlayerAlt/>
+            <LoggedinNavigation onLongPress={this._openBottomDrawer} />
+            <BottomDrawer
+              containerHeight={Dimensions.get('screen').height}
+              offset={-100}
+              downDisplay={Dimensions.get('screen').height}
+              startUp={false}
+              ref={ref => (this.bottomDrawer = ref)}>
+              <Text>test</Text>
+            </BottomDrawer>
+            <PlayerAlt />
           </SafeAreaView>
         </SafeAreaProvider>
       );
@@ -80,8 +92,8 @@ class EntryScreen extends PureComponent {
     return (
       <SafeAreaProvider>
         <SafeAreaView style={{flex: 1, marginTop: -StatusBar.currentHeight}}>
-          <StatusBar backgroundColor={'rgba(0,0,0, 0.5)'} translucent={true}/>
-          <GuestNavigation/>
+          <StatusBar backgroundColor={'rgba(0,0,0, 0.5)'} translucent={true} />
+          <GuestNavigation />
         </SafeAreaView>
       </SafeAreaProvider>
     );

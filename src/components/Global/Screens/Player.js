@@ -211,7 +211,7 @@ class Player extends React.PureComponent {
 					</TouchableOpacity>
 					<this.PlayPauseButton />
 				</View>
-				<View style={{...styles.player.timebar.container, width: Dimensions.get('screen').width - 30,}}>
+				<View style={{...styles.player.timebar.container, width: Dimensions.get('screen').width - 30}}>
 					<View style={styles.player.timebar.outer}>
 						<View style={{...styles.player.timebar.inner, width: (this.props.store.listening.listening?.progress_ms) / (this.props.store.listening.listening?.item?.duration_ms) * 100 + '%'}}/>
 					</View>
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
 				backgroundColor: '#6C4DE6',
 				height: 42,
 				alignItems: 'center',
-				justifyContent: 'flex-end'
+				justifyContent: 'flex-end',
 			},
 			icons: {
 				right: {
@@ -307,8 +307,8 @@ const styles = StyleSheet.create({
 				height: 2,
 				backgroundColor: 'white',
 				borderRadius: 5,
-			}
-		}
+			},
+		},
 	},
 });
 

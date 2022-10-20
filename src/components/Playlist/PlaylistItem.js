@@ -4,6 +4,7 @@ import {Dimensions, Image, Text, TouchableOpacity, View} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 function PlaylistItem({playlist}) {
+
     const navigation = useNavigation();
 
     return (
