@@ -45,19 +45,23 @@ class PlaylistScreen extends React.Component {
    * @private
    */
   _get_playlist = () => {
-    const promise = axios.get(
-      'https://api.spotify.com/v1/playlists/' +
-        this.props.route.params.playlist_id,
-      {
-        headers: {
-          Accept: 'application/json',
-          Authorization:
-            'Bearer ' + this.props.store.authentication.accessToken,
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-    return promise.then(data => data.data);
+    const promise = SpotifyApi.getPlaylist(this.props.route.params.playlist_id)
+
+    return promise.then((data) => data.body);
+
+    // const promise = axios.get(
+    //   'https://api.spotify.com/v1/playlists/' +
+    //     this.props.route.params.playlist_id,
+    //   {
+    //     headers: {
+    //       Accept: 'application/json',
+    //       Authorization:
+    //         'Bearer ' + this.props.store.authentication.accessToken,
+    //       'Content-Type': 'application/json',
+    //     },
+    //   },
+    // );
+    // return promise.then(data => data.data);
   };
 
   /**
@@ -96,20 +100,9 @@ class PlaylistScreen extends React.Component {
    * @private
    */
   _get_related_playlists = () => {
-    const promise = axios.get(
-      'https://api.spotify.com/v1/browse/featured-playlists',
-      {
-        headers: {
-          Accept: 'application/json',
-          Authorization:
-            'Bearer ' + this.props.store.authentication.accessToken,
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-    promise.then(data =>
-      this.setState({related_playlist: data.data.playlists}),
-    );
+    SpotifyApi.getFeaturedPlaylists().then(data => {
+      this.setState({related_playlist: data.body.playlist});
+    });
   };
 
   /**
@@ -120,18 +113,25 @@ class PlaylistScreen extends React.Component {
   _get_recommended_playlists = json => {
     let tracksId = this._format_ids(json, 'tracks');
     let artistsId = this._format_ids(json, 'artists');
-    const promise = axios.get(
-      `https://api.spotify.com/v1/recommendations?limit=10&seed_artists=${artistsId}&seed_genres=*&seed_tracks=${tracksId}`,
-      {
-        headers: {
-          Accept: 'application/json',
-          Authorization:
-            'Bearer ' + this.props.store.authentication.accessToken,
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-    promise.then(data => this.setState({recommendations: data.data}));
+    SpotifyApi.getRecommendations({
+      seed_artists: artistsId,
+      seed_genres: '*',
+      seed_tracks: tracksId,
+    }).then(data => {
+      this.setState({recommendations: data.body});
+    });
+    // const promise = axios.get(
+    //   `https://api.spotify.com/v1/recommendations?limit=10&seed_artists=${artistsId}&seed_genres=*&seed_tracks=${tracksId}`,
+    //   {
+    //     headers: {
+    //       Accept: 'application/json',
+    //       Authorization:
+    //         'Bearer ' + this.props.store.authentication.accessToken,
+    //       'Content-Type': 'application/json',
+    //     },
+    //   },
+    // );
+    // promise.then(data => this.setState({recommendations: data.data}));
   };
 
   /**
@@ -202,14 +202,17 @@ class PlaylistScreen extends React.Component {
    * @private
    */
   _get_user = href => {
-    const promise = axios.get(`${href}`, {
-      headers: {
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
-        'Content-Type': 'application/json',
-      },
+    return SpotifyApi.getMe(data => {
+      data.data;
     });
-    return promise.then(data => data.data);
+    // const promise = axios.get(`${href}`, {
+    //   headers: {
+    //     Accept: 'application/json',
+    //     Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
+    //     'Content-Type': 'application/json',
+    //   },
+    // });
+    // return promise.then(data => data.data);
   };
 
   componentDidMount() {
@@ -256,42 +259,50 @@ class PlaylistScreen extends React.Component {
   };
 
   _search_results = val => {
+    SpotifyApi.searchTracks(val, {limit: 7}).then(data =>
+      this.setState({search_results: data.body?.tracks?.items}),
+    );
     this.setState({search: val});
-    fetch(`https://api.spotify.com/v1/search?q=${val}&type=track&limit=7`, {
-      headers: {
-        Accept: 'application/json',
-        Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
-        'Content-Type': 'application/json',
-      },
-    })
-      .then(response => response.json())
-      .then(data => {
-        this.setState({search_results: data.tracks?.items});
-      });
+    // fetch(`https://api.spotify.com/v1/search?q=${val}&type=track&limit=7`, {
+    //   headers: {
+    //     Accept: 'application/json',
+    //     Authorization: 'Bearer ' + this.props.store.authentication.accessToken,
+    //     'Content-Type': 'application/json',
+    //   },
+    // })
+    //   .then(response => response.json())
+    //   .then(data => {
+    //     this.setState({search_results: data.tracks?.items});
+    //   });
   };
 
   _deploy_contextual_menu = item_id => {
-    fetch(
-      `https://api.spotify.com/v1/playlists/${this.state.playlist.id}/tracks`,
-      {
-        method: 'DELETE',
-        headers: {
-          Accept: 'application/json',
-          Authorization:
-            'Bearer ' + this.props.store.authentication.accessToken,
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          tracks: [
-            {
-              uri: `${item_id}`,
-            },
-          ],
-        }),
-      },
-    )
-      .then(r => r.json())
-      .then(data => setTimeout(() => this._store_playlist(), 200));
+    SpotifyApi.getPlaylistTracks(this.state.playlist?.id).then(data =>
+      setTimeout(() => {
+        this._store_playlist();
+      }, 200),
+    );
+    // fetch(
+    //   `https://api.spotify.com/v1/playlists/${this.state.playlist.id}/tracks`,
+    //   {
+    //     method: 'DELETE',
+    //     headers: {
+    //       Accept: 'application/json',
+    //       Authorization:
+    //         'Bearer ' + this.props.store.authentication.accessToken,
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify({
+    //       tracks: [
+    //         {
+    //           uri: `${item_id}`,
+    //         },
+    //       ],
+    //     }),
+    //   },
+    // )
+    //   .then(r => r.json())
+    //   .then(data => setTimeout(() => this._store_playlist(), 200));
   };
 
   render() {
