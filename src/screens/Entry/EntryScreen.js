@@ -75,14 +75,6 @@ class EntryScreen extends PureComponent {
               translucent={true}
             />
             <LoggedinNavigation onLongPress={this._openBottomDrawer} />
-            <BottomDrawer
-              containerHeight={Dimensions.get('screen').height}
-              offset={-100}
-              downDisplay={Dimensions.get('screen').height}
-              startUp={false}
-              ref={ref => (this.bottomDrawer = ref)}>
-              <Text>test</Text>
-            </BottomDrawer>
             <PlayerAlt />
           </SafeAreaView>
         </SafeAreaProvider>
