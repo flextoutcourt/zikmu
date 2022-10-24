@@ -47,7 +47,7 @@ class SelfScreen extends PureComponent {
           marginTop: 0,
           ...styles.container,
         }}>
-        <SelfHeader {...this.props} user={this.state.user} />
+        <SelfHeader user={this.state.user} {...this.props}/>
         <ScrollView style={{paddingTop: 2 * StatusBar.currentHeight}}>
           <TouchableOpacity
             onPress={() =>
