@@ -14,10 +14,14 @@ import axios from 'axios';
 import {connect} from 'react-redux';
 import Playlist from '../../components/Genres/Playlist';
 import Header from '../../components/Genres/Header';
+import SpotifyWebApi from 'spotify-web-api-node';
+
+const SpotifyApi = new SpotifyWebApi();
 
 class GenreScreen extends React.PureComponent {
   constructor(props) {
     super(props);
+    SpotifyApi.setAccessToken(this.props.store.authentication.accessToken);
     this.state = {
       genre: null,
       playlists: null, //4
