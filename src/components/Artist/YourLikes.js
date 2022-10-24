@@ -113,7 +113,7 @@ class YourLikes extends React.PureComponent {
   };
 
   render() {
-    return (
+    return this.state.likes > 0 ? (
       <View
         style={{
           flex: 1,
@@ -159,7 +159,7 @@ class YourLikes extends React.PureComponent {
           </Text>
         </View>
       </View>
-    );
+    ) : null;
   }
 }
 
