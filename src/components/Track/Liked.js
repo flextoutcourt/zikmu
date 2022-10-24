@@ -1,4 +1,4 @@
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {TouchableOpacity, Vibration} from 'react-native';
 import React from 'react';
 import {connect} from 'react-redux';
@@ -58,13 +58,11 @@ class Liked extends React.PureComponent {
 
   render() {
     return (
-      <TouchableOpacity onPress={() => this._like(this.props.track?.id)}>
+      <TouchableOpacity onPress={this.props.onLike}>
         <Icon
-          name="heart"
+          name={this.props.liked ? 'heart' : 'heart-outline'}
           size={this.props.iconSize ?? 24}
-          solid={!!this.props.liked_tracks?.id?.liked}
-          color={this.props.liked_tracks?.id?.liked ? '#7856FF' : 'white'}
-          style={{color: this.state.liked ? '#7856FF' : 'white'}}
+          color={this.props.liked ? '#c0392b' : 'white'}
         />
       </TouchableOpacity>
     );
