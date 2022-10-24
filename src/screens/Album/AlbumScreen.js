@@ -11,7 +11,7 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {connect} from 'react-redux';
 import Animated, {Extrapolate} from 'react-native-reanimated';
 import TrackItem from '../../components/Track/TrackItem';
@@ -37,18 +37,8 @@ class AlbumScreen extends React.PureComponent {
   }
 
   _get_album = () => {
-    const promise = axios.get(
-      `https://api.spotify.com/v1/albums/${this.props.route.params.album_id}`,
-      {
-        headers: {
-          Accept: 'application/json',
-          Authorization:
-            'Bearer ' + this.props.store.authentication.accessToken,
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-    return promise.then(data => data.data);
+    const promise = SpotifyApi.getAlbum(this.props.route.params.album_id);
+    return promise.then(data => data.body);
   };
 
   _group_by_key = array => {
@@ -67,6 +57,14 @@ class AlbumScreen extends React.PureComponent {
     return groups;
   };
 
+  _get_related_albums = json => {
+    const promise = SpotifyApi.getArtistAlbums([json.artists[0]?.id]);
+    return promise.then(data => {
+      console.log(data.body.items);
+      this.setState({recommendations: data.body.items});
+    });
+  };
+
   componentDidMount() {
     this._check_liked();
     const opacity = this.state.scrollY.interpolate({
@@ -76,6 +74,7 @@ class AlbumScreen extends React.PureComponent {
     });
     this._get_album().then(json => {
       this.setState({album: json});
+      this._get_related_albums(json);
       this.setState({
         disks: this._group_by_key(json.tracks.items, 'disc_number'),
       });
@@ -223,8 +222,7 @@ class AlbumScreen extends React.PureComponent {
           showsVerticalScrollIndicator={false}
           scrollEventThrottle={400}
           overScrollMode={'always'}>
-          <Text>test</Text>
-          <Animated.View style={{marginTop: mt, paddingBottom: 80}}>
+          <Animated.View style={{marginTop: mt, paddingBottom: 120}}>
             {this.state.disks && this.state.test ? (
               <SectionList
                 scrollEnabled={false}
@@ -243,8 +241,9 @@ class AlbumScreen extends React.PureComponent {
                   <View style={{padding: 15}}>
                     <View>
                       <Text style={{color: 'white'}}>
-                        {moment(this.state.album?.release_date)
-                          .format('DD MMMM YYYY')}
+                        {moment(this.state.album?.release_date).format(
+                          'DD MMMM YYYY',
+                        )}
                       </Text>
                       <Text style={{color: 'white', marginBottom: 10}}>
                         {this.state.album?.total_tracks} titres -{' '}
@@ -268,7 +267,7 @@ class AlbumScreen extends React.PureComponent {
                         return (
                           <View
                             style={{flexDirection: 'row', marginVertical: 5}}>
-                            <Icon name={'info'} size={18} color="white" />
+                            <Icon name={'information-outline'} size={18} color="white" />
                             <Text style={{marginLeft: 10, color: 'white'}}>
                               {item?.text}
                             </Text>
@@ -289,7 +288,7 @@ class AlbumScreen extends React.PureComponent {
                       justifyContent: 'flex-start',
                       marginLeft: 5,
                     }}>
-                    <Icon name="disc" size={24} color={'white'} />
+                    <Icon name="disc-outline" size={24} color={'white'} />
                     <Text
                       style={{
                         fontSize: 18,
@@ -303,8 +302,17 @@ class AlbumScreen extends React.PureComponent {
                 )}
               />
             ) : null}
+            {this.state.recommendations ? (
+              <FlatList
+                data={this.state.recommendations}
+                horizontal={true}
+                renderItem={() => {
+                  <Text style={{fontSize: 50, color: 'white'}}>lorem</Text>;
+                }}
+              />
+            ) : null}
           </Animated.View>
-          {/* Ajouter le bloc "album que vous pourriez aimer" */}
+
         </Animated.ScrollView>
       </LinearGradient>
     );

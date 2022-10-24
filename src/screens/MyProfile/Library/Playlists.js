@@ -16,7 +16,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import {connect} from 'react-redux';
 import PlaylistItem from '../../../components/Playlist/PlaylistItem';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const {width} = Dimensions.get('screen');
 

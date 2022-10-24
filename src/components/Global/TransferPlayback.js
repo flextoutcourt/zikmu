@@ -1,7 +1,7 @@
 import React, {PureComponent} from 'react';
 import {Dimensions, FlatList, Text, TouchableOpacity, View} from 'react-native';
 import Animated from 'react-native-reanimated';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {connect} from 'react-redux';
 
 class TransferPlayback extends PureComponent {

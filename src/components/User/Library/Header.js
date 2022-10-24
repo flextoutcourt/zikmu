@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import Animated, {Extrapolate} from 'react-native-reanimated';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 
 class LibraryHeader extends React.PureComponent {
@@ -85,7 +85,7 @@ class LibraryHeader extends React.PureComponent {
             opacity: backgroundOpacity,
           }}>
           <Icon
-            name={'arrow-left'}
+            name={'arrow-back'}
             size={24}
             color={'white'}
             style={{opacity: 0}}
@@ -102,7 +102,7 @@ class LibraryHeader extends React.PureComponent {
             padding: 5,
           }}>
           <Icon
-            name={'arrow-left'}
+            name={'arrow-back'}
             size={24}
             color={'white'}
             style={{opacity: 1}}

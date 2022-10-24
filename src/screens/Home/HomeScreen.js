@@ -13,7 +13,7 @@ import {
 import {useFocusEffect, useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import {connect} from 'react-redux';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 import RecentComponent from '../../components/Home/Recents/RecentComponent';
 import GenreComponent from '../../components/Home/Genres/GenreComponent';
 import ReleaseComponent from '../../components/Home/Release/ReleaseComponent';
@@ -256,7 +256,7 @@ const HomeScreen = props => {
             <TouchableOpacity
               onPress={() => navigation.push('Self')}
               style={{marginLeft: 20}}>
-              <Icon name={'settings'} solid={true} size={24} color={'white'} />
+              <Icon name={'cog'} solid={true} size={24} color={'white'} />
             </TouchableOpacity>
           </View>
         </View>

@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import {connect} from 'react-redux';
 
@@ -42,7 +42,7 @@ class SelfHeader extends React.PureComponent {
             justifyContent: 'flex-start',
           }}>
           <TouchableOpacity onPress={() => this.props.navigation.goBack()}>
-            <Icon name={'arrow-left'} size={24} color={'white'} />
+            <Icon name={'arrow-back'} size={24} color={'white'} />
           </TouchableOpacity>
           <Text
             style={{

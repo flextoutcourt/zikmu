@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import Animated, {Extrapolate} from 'react-native-reanimated';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 class Header extends React.PureComponent {
   constructor(props) {
@@ -47,7 +47,7 @@ class Header extends React.PureComponent {
               this.props.navigation.goBack();
             }}>
             <Icon
-              name="arrow-left"
+              name="arrow-back"
               color={'white'}
               size={24}
               style={{marginRight: 15}}

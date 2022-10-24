@@ -19,7 +19,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import * as rootNavigation from '../../utils/RootNavigation';
 // import Icon from 'react-native-vector-icons/FontAwesome5';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 import Liked from '../Track/Liked';
 import axios from 'axios';
 import {connect} from 'react-redux';
@@ -49,6 +49,7 @@ class PlayerAlt extends React.Component {
       play: null,
       shuffle: null,
       repeat: null,
+      liked: false,
       device_menu: {
         big: false,
         top: new Animated.Value(Dimensions.get('screen').height),
@@ -112,6 +113,12 @@ class PlayerAlt extends React.Component {
   _get_listening = () => {
     setInterval(() => {
       SpotifyApi.getMyCurrentPlayingTrack().then(data => {
+        if (
+          data.body.item?.id !== this.state?.listening?.item?.id &&
+          this.state.listening !== null
+        ) {
+          this._check_liked(data.body);
+        }
         if (data.body) {
           this.setState({
             listening: data.body,
@@ -119,9 +126,6 @@ class PlayerAlt extends React.Component {
             shuffle: data.body.shuffle_state,
             repeat: data.body.repeat_state,
           });
-        }
-        if (data.error) {
-          alert(data.error);
         }
       });
     }, 1000);
@@ -329,6 +333,12 @@ class PlayerAlt extends React.Component {
     SpotifyApi.skipToNext();
   };
 
+  _check_liked = (json = null) => {
+    SpotifyApi.containsMySavedTracks([json?.item?.id]).then(data =>
+      this.setState({liked: data.body[0]}),
+    );
+  };
+
   /**
    * Skip to previous track
    * @private
@@ -381,13 +391,13 @@ class PlayerAlt extends React.Component {
   _display_device_icon = device_type => {
     // alert(device_type);
     if (device_type === 'Smartphone') {
-      return 'smartphone';
+      return 'phone-portrait';
     } else if (device_type === 'Speaker') {
-      return 'speaker';
+      return 'headset';
     } else if (device_type === 'Computer') {
-      return 'hard-drive';
+      return 'desktop';
     } else {
-      return 'smartphone';
+      return 'phone-portrait';
     }
   };
 
@@ -457,6 +467,17 @@ class PlayerAlt extends React.Component {
       },
     }));
   };
+
+  _on_like = () => {
+    this.state.liked
+      ? SpotifyApi.removeFromMySavedTracks([
+          this.state?.listening?.item?.id,
+        ]).then(data => this.setState({liked: false}))
+      : SpotifyApi.addToMySavedTracks([this.state?.listening?.item?.id]).then(
+          data => this.setState({liked: true}),
+        );
+  };
+
   /**
    * Deploy the share menu
    * @private
@@ -707,7 +728,7 @@ class PlayerAlt extends React.Component {
                         </Text>
                         {!this.state.big ? (
                           <Icon
-                            name={'circle'}
+                            name={'ellipse'}
                             size={5}
                             style={{marginHorizontal: 5}}
                           />
@@ -719,7 +740,7 @@ class PlayerAlt extends React.Component {
                             contentContainerStyle={{maxWidth: '90%'}}
                             ItemSeparatorComponent={() => (
                               <Icon
-                                name={'circle'}
+                                name={'ellipse'}
                                 size={5}
                                 style={{
                                   marginHorizontal: 5,
@@ -783,6 +804,8 @@ class PlayerAlt extends React.Component {
                           <Liked
                             track={this.state?.listening?.item}
                             iconSize={this.state.big ? 24 : 24}
+                            liked={this.state.liked}
+                            onLike={this._on_like}
                           />
                           {this.state?.listening?.actions?.disallows
                             ?.toggling_repeat_context &&
@@ -884,7 +907,7 @@ class PlayerAlt extends React.Component {
                       </TouchableOpacity>
                       <TouchableOpacity onPress={() => this._prev()}>
                         <Icon
-                          name="skip-back"
+                          name="play-skip-back"
                           size={this.state.big ? 36 : 24}
                           style={{
                             marginLeft: 10,
@@ -926,7 +949,7 @@ class PlayerAlt extends React.Component {
                       )}
                       <TouchableOpacity onPress={() => this._next()}>
                         <Icon
-                          name="skip-forward"
+                          name="play-skip-forward"
                           size={this.state.big ? 36 : 24}
                           style={{
                             marginLeft: 10,
@@ -1045,13 +1068,15 @@ class PlayerAlt extends React.Component {
                         : 'auto',
                     }}>
                     <Icon
-                      name="speaker"
+                      name="headset"
                       size={this.state.big ? 48 : 24}
                       style={{marginLeft: 10, marginRight: 10}}
                     />
                     <Liked
                       track={this.state?.listening?.item}
                       iconSize={this.state.big ? 48 : 24}
+                      onLike={this._on_like}
+                      liked={this.state.liked}
                     />
                     {this.state.play ? (
                       <TouchableOpacity
@@ -1179,12 +1204,12 @@ class PlayerAlt extends React.Component {
               paddingHorizontal: 30,
             }}>
             <TouchableOpacity onPress={() => this._deploy_devices_menu()}>
-              <Icon name={'x'} size={24} color={'white'} />
+              <Icon name={'close'} size={24} color={'white'} />
             </TouchableOpacity>
           </View>
           <View style={{flex: 1, padding: 30}}>
-            <View style={{flexDirection: 'row', justifyContent: 'flex-start'}}>
-              <Icon name={'music'} size={48} color={'white'} />
+            <View style={{flexDirection: 'row', justifyContent: 'flex-start', alignItems: 'center'}}>
+              <Icon name={'radio'} size={48} color={'white'} />
               <View style={{marginLeft: 20}}>
                 <Text
                   style={{color: 'white', fontSize: 22, fontWeight: 'bold'}}>
@@ -1245,7 +1270,7 @@ class PlayerAlt extends React.Component {
                 paddingHorizontal: 30,
               }}>
               <TouchableOpacity onPress={() => this._deploy_waiting_list()}>
-                <Icon name={'x'} size={24} color={'white'} />
+                <Icon name={'close'} size={24} color={'white'} />
               </TouchableOpacity>
             </View>
             {this.state.waiting_list.big ? (
@@ -1324,7 +1349,7 @@ class PlayerAlt extends React.Component {
                 Partager
               </Text>
               <TouchableOpacity onPress={() => this._deploy_share_menu()}>
-                <Icon name={'x'} size={24} color={'white'} />
+                <Icon name={'close'} size={24} color={'white'} />
               </TouchableOpacity>
             </View>
             <View style={{flex: 1, padding: 30}}>
@@ -1673,7 +1698,7 @@ class PlayerAlt extends React.Component {
                   paddingHorizontal: 30,
                 }}>
                 <TouchableOpacity onPress={() => this._deploy_track_infos()}>
-                  <Icon name={'x'} size={24} color={'white'} />
+                  <Icon name={'close'} size={24} color={'white'} />
                 </TouchableOpacity>
               </View>
               <View

@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import {connect} from 'react-redux';
 import SelfHeader from '../../components/User/SelfHeader';
@@ -83,7 +83,7 @@ class SelfScreen extends PureComponent {
             </View>
             <View style={{marginLeft: 20}}>
               <Icon
-                name={'chevron-right'}
+                name={'chevron-forward'}
                 solid={true}
                 size={24}
                 color={'white'}

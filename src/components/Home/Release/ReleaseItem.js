@@ -9,7 +9,7 @@ import {
 } from 'react-native';
 import {connect} from 'react-redux';
 import axios from 'axios';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from 'react-native-vector-icons/Ionicons';
 import Liked from '../../Track/Liked';
 import SpotifyWebApi from 'spotify-web-api-node';
 
