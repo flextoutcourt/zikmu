@@ -18,31 +18,22 @@ import TrackItem from '../../components/Track/TrackItem';
 import Header from '../../components/Album/Header';
 import moment from 'moment';
 import ArtistItem from '../../components/Artist/ArtistItem';
+import SpotifyWebApi from 'spotify-web-api-node';
+
+const SpotifyApi = new SpotifyWebApi();
 
 class AlbumScreen extends React.PureComponent {
   constructor(props) {
     super(props);
+    SpotifyApi.setAccessToken(this.props.store.authentication.accessToken);
     this.state = {
       album: null,
       disks: null,
       test: null,
       scrollY: new Animated.Value(0),
       recommendations: null,
+      liked: false,
     };
-  }
-
-  componentDidUpdate(
-    prevProps: Readonly<P>,
-    prevState: Readonly<S>,
-    snapshot: SS,
-  ) {}
-
-  shouldComponentUpdate(
-    nextProps: Readonly<P>,
-    nextState: Readonly<S>,
-    nextContext: any,
-  ): boolean {
-    return false;
   }
 
   _get_album = () => {
@@ -77,6 +68,7 @@ class AlbumScreen extends React.PureComponent {
   };
 
   componentDidMount() {
+    this._check_liked();
     const opacity = this.state.scrollY.interpolate({
       inputRange: [250, 325],
       outputRange: [0, 1],
@@ -127,6 +119,38 @@ class AlbumScreen extends React.PureComponent {
       super.forceUpdate();
     });
   }
+
+  _get_full_duration = () => {
+    let duration = 0;
+    this.state.album.tracks.items.map((item, key) => {
+      duration += item.duration_ms;
+    });
+    return moment.duration(duration).hours() > 0
+      ? moment.duration(duration).hours() + ' h '
+      : null +
+          moment.duration(duration).minutes() +
+          ' min ' +
+          moment.duration(duration).seconds() +
+          ' s ';
+  };
+
+  _on_like = () => {
+    this.state.liked
+      ? SpotifyApi.removeFromMySavedAlbums([this.state.album.id]).then(() => {
+          this.setState({liked: false});
+        })
+      : SpotifyApi.addToMySavedAlbums([this.state.album.id]).then(data => {
+          this.setState({liked: true});
+        });
+  };
+
+  _check_liked = () => {
+    SpotifyApi.containsMySavedAlbums([this.props.route.params.album_id]).then(
+      data => {
+        this.setState({liked: data.body[0]});
+      },
+    );
+  };
 
   render() {
     const scale = this.state.scrollY.interpolate({
@@ -185,8 +209,10 @@ class AlbumScreen extends React.PureComponent {
         style={({marginTop: 0}, styles.container)}>
         <Header
           y={this.state.scrollY}
-          {...this.props}
           album={this.state.album}
+          onLike={this._on_like}
+          liked={this.state.liked}
+          {...this.props}
         />
         <Animated.ScrollView
           style={{marginTop: -2.5 * StatusBar.currentHeight, zIndex: 98}}
@@ -217,25 +243,12 @@ class AlbumScreen extends React.PureComponent {
                   <View style={{padding: 15}}>
                     <View>
                       <Text style={{color: 'white'}}>
-                        {moment(this.state.album?.release_date).format(
-                          'DD MMMM YYYY',
-                        )}
+                        {moment(this.state.album?.release_date)
+                          .format('DD MMMM YYYY')}
                       </Text>
                       <Text style={{color: 'white', marginBottom: 10}}>
                         {this.state.album?.total_tracks} titres -{' '}
-                        {moment
-                          .duration(this.state.album?.full_duration)
-                          .hours() !== 0
-                          ? moment
-                              .duration(this.state.album?.full_duration)
-                              .hours() + ' h '
-                          : null}
-                        {moment
-                          .duration(this.state.album?.full_duration)
-                          .minutes() + ' min '}
-                        {moment
-                          .duration(this.state.album?.full_duration)
-                          .seconds() + ' s'}
+                        {this._get_full_duration()}
                       </Text>
                       <FlatList
                         data={this.state.album?.artists}
