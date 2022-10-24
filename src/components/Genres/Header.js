@@ -76,14 +76,14 @@ class Header extends React.PureComponent {
             </Text>
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-            <TouchableOpacity onPress={() => alert('liked')}>
-              <Icon name="heart" size={24} color={'white'} />
-            </TouchableOpacity>
-            <TouchableOpacity
-              onPress={() => alert('liked')}
-              style={{marginLeft: 15}}>
-              <Icon name="more-vertical" size={24} color={'white'} />
-            </TouchableOpacity>
+            {/*<TouchableOpacity onPress={() => alert('liked')}>*/}
+            {/*  <Icon name="heart" size={24} color={'white'} />*/}
+            {/*</TouchableOpacity>*/}
+            {/*<TouchableOpacity*/}
+            {/*  onPress={() => alert('liked')}*/}
+            {/*  style={{marginLeft: 15}}>*/}
+            {/*  <Icon name="more-vertical" size={24} color={'white'} />*/}
+            {/*</TouchableOpacity>*/}
           </View>
         </Animated.View>
       </Animated.View>
