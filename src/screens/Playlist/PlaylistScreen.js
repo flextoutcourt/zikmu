@@ -1,8 +1,9 @@
 import axios from 'axios';
-import React from 'react';
+import React, {Suspense} from 'react';
 import {
   Dimensions,
   FlatList,
+  Image,
   Modal,
   StatusBar,
   StyleSheet,
@@ -11,7 +12,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 import LinearGradient from 'react-native-linear-gradient';
 import Animated, {Extrapolate} from 'react-native-reanimated';
 import {connect} from 'react-redux';
@@ -35,6 +36,8 @@ class PlaylistScreen extends React.Component {
       search_menu: false,
       search_results: false,
       search: '',
+      playlist_liked: false,
+      modalVisible: false,
     };
     SpotifyApi.setAccessToken(this.props.store.authentication.accessToken);
   }
@@ -45,9 +48,9 @@ class PlaylistScreen extends React.Component {
    * @private
    */
   _get_playlist = () => {
-    const promise = SpotifyApi.getPlaylist(this.props.route.params.playlist_id)
+    const promise = SpotifyApi.getPlaylist(this.props.route.params.playlist_id);
 
-    return promise.then((data) => data.body);
+    return promise.then(data => data.body);
 
     // const promise = axios.get(
     //   'https://api.spotify.com/v1/playlists/' +
@@ -215,6 +218,12 @@ class PlaylistScreen extends React.Component {
     // return promise.then(data => data.data);
   };
 
+  _get_owner = json => {
+    SpotifyApi.getUser(json?.owner?.id).then(data => {
+      this.setState({owner: data.body});
+    });
+  };
+
   componentDidMount() {
     const opacity = this.state.scrollY.interpolate({
       inputRange: [250, 325],
@@ -233,6 +242,8 @@ class PlaylistScreen extends React.Component {
   _store_playlist = () => {
     this._get_playlist().then(json => {
       this.setState({playlist: json});
+      this._get_liked(json);
+      this._get_owner(json);
       this._get_recommended_playlists(json);
       if (json.collaborative) {
         let users = [];
@@ -305,6 +316,46 @@ class PlaylistScreen extends React.Component {
     //   .then(data => setTimeout(() => this._store_playlist(), 200));
   };
 
+  _on_like = () => {
+    this.state.playlist_liked
+      ? SpotifyApi.unfollowPlaylist(this.state?.playlist?.id).then(data => {
+          this.setState({playlist_liked: false});
+        })
+      : SpotifyApi.followPlaylist(this.state.playlist?.id).then(data =>
+          this.setState({playlist_liked: !this.state.playlist_liked}),
+        );
+  };
+
+  _get_me = () => {
+    const promise = SpotifyApi.getMe();
+    return promise.then(data => {
+      this.setState({me: data.body});
+      return data.body;
+    });
+  };
+
+  _on_info = () => {
+    this.setState({modalVisible: true});
+  };
+
+  _get_liked = data => {
+    this._get_me().then(response => {
+      axios
+        .get(
+          `	https://api.spotify.com/v1/playlists/${this.state.playlist?.id}/followers/contains?ids=${response?.id}`,
+          {
+            headers: {
+              Accept: 'application/json',
+              Authorization:
+                'Bearer ' + this.props.store.authentication.accessToken,
+              'Content-Type': 'application/json',
+            },
+          },
+        )
+        .then(data => this.setState({playlist_liked: data.data[0]}));
+    });
+  };
+
   render() {
     const scale = this.state.scrollY.interpolate({
       inputRange: [-Dimensions.get('screen').height, 0, 125],
@@ -321,13 +372,11 @@ class PlaylistScreen extends React.Component {
       outputRange: [10, -75],
       extrapolate: Extrapolate.CLAMP,
     });
-
     const br = this.state.scrollY.interpolate({
       inputRange: [0, 10],
       outputRange: [0, 10],
       extrapolate: Extrapolate.CLAMP,
     });
-
     const height = this.state.scrollY.interpolate({
       inputRange: [0, 125],
       outputRange: [
@@ -336,19 +385,16 @@ class PlaylistScreen extends React.Component {
       ],
       extrapolate: Extrapolate.CLAMP,
     });
-
     const mt = this.state.scrollY.interpolate({
       inputRange: [0, Dimensions.get('window').height * 10],
       outputRange: [Dimensions.get('screen').width - 20, 0],
       extrapolate: Extrapolate.CLAMP,
     });
-
     const borderRadius = this.state.scrollY.interpolate({
       inputRange: [0, 125],
       outputRange: [0, 350],
       extrapolate: Extrapolate.CLAMP,
     });
-
     const transform = [{scale}];
     return (
       <LinearGradient
@@ -360,6 +406,9 @@ class PlaylistScreen extends React.Component {
         <Header
           y={this.state.scrollY}
           playlist={this.state.playlist}
+          liked={this.state.playlist_liked}
+          onLike={this._on_like}
+          onInfo={this._on_info}
           {...this.props}
         />
         <Animated.ScrollView
@@ -379,164 +428,179 @@ class PlaylistScreen extends React.Component {
                   this.listViewRef = ref;
                 }}
                 scrollToOverflowEnabled={true}
-                ListHeaderComponent={() => (
-                  <>
-                    <View style={{marginHorizontal: 10, flexDirection: 'row'}}>
-                      <View style={{flex: 1}} />
-                      <TouchableOpacity
-                        onPress={() =>
-                          this.state.recommendations == false
-                            ? this._enlight_playlist().then(data =>
-                                this.setState({
-                                  recommendations: data,
-                                }),
-                              )
-                            : this.setState({
-                                recommendations: false,
-                              })
-                        }
-                        style={{flex: 2}}>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            backgroundColor: 'transparent',
-                            borderColor:
-                              this.state.recommendations === false
-                                ? 'white'
-                                : '#6C4DE6',
-                            borderWidth: 2,
-                            justifyContent: 'center',
-                            padding: 3,
-                            borderRadius: 100,
-                            marginBottom: 10,
-                          }}>
-                          <Icon
-                            name={'zap'}
-                            size={24}
-                            color={
-                              this.state.recommendations === false
-                                ? 'white'
-                                : '#6C4DE6'
-                            }
-                          />
-                          <Text
+                style={{paddingBottom: 120}}
+                ListHeaderComponent={() =>
+                  this.state.playlist?.collaborative ||
+                  this.state.playlist?.owner?.id === this.state?.me?.id ? (
+                    <>
+                      <View
+                        style={{marginHorizontal: 10, flexDirection: 'row'}}>
+                        <View style={{flex: 1}} />
+                        <TouchableOpacity
+                          onPress={() =>
+                            this.state.recommendations == false
+                              ? this._enlight_playlist().then(data => {
+                                  this.setState({
+                                    recommendations: data,
+                                  });
+                                  this.flatListRef.scrollTo({
+                                    x: 0,
+                                    y: Dimensions.get('screen').height * 10,
+                                    animated: true,
+                                  });
+                                })
+                              : this.setState({
+                                  recommendations: false,
+                                })
+                          }
+                          style={{flex: 2}}>
+                          <View
                             style={{
-                              color:
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                              backgroundColor: 'transparent',
+                              borderColor:
                                 this.state.recommendations === false
                                   ? 'white'
                                   : '#6C4DE6',
+                              borderWidth: 2,
+                              justifyContent: 'center',
+                              padding: 3,
+                              borderRadius: 100,
+                              marginBottom: 10,
                             }}>
-                            Enrichir
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                      <View style={{flex: 1}} />
-                      <TouchableOpacity
-                        onPress={() => {
-                          this.flatListRef.scrollTo({
-                            x: 0,
-                            y: this.state.search_menu ? 0 : 300,
-                            animated: true,
-                          });
-                          return this.state.search_menu === false
-                            ? this.setState({
-                                search_menu: true,
-                              })
-                            : this.setState({
-                                search_menu: false,
-                                search_results: false,
-                              });
-                        }}
-                        style={{flex: 2}}>
-                        <View
-                          style={{
-                            flexDirection: 'row',
-                            alignItems: 'center',
-                            backgroundColor: 'transparent',
-                            borderColor:
-                              this.state.search_menu === false
-                                ? 'white'
-                                : '#6C4DE6',
-                            borderWidth: 2,
-                            justifyContent: 'center',
-                            padding: 3,
-                            borderRadius: 100,
-                            marginBottom: 10,
-                          }}>
-                          <Icon
-                            name={'plus'}
-                            size={24}
-                            color={
-                              this.state.search_menu === false
-                                ? 'white'
-                                : '#6C4DE6'
-                            }
-                          />
-                          <Text
+                            <Icon
+                              name={
+                                this.state.recommendations
+                                  ? 'color-wand'
+                                  : 'color-wand-outline'
+                              }
+                              size={24}
+                              color={
+                                this.state.recommendations === false
+                                  ? 'white'
+                                  : '#6C4DE6'
+                              }
+                            />
+                            <Text
+                              style={{
+                                color:
+                                  this.state.recommendations === false
+                                    ? 'white'
+                                    : '#6C4DE6',
+                              }}>
+                              Enrichir
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                        <View style={{flex: 1}} />
+                        <TouchableOpacity
+                          onPress={() => {
+                            this.flatListRef.scrollTo({
+                              x: 0,
+                              y: this.state.search_menu ? 0 : 300,
+                              animated: true,
+                            });
+                            return this.state.search_menu === false
+                              ? this.setState({
+                                  search_menu: true,
+                                })
+                              : this.setState({
+                                  search_menu: false,
+                                  search_results: false,
+                                });
+                          }}
+                          style={{flex: 2}}>
+                          <View
                             style={{
-                              color:
+                              flexDirection: 'row',
+                              alignItems: 'center',
+                              backgroundColor: 'transparent',
+                              borderColor:
                                 this.state.search_menu === false
                                   ? 'white'
                                   : '#6C4DE6',
+                              borderWidth: 2,
+                              justifyContent: 'center',
+                              padding: 3,
+                              borderRadius: 100,
+                              marginBottom: 10,
                             }}>
-                            Ajouter un titre
-                          </Text>
-                        </View>
-                      </TouchableOpacity>
-                      <View style={{flex: 1}} />
-                    </View>
-                    {this.state.search_menu ? (
-                      <SearchMenu
-                        onChangeText={this._search_results}
-                        search={this.state.search}
-                      />
-                    ) : null}
-                    {this.state.search_results ? (
-                      <LinearGradient
-                        colors={['#1E2732', '#1E2732']}
-                        style={{
-                          marginTop: 0,
-                          padding: 0,
-                          paddingTop: 15,
-                          paddingBottom: 50,
-                        }}>
-                        <View
+                            <Icon
+                              name={'add-outline'}
+                              size={24}
+                              color={
+                                this.state.search_menu === false
+                                  ? 'white'
+                                  : '#6C4DE6'
+                              }
+                            />
+                            <Text
+                              style={{
+                                color:
+                                  this.state.search_menu === false
+                                    ? 'white'
+                                    : '#6C4DE6',
+                              }}>
+                              Ajouter un titre
+                            </Text>
+                          </View>
+                        </TouchableOpacity>
+                        <View style={{flex: 1}} />
+                      </View>
+                      {this.state.search_menu ? (
+                        <SearchMenu
+                          onChangeText={this._search_results}
+                          search={this.state.search}
+                        />
+                      ) : null}
+                      {this.state.search_results ? (
+                        <LinearGradient
+                          colors={['#1E2732', '#1E2732']}
                           style={{
+                            marginTop: 0,
                             padding: 0,
-                            alignItems: 'center',
-                            justifyContent: 'flex-start',
-                            flex: 1,
+                            marginTop: 10,
+                            paddingTop: 15,
+                            paddingBottom: 50,
                           }}>
-                          <Text
+                          <View
                             style={{
-                              color: 'white',
-                              textAlign: 'center',
-                              fontSize: 24,
+                              padding: 0,
+                              alignItems: 'center',
+                              justifyContent: 'flex-start',
+                              flex: 1,
                             }}>
-                            Recherche pour {this.state.search}
-                          </Text>
-                          <FlatList
-                            data={this.state.search_results}
-                            keyExtractor={(item, index) => index.toString()}
-                            renderItem={(item, key) => (
-                              <TrackItem
-                                track={item?.item}
-                                album={item?.item.album}
-                                type={'playlist_recommendation'}
-                                playlist_id={this.state.playlist?.id}
-                                onReload={() => this._store_playlist()}
-                                onLongPress={() => {
-                                  alert('test');
-                                }}
-                              />
-                            )}
-                          />
-                        </View>
-                      </LinearGradient>
-                    ) : null}
-                  </>
-                )}
+                            <Text
+                              style={{
+                                color: 'white',
+                                textAlign: 'center',
+                                fontSize: 24,
+                              }}>
+                              Recherche pour {this.state.search}
+                            </Text>
+                            <FlatList
+                              data={this.state.search_results}
+                              keyExtractor={(item, index) => index.toString()}
+                              renderItem={(item, key) => (
+                                <TrackItem
+                                  track={item?.item}
+                                  album={item?.item.album}
+                                  type={'playlist_recommendation'}
+                                  playlist_id={this.state.playlist?.id}
+                                  onReload={() => this._store_playlist()}
+                                  onLongPress={() => {
+                                    alert('test');
+                                  }}
+                                />
+                              )}
+                            />
+                          </View>
+                        </LinearGradient>
+                      ) : null}
+                    </>
+                  ) : null
+                }
                 renderItem={({item, key, index}) => (
                   <TouchableOpacity
                     onPress={() =>
@@ -584,6 +648,7 @@ class PlaylistScreen extends React.Component {
                 <FlatList
                   data={this.state.recommendations?.tracks}
                   keyExtractor={(item, index) => index.toString()}
+                  style={{paddingBottom: 60}}
                   renderItem={(item, key) => (
                     <TrackItem
                       track={item.item}
@@ -630,6 +695,66 @@ class PlaylistScreen extends React.Component {
             </LinearGradient>
           ) : null}
         </Animated.ScrollView>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={this.state.modalVisible}
+          hardwareAccelerated={true}
+          onRequestClose={() => {
+            this.setState({modalVisible: false});
+          }}
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 10,
+          }}>
+          <View
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              width: Dimensions.get('screen').width,
+              backgroundColor: '#7856FF',
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 10,
+              paddingVertical: 50,
+            }}>
+            <TouchableOpacity
+              onPress={() => this.setState({modalVisible: false})}
+              style={{position: 'absolute', top: 10, right: 10}}>
+              <Icon name={'close'} size={24} color={'white'} />
+            </TouchableOpacity>
+            <Text
+              style={{
+                color: 'white',
+                fontSize: 20,
+                textAlign: 'center',
+                marginBottom: 20,
+              }}>
+              Voir les informations de la playlist
+            </Text>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: 20,
+                width: Dimensions.get('screen').width - 40,
+                justifyContent: 'center',
+                alignItems: 'center',
+                elevation: 10,
+              }}>
+              <Image
+                source={{uri: this.state.owner?.images[0]?.url}}
+                style={{width: 50, height: 50, borderRadius: 25, marginRight: 10}}
+              />
+              <Text>
+                {this.state.playlist?.owner?.display_name}
+              </Text>
+            </View>
+          </View>
+        </Modal>
       </LinearGradient>
     );
   }

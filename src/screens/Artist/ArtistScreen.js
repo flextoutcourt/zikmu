@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import Animated, {Extrapolate} from 'react-native-reanimated';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {connect} from 'react-redux';
 import Albums from '../../components/Artist/Albums';
 import Header from '../../components/Artist/Header';

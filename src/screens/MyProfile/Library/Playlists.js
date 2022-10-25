@@ -16,6 +16,7 @@ import {
 import LinearGradient from 'react-native-linear-gradient';
 import {connect} from 'react-redux';
 import PlaylistItem from '../../../components/Playlist/PlaylistItem';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 const {width} = Dimensions.get('screen');
 
@@ -99,19 +100,48 @@ class Playlists extends React.PureComponent {
         style={({marginTop: -StatusBar.currentHeight}, styles.container)}>
         <Modal
           animationType="slide"
-          transparent={false}
+          transparent={true}
           visible={this.state.modalVisible}
-          statusBarTranslucent={true}
           hardwareAccelerated={true}
           onRequestClose={() => {
             this.setState({modalVisible: false});
           }}
-          style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+          style={{
+            flex: 1,
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 10,
+          }}>
           <View
-            style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+            style={{
+              position: 'absolute',
+              bottom: 0,
+              left: 0,
+              width: Dimensions.get('screen').width,
+              backgroundColor: '#7856FF',
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: 10,
+              paddingVertical: 50,
+            }}>
+            <TouchableOpacity
+              onPress={() => this.setState({modalVisible: false})}
+              style={{position: 'absolute', top: 10, right: 10}}>
+              <Icon name={'x'} size={24} color={'white'} />
+            </TouchableOpacity>
+            <Text
+              style={{
+                color: 'white',
+                fontSize: 20,
+                textAlign: 'center',
+                marginBottom: 20,
+              }}>
+              Donnez un joli nom a la playlist
+            </Text>
             <TextInput
               style={{
-                width: Dimensions.get('screen').width - 20,
+                width: Dimensions.get('screen').width - 40,
                 marginHorizontal: 10,
                 borderRadius: 10,
                 backgroundColor: '#1E2732',
@@ -123,6 +153,16 @@ class Playlists extends React.PureComponent {
               onSubmitEditing={val => this._create_playlist()}
               onChangeText={val => this.setState({playlist_name: val})}
             />
+            <View style={{flexDirection: 'row', marginTop: 20, width: Dimensions.get('screen').width - 40, justifyContent: 'space-around'}}>
+              <TouchableOpacity
+                onPress={() => this.setState({modalVisible: false})}>
+                <Text style={{color: '#95a5a6', fontSize: 20}}>Annuler</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                onPress={() => this._create_playlist()}>
+                <Text style={{color: 'white', fontSize: 20}}>Envoyer</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </Modal>
         <FlatList

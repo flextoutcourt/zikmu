@@ -1,7 +1,7 @@
 import React from 'react';
 import {Dimensions, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import {connect} from 'react-redux';
-import FontAwesome5Icon from 'react-native-vector-icons/FontAwesome5';
+import FontAwesome5Icon from 'react-native-vector-icons/Ionicons';
 
 class Recentitem extends React.PureComponent {
     constructor(props) {

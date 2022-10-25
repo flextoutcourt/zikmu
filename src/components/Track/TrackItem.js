@@ -12,7 +12,7 @@ import {connect} from 'react-redux';
 import Liked from './Liked';
 import Collab from './Collab';
 import {Swipeable} from 'react-native-gesture-handler';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 import SpotifyWebApi from 'spotify-web-api-node';
 import BottomDrawer from 'react-native-bottom-drawer-view';
 
@@ -32,8 +32,9 @@ class TrackItem extends React.PureComponent {
   }
 
   _set_offset = (disc_number, track_number) => {
+    console.log(disc_number);
     let offset = 0;
-    while (disc_number > 0) {
+    while (disc_number > 1) {
       offset += this.props.disks[disc_number - 1]?.data?.length ?? 0;
       disc_number--;
     }
@@ -90,7 +91,9 @@ class TrackItem extends React.PureComponent {
     return this.props.collab_users?.users_array.find(item => item?.id === id);
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    this._check_liked();
+  }
 
   _renderLeftActions = (progress, dragX) => {
     return (
@@ -158,6 +161,16 @@ class TrackItem extends React.PureComponent {
     );
   };
 
+  _on_like = () => {
+    this.state.liked
+      ? spotifyApi.removeFromMySavedTracks([this.props.track?.id]).then(data => {
+          this.setState({liked: false});
+        })
+      : spotifyApi.addToMySavedTracks([this.props.track?.id]).then(data => {
+          this.setState({liked: true});
+        });
+  };
+
   _renderRightLibraryActions = () => {
     return (
       <TouchableOpacity
@@ -181,6 +194,12 @@ class TrackItem extends React.PureComponent {
         />
       </TouchableOpacity>
     );
+  };
+
+  _check_liked = () => {
+    spotifyApi.containsMySavedTracks([this.props.track?.id]).then(data => {
+      this.setState({liked: data?.body[0]});
+    });
   };
 
   add_to_playlist = (playlist_id, uri) => {
@@ -340,25 +359,24 @@ class TrackItem extends React.PureComponent {
                     }}>
                     {this.state.added_to_playlist ? (
                       <Icon
-                        name="plus"
+                        name="add"
                         size={this.props.iconSize ?? 24}
                         color={'green'}
-                        style={'green'}
                       />
                     ) : (
                       <Icon
-                        name="plus"
+                        name="add"
                         size={this.props.iconSize ?? 24}
-                        solid={!!this.state.liked}
-                        color={this.state.liked ? '#7856FF' : 'white'}
-                        style={{
-                          color: this.state.liked ? '#7856FF' : 'white',
-                        }}
+                        color={'white'}
                       />
                     )}
                   </TouchableOpacity>
                 ) : (
-                  <Liked track={this.state.track} />
+                  <Liked
+                    track={this.state.track}
+                    onLike={this._on_like}
+                    liked={this.state.liked}
+                  />
                 )}
               </View>
             </View>

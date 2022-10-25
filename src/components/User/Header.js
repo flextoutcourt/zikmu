@@ -9,7 +9,7 @@ import {
   View,
 } from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 
 import {connect} from 'react-redux';
 import Animated, {Extrapolate} from 'react-native-reanimated';
@@ -87,7 +87,7 @@ class SelfHeader extends React.PureComponent {
             opacity: backgroundOpacity,
           }}>
           <Icon
-            name={'arrow-left'}
+            name={'arrow-back'}
             size={24}
             color={'white'}
             style={{opacity: 0}}
@@ -104,7 +104,7 @@ class SelfHeader extends React.PureComponent {
             padding: 5,
           }}>
           <Icon
-            name={'arrow-left'}
+            name={'arrow-back'}
             size={24}
             color={'white'}
             style={{opacity: 1}}

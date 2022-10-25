@@ -1,7 +1,7 @@
 import React from 'react';
 import {Dimensions, Image, Text, View} from 'react-native';
 import {connect} from 'react-redux';
-import FontAwesome from 'react-native-vector-icons/FontAwesome';
+import FontAwesome from 'react-native-vector-icons/Ionicons';
 import SpotifyWebApi from 'spotify-web-api-node';
 
 const SpotifyApi = new SpotifyWebApi();
@@ -113,7 +113,7 @@ class YourLikes extends React.PureComponent {
   };
 
   render() {
-    return (
+    return this.state.likes > 0 ? (
       <View
         style={{
           flex: 1,
@@ -159,7 +159,7 @@ class YourLikes extends React.PureComponent {
           </Text>
         </View>
       </View>
-    );
+    ) : null;
   }
 }
 

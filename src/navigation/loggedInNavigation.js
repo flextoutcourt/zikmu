@@ -3,7 +3,7 @@ import {Button, StyleSheet, Text, View} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {createSharedElementStackNavigator} from 'react-navigation-shared-element';
-import Icon from 'react-native-vector-icons/Feather';
+import Icon from 'react-native-vector-icons/Ionicons';
 import {navigationRef} from '../utils/RootNavigation';
 import {BlurView} from 'expo-blur';
 
