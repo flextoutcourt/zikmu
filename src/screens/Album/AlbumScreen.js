@@ -19,10 +19,11 @@ import Header from '../../components/Album/Header';
 import moment from 'moment';
 import ArtistItem from '../../components/Artist/ArtistItem';
 import SpotifyWebApi from 'spotify-web-api-node';
+import AlbumItem from '../../components/Album/AlbumItem';
 
 const SpotifyApi = new SpotifyWebApi();
 
-class AlbumScreen extends React.PureComponent {
+class AlbumScreen extends React.Component {
   constructor(props) {
     super(props);
     SpotifyApi.setAccessToken(this.props.store.authentication.accessToken);
@@ -58,9 +59,9 @@ class AlbumScreen extends React.PureComponent {
   };
 
   _get_related_albums = json => {
-    const promise = SpotifyApi.getArtistAlbums([json.artists[0]?.id]);
-    return promise.then(data => {
-      console.log(data.body.items);
+    SpotifyApi.getArtistAlbums([json.artists[0]?.id], {
+      include_groups: 'album',
+    }).then(data => {
       this.setState({recommendations: data.body.items});
     });
   };
@@ -75,11 +76,12 @@ class AlbumScreen extends React.PureComponent {
     this._get_album().then(json => {
       this.setState({album: json});
       this._get_related_albums(json);
+      console.log(this._group_by_key(json.tracks.items).splice(1));
       this.setState({
-        disks: this._group_by_key(json.tracks.items, 'disc_number'),
+        disks: this._group_by_key(json.tracks.items, 'disc_number').splice(1),
       });
       this.setState({
-        test: this._group_by_key(json.tracks.items, 'disc_number'),
+        test: this._group_by_key(json.tracks.items, 'disc_number').splice(1),
       });
 
       this.props.navigation.setOptions({
@@ -124,13 +126,14 @@ class AlbumScreen extends React.PureComponent {
     this.state.album.tracks.items.map((item, key) => {
       duration += item.duration_ms;
     });
-    return moment.duration(duration).hours() > 0
-      ? moment.duration(duration).hours() + ' h '
-      : null +
-          moment.duration(duration).minutes() +
-          ' min ' +
-          moment.duration(duration).seconds() +
-          ' s ';
+    let hours = moment.duration(duration).hours();
+    return (
+      (hours > 0 ? hours + ' h ' : '') +
+      moment.duration(duration).minutes() +
+      ' min ' +
+      moment.duration(duration).seconds() +
+      ' s '
+    );
   };
 
   _on_like = () => {
@@ -185,7 +188,7 @@ class AlbumScreen extends React.PureComponent {
 
     const mt = this.state.scrollY.interpolate({
       inputRange: [0, Dimensions.get('window').height * 10],
-      outputRange: [Dimensions.get('screen').width, 0],
+      outputRange: [Dimensions.get('screen').width + 50, 0],
       extrapolate: Extrapolate.CLAMP,
     });
 
@@ -226,7 +229,7 @@ class AlbumScreen extends React.PureComponent {
             {this.state.disks && this.state.test ? (
               <SectionList
                 scrollEnabled={false}
-                sections={this.state.disks.splice(1)}
+                sections={this.state.disks}
                 keyExtractor={({item, index}) => item * index}
                 style={{backgroundColor: '#15202B'}}
                 renderItem={({item, section}) => (
@@ -256,7 +259,11 @@ class AlbumScreen extends React.PureComponent {
                           <View style={{height: 10, width: 10}} />
                         )}
                         renderItem={({item}) => (
-                          <ArtistItem artist_id={item?.id} {...this.props} />
+                          <>
+                            <View style={{height: 10, flex: 1}} />
+                            <ArtistItem artist_id={item?.id} {...this.props} />
+                            <View style={{height: 10, flex: 1}} />
+                          </>
                         )}
                       />
                     </View>
@@ -267,7 +274,11 @@ class AlbumScreen extends React.PureComponent {
                         return (
                           <View
                             style={{flexDirection: 'row', marginVertical: 5}}>
-                            <Icon name={'information-outline'} size={18} color="white" />
+                            <Icon
+                              name={'information-outline'}
+                              size={18}
+                              color="white"
+                            />
                             <Text style={{marginLeft: 10, color: 'white'}}>
                               {item?.text}
                             </Text>
@@ -303,16 +314,38 @@ class AlbumScreen extends React.PureComponent {
               />
             ) : null}
             {this.state.recommendations ? (
-              <FlatList
-                data={this.state.recommendations}
-                horizontal={true}
-                renderItem={() => {
-                  <Text style={{fontSize: 50, color: 'white'}}>lorem</Text>;
-                }}
-              />
+              <>
+                <View
+                  style={{
+                    flex: 1,
+                    justifyContent: 'flex-start',
+                    paddingHorizontal: 10,
+                    textAlign: 'left',
+                  }}>
+                  <Text
+                    style={{
+                      fontSize: 20,
+                      fontWeight: 'bold',
+                      color: 'white',
+                      flex: 1,
+                      justifyContent: 'flex-start',
+                    }}>
+                    Vous aimerez aussi
+                  </Text>
+                </View>
+                <FlatList
+                  data={this.state.recommendations}
+                  horizontal={true}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({item, key}) =>
+                    this.state.album?.id !== item?.id ? (
+                      <AlbumItem album={item} {...this.props} />
+                    ) : null
+                  }
+                />
+              </>
             ) : null}
           </Animated.View>
-
         </Animated.ScrollView>
       </LinearGradient>
     );

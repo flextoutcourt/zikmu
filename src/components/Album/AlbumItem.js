@@ -7,7 +7,7 @@ import {
   View,
 } from 'react-native';
 
-class AlbumItem extends React.PureComponent {
+class AlbumItem extends React.Component {
   render() {
     return (
       <TouchableWithoutFeedback
