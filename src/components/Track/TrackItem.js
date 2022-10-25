@@ -32,8 +32,9 @@ class TrackItem extends React.PureComponent {
   }
 
   _set_offset = (disc_number, track_number) => {
+    console.log(disc_number);
     let offset = 0;
-    while (disc_number > 0) {
+    while (disc_number > 1) {
       offset += this.props.disks[disc_number - 1]?.data?.length ?? 0;
       disc_number--;
     }
