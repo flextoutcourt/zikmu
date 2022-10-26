@@ -34,7 +34,7 @@ class Albums extends React.PureComponent {
   render() {
     return (
       <View style={{flex: 1}}>
-        <Text style={{fontSize: 20, fontWeight: 'bold', paddingHorizontal: 10}}>
+        <Text style={{fontSize: 20, fontWeight: 'bold', paddingHorizontal: 10, color: 'white'}}>
           Albums de {this.props.artist?.name}
         </Text>
         <FlatList

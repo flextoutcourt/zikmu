@@ -216,29 +216,71 @@ const HomeScreen = props => {
           horizontal={true}
           style={{
             flex: 1,
-            backgroundColor: '#15202B',
+            // backgroundColor: '#15202B',
+            background: 'transparent',
             paddingVertical: 10,
             elevation: 0,
             width: Dimensions.get('screen').width,
             paddingTop: StatusBar.currentHeight + 10,
           }}>
-          {/*{stories.map((story, key) => (*/}
-          {/*    <Pressable onPress={() => props.navigation.navigate('Story', {story})}*/}
-          {/*               style={{position: 'relative'}}>*/}
-          {/*        <SharedElement id={story.id}>*/}
-          {/*            <View style={styles.stories.imageContainer}>*/}
-          {/*                <Image source={{uri: story.source}} style={styles.stories.image}/>*/}
-          {/*            </View>*/}
-          {/*        </SharedElement>*/}
-          {/*        <Pressable onPress={() => {*/}
-          {/*            //fetch artist_id from database ticket #FLEX-38*/}
-          {/*            // navigation.push('Artist', {});*/}
-          {/*        }} style={{flex: 1, flexDirection: 'row', justifyContent: 'center', maxWidth: '99%'}}>*/}
-          {/*            <Text style={{textAlign: 'center', marginTop: 5, color: 'white'}}*/}
-          {/*                  numberOfLines={1}>{story.user.name}</Text>*/}
-          {/*        </Pressable>*/}
-          {/*    </Pressable>*/}
-          {/*))}*/}
+          <Pressable
+            onPress={() => props.navigation.navigate('StoryAdd')}
+            style={{position: 'relative'}}>
+              <View style={styles.stories.imageContainer}>
+                <Image
+                  source={{uri: 'https://picsum.photos/48'}}
+                  style={styles.stories.image}
+                />
+              </View>
+            <Pressable
+              onPress={() => {
+                //fetch artist_id from database ticket #FLEX-38
+                // navigation.push('Artist', {});
+              }}
+              style={{
+                flex: 1,
+                flexDirection: 'row',
+                justifyContent: 'center',
+                maxWidth: '99%',
+              }}>
+              <Text
+                style={{textAlign: 'center', marginTop: 5, color: 'white'}}
+                numberOfLines={1}>
+                {'Ajouter'}
+              </Text>
+            </Pressable>
+          </Pressable>
+          {stories.map((story, key) => (
+            <Pressable
+              onPress={() => props.navigation.navigate('Story', {story})}
+              style={{position: 'relative'}}>
+              <SharedElement id={story.id}>
+                <View style={styles.stories.imageContainer}>
+                  <Image
+                    source={{uri: story.source}}
+                    style={styles.stories.image}
+                  />
+                </View>
+              </SharedElement>
+              <Pressable
+                onPress={() => {
+                  //fetch artist_id from database ticket #FLEX-38
+                  // navigation.push('Artist', {});
+                }}
+                style={{
+                  flex: 1,
+                  flexDirection: 'row',
+                  justifyContent: 'center',
+                  maxWidth: '99%',
+                }}>
+                <Text
+                  style={{textAlign: 'center', marginTop: 5, color: 'white'}}
+                  numberOfLines={1}>
+                  {story.user.name}
+                </Text>
+              </Pressable>
+            </Pressable>
+          ))}
         </ScrollView>
         <View
           style={{

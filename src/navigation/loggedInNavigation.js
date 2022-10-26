@@ -25,6 +25,7 @@ import NewsScreen from '../screens/Genres/Items/NewsScreen';
 import SelfScreen from '../screens/User/SelfScreen';
 import UserScreen from '../screens/User/UserScreen';
 import StoryScreen from '../screens/Stories/StoryScreen';
+import StoryAddScreen from '../screens/Stories/StoryAddScreen';
 import BigPlayer from '../components/Global/Screens/BigPlayer';
 
 export const config = {
@@ -103,6 +104,10 @@ class HomeNavigationStack extends React.PureComponent {
             return [story];
           }}
           {...this.props}
+        />
+        <Stack.Screen
+          name={'StoryAdd'}
+          component={StoryAddScreen}
         />
         <Stack.Screen
           name="BigPlayer"
