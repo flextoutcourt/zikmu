@@ -8,6 +8,7 @@ class AuthenticationHandler {
       clientSecret: '5bf46323f90249b3ba1417df139b5c4c',
       redirectUrl: 'info.enguehard.localhost.quentin://oauthredirect',
       scopes: [
+        'app-remote-control',
         'playlist-read-private',
         'playlist-read-collaborative',
         'playlist-modify-public',
