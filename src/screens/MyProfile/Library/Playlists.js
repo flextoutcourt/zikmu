@@ -6,6 +6,7 @@ import {
   Dimensions,
   FlatList,
   Modal,
+  RefreshControl,
   StatusBar,
   StyleSheet,
   Text,
@@ -128,7 +129,7 @@ class Playlists extends React.PureComponent {
             <TouchableOpacity
               onPress={() => this.setState({modalVisible: false})}
               style={{position: 'absolute', top: 10, right: 10}}>
-              <Icon name={'x'} size={24} color={'white'} />
+              <Icon name={'close'} size={24} color={'white'} />
             </TouchableOpacity>
             <Text
               style={{
@@ -153,13 +154,18 @@ class Playlists extends React.PureComponent {
               onSubmitEditing={val => this._create_playlist()}
               onChangeText={val => this.setState({playlist_name: val})}
             />
-            <View style={{flexDirection: 'row', marginTop: 20, width: Dimensions.get('screen').width - 40, justifyContent: 'space-around'}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                marginTop: 20,
+                width: Dimensions.get('screen').width - 40,
+                justifyContent: 'space-around',
+              }}>
               <TouchableOpacity
                 onPress={() => this.setState({modalVisible: false})}>
                 <Text style={{color: '#95a5a6', fontSize: 20}}>Annuler</Text>
               </TouchableOpacity>
-              <TouchableOpacity
-                onPress={() => this._create_playlist()}>
+              <TouchableOpacity onPress={() => this._create_playlist()}>
                 <Text style={{color: 'white', fontSize: 20}}>Envoyer</Text>
               </TouchableOpacity>
             </View>
@@ -168,6 +174,18 @@ class Playlists extends React.PureComponent {
         <FlatList
           stickyHeaderIndices={[0]}
           stickyHeaderHiddenOnScroll={true}
+          refreshControl={
+            <RefreshControl
+              colors={['#7856FF', '#7856FF']}
+              refreshing={this.state.refreshing}
+              onRefresh={() => {
+                this.setState({refreshing: true});
+                this._get_playlists().then(data =>
+                  this.setState({playlists: data.items, refreshing: false}),
+                );
+              }}
+            />
+          }
           ListHeaderComponent={() => (
             <LinearGradient
               colors={['#15202B', '#15202B', 'transparent']}
@@ -175,7 +193,7 @@ class Playlists extends React.PureComponent {
               <TouchableOpacity
                 onPress={() => this.setState({modalVisible: true})}>
                 <LinearGradient
-                  colors={['#391a6c', '#b21f1f']}
+                  colors={['#1E2732', '#1E2732']}
                   useAngle={true}
                   angle={180}
                   style={{
@@ -186,6 +204,8 @@ class Playlists extends React.PureComponent {
                     borderRadius: 10,
                     justifyContent: 'center',
                     alignItems: 'center',
+                    borderWidth: 1,
+                    borderColor: '#7856FF',
                   }}>
                   <Text
                     style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>
@@ -198,7 +218,7 @@ class Playlists extends React.PureComponent {
                   this.props.navigation.navigate('MyTracks');
                 }}>
                 <LinearGradient
-                  colors={['#b21f1f', '#fdbb2d']}
+                  colors={['#1E2732', '#1E2732']}
                   useAngle={true}
                   angle={180}
                   style={{
@@ -209,6 +229,8 @@ class Playlists extends React.PureComponent {
                     borderRadius: 10,
                     justifyContent: 'center',
                     alignItems: 'center',
+                    borderWidth: 1,
+                    borderColor: '#7856FF'
                   }}>
                   <Text
                     style={{color: 'white', fontSize: 18, fontWeight: 'bold'}}>

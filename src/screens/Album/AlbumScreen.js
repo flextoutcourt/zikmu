@@ -313,7 +313,7 @@ class AlbumScreen extends React.Component {
                 )}
               />
             ) : null}
-            {this.state.recommendations ? (
+            {this.state.recommendations?.length > 1 ? (
               <>
                 <View
                   style={{

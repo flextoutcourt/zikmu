@@ -1,7 +1,7 @@
 //import liraries
 import axios from 'axios';
 import React from 'react';
-import {Dimensions, FlatList, StatusBar, StyleSheet} from 'react-native';
+import {Dimensions, FlatList, RefreshControl, StatusBar, StyleSheet} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {connect} from 'react-redux';
 import ArtistAlt from '../../../components/Artist/ArtistAlt';
@@ -48,6 +48,18 @@ class Artist extends React.PureComponent {
           horizontal={false}
           numColumns={3}
           keyExtractor={item => item.id}
+          refreshControl={
+            <RefreshControl
+              colors={['#7856FF', '#7856FF']}
+              refreshing={this.state.refreshing}
+              onRefresh={() => {
+                this.setState({refreshing: true});
+                this._get_artist().then(data =>
+                  this.setState({artists: data.artists.items, refreshing: false}),
+                );
+              }}
+            />
+          }
           renderItem={({item, key}) => (
             <ArtistAlt artist={item} {...this.props} />
           )}

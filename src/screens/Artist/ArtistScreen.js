@@ -28,6 +28,7 @@ class ArtistScreen extends React.PureComponent {
     this.state = {
       artist: null,
       scrollY: new Animated.Value(0),
+      liked: false
     };
   }
 
@@ -39,6 +40,7 @@ class ArtistScreen extends React.PureComponent {
   componentDidMount() {
     this._get_artist().then(data => {
       this.setState({artist: data});
+      this._check_if_following();
       this.props.navigation.setOptions({
         headerTitle: () => (
           <View
@@ -62,6 +64,28 @@ class ArtistScreen extends React.PureComponent {
       });
     });
   }
+
+  like_artist = () => {
+    this.state.liked
+      ? SpotifyApi.unfollowArtists([this.props.route.params.artist_id]).then(
+          data => {
+            this.setState({liked: false});
+          },
+        )
+      : SpotifyApi.followArtists([this.props.route.params.artist_id]).then(
+          data => {
+            this.setState({liked: true});
+          },
+        );
+  };
+
+  _check_if_following = () => {
+    SpotifyApi.isFollowingArtists([this.props.route.params.artist_id]).then(
+      data => {
+        this.setState({liked: data.body[0]});
+      },
+    );
+  };
 
   render() {
     const scale = this.state.scrollY.interpolate({
@@ -116,6 +140,8 @@ class ArtistScreen extends React.PureComponent {
         <Header
           y={this.state.scrollY}
           artist={this.state.artist}
+          onLike={this.like_artist}
+          liked={this.state.liked}
           {...this.props}
         />
         {/*<SubHeader y={this.state.scrollY} {...this.props} artist={this.state.artist}/>*/}

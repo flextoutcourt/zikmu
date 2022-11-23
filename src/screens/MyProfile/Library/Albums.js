@@ -1,7 +1,7 @@
 //import liraries
 import axios from 'axios';
 import React from 'react';
-import {FlatList, StatusBar, StyleSheet} from 'react-native';
+import {FlatList, RefreshControl, StatusBar, StyleSheet} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {connect} from 'react-redux';
 import AlbumItem from '../../../components/Album/AlbumItem';
@@ -60,6 +60,18 @@ class Albums extends React.PureComponent {
           data={this.state.albums}
           scrollEnabled={true}
           horizontal={false}
+          refreshControl={
+            <RefreshControl
+              colors={['#7856FF', '#7856FF']}
+              refreshing={this.state.refreshing}
+              onRefresh={() => {
+                this.setState({refreshing: true});
+                this._get_albums().then(data =>
+                  this.setState({albums: data.items, refreshing: false}),
+                );
+              }}
+            />
+          }
           numColumns={2}
           onEndReachedThreshold={0.1}
           onEndReached={() => {

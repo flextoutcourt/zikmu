@@ -131,12 +131,21 @@ class Header extends React.PureComponent {
                 marginLeft: 50,
                 alignItems: 'center',
               }}>
-              {this.props.playlist?.images[0] ? (
+              {this.props.playlist?.images[0]?.url != undefined ? (
                 <Image
-                  source={{uri: this.props.playlist?.images[0]?.url}}
+                  source={{
+                    uri: this.props.playlist?.images[0]?.url
+                      ? this.props.playlist?.images[0]?.url
+                      : 'https://picsum.photos/500',
+                  }}
                   style={{height: 40, width: 40, borderRadius: 10}}
                 />
-              ) : null}
+              ) : (
+                <Image
+                  source={require('../../images/defaultPlaylist.png')}
+                  style={{height: 40, width: 40, borderRadius: 10}}
+                />
+              )}
               <Text style={{color: 'white', marginLeft: 10}}>
                 {this.props.playlist?.name}
               </Text>
@@ -144,29 +153,56 @@ class Header extends React.PureComponent {
           </View>
           <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
             <TouchableOpacity onPress={this.props.onLike}>
-              <Icon name={this.props.liked ? 'heart' : 'heart-outline'} size={24} color={this.props.liked ? '#c0392b': 'white'} />
+              <Icon
+                name={this.props.liked ? 'heart' : 'heart-outline'}
+                size={24}
+                color={this.props.liked ? '#c0392b' : 'white'}
+              />
             </TouchableOpacity>
             <TouchableOpacity
               onPress={this.props.onInfo}
               style={{marginLeft: 15}}>
-              <Icon name="ellipsis-vertical-outline" size={24} color={'white'} />
+              <Icon
+                name="ellipsis-vertical-outline"
+                size={24}
+                color={'white'}
+              />
             </TouchableOpacity>
           </View>
         </Animated.View>
-        <Animated.Image
-          source={{uri: this.props.playlist?.images[0]?.url}}
-          style={{
-            width: Dimensions.get('screen').width - StatusBar.currentHeight * 3,
-            height:
-              Dimensions.get('screen').width - StatusBar.currentHeight * 3,
-            margin: StatusBar.currentHeight * 1.5,
-            position: 'absolute',
-            top: StatusBar.currentHeight,
-            left: 0,
-            right: 0,
-            transform: transform,
-          }}
-        />
+        {this.props.playlist?.images[0]?.url != undefined ? (
+          <Animated.Image
+            source={{uri: this.props.playlist?.images[0]?.url}}
+            style={{
+              width:
+                Dimensions.get('screen').width - StatusBar.currentHeight * 3,
+              height:
+                Dimensions.get('screen').width - StatusBar.currentHeight * 3,
+              margin: StatusBar.currentHeight * 1.5,
+              position: 'absolute',
+              top: StatusBar.currentHeight,
+              left: 0,
+              right: 0,
+              transform: transform,
+            }}
+          />
+        ) : (
+          <Animated.Image
+            source={require('../../images/defaultPlaylist.png')}
+            style={{
+              width:
+                Dimensions.get('screen').width - StatusBar.currentHeight * 3,
+              height:
+                Dimensions.get('screen').width - StatusBar.currentHeight * 3,
+              margin: StatusBar.currentHeight * 1.5,
+              position: 'absolute',
+              top: StatusBar.currentHeight,
+              left: 0,
+              right: 0,
+              transform: transform,
+            }}
+          />
+        )}
         <Animated.View
           style={{
             position: 'absolute',

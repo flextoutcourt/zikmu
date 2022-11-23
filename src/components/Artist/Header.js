@@ -110,7 +110,7 @@ class Header extends React.PureComponent {
           style={{
             flex: 1,
             flexDirection: 'row',
-            justifyContent: 'flex-start',
+            justifyContent: 'space-between',
             alignItems: 'center',
             backgroundColor: 'rgba(120,86,255, 1)',
             position: 'absolute',
@@ -141,6 +141,9 @@ class Header extends React.PureComponent {
               </Text>
             </View>
           </View>
+          <TouchableOpacity onPress={this.props.onLike}>
+            <Icon name={this.props.liked ? 'heart': 'heart-outline'} size={24} color={this.props.liked ? 'red': 'white'} />
+          </TouchableOpacity>
         </Animated.View>
         <Animated.Image
           source={{uri: this.props.artist?.images[0]?.url}}

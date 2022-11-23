@@ -54,6 +54,7 @@ class PlaylistScreen extends React.Component {
 
     // const promise = axios.get(
     //   'https://api.spotify.com/v1/playlists/' +
+
     //     this.props.route.params.playlist_id,
     //   {
     //     headers: {
@@ -434,7 +435,7 @@ class PlaylistScreen extends React.Component {
                   this.state.playlist?.owner?.id === this.state?.me?.id ? (
                     <>
                       <View
-                        style={{marginHorizontal: 10, flexDirection: 'row'}}>
+                        style={{marginHorizontal: 10, flexDirection: 'row', width: Dimensions.get('screen').width - 20}}>
                         <View style={{flex: 1}} />
                         <TouchableOpacity
                           onPress={() =>
